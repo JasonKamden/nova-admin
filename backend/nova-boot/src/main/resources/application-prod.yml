@@ -1,0 +1,16 @@
+spring:
+  main:
+    banner-mode: off
+  datasource:
+    password: ${MYSQL_PASSWORD}
+  data:
+    redis:
+      password: ${REDIS_PASSWORD}
+
+storage:
+  minio-access-key: ${MINIO_ACCESS_KEY}
+  minio-secret-key: ${MINIO_SECRET_KEY}
+
+logging:
+  level:
+    root: INFO
