@@ -273,7 +273,7 @@ watch(
                 <div class="mt-10px break-all text-24px font-600 text-#1f2329">{{ card.value }}</div>
               </div>
               <div class="flex size-48px items-center justify-center rounded-12px bg-#f3f6fb text-24px text-#2f7df6">
-                <SvgIcon :icon="card.icon"/>
+                <SvgIcon :icon="card.icon" />
               </div>
             </div>
           </NCard>
@@ -302,7 +302,8 @@ watch(
         <NGi span="24 s:24 m:14">
           <NCard :bordered="false" :title="$t('page.home.platformSummary')" class="card-wrapper" size="small">
             <NDescriptions :column="1" bordered label-placement="left">
-              <NDescriptionsItem :label="$t('page.home.tenantCount')">{{
+              <NDescriptionsItem :label="$t('page.home.tenantCount')">
+                {{
                   platformDashboard?.tenantCount ?? '-'
                 }}
               </NDescriptionsItem>
@@ -315,7 +316,8 @@ watch(
               <NDescriptionsItem :label="$t('page.home.platformUserCount')">
                 {{ platformDashboard?.platformUserCount ?? '-' }}
               </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.home.todayLoginCount')">{{
+              <NDescriptionsItem :label="$t('page.home.todayLoginCount')">
+                {{
                   platformDashboard?.todayLoginCount ?? '-'
                 }}
               </NDescriptionsItem>
@@ -324,9 +326,11 @@ watch(
         </NGi>
       </NGrid>
 
-      <NCard v-if="!isPlatform" :bordered="false" :title="$t('page.home.recentOperations')" class="mt-16px card-wrapper"
-             size="small">
-        <NEmpty v-if="recentOperations.length === 0" :description="$t('common.noData')" class="py-24px"/>
+      <NCard
+        v-if="!isPlatform" :bordered="false" :title="$t('page.home.recentOperations')" class="mt-16px card-wrapper"
+        size="small"
+      >
+        <NEmpty v-if="recentOperations.length === 0" :description="$t('common.noData')" class="py-24px" />
         <NList v-else>
           <NListItem v-for="(item, index) in recentOperations" :key="`${item.operator}-${item.time}-${index}`">
             <div class="flex flex-col gap-6px md:flex-row md:items-center md:justify-between">
@@ -340,18 +344,21 @@ watch(
         </NList>
       </NCard>
 
-      <NCard v-if="!isPlatform" :bordered="false" :title="$t('page.messageCenter.title')" class="mt-16px card-wrapper"
-             size="small">
+      <NCard
+        v-if="!isPlatform" :bordered="false" :title="$t('page.messageCenter.title')" class="mt-16px card-wrapper"
+        size="small"
+      >
         <template #header-extra>
           <NButton text type="primary" @click="() => messageStore.refreshRecent()">
             {{ $t('common.refresh') }}
           </NButton>
         </template>
-        <NEmpty v-if="announcements.length === 0" :description="$t('page.messageCenter.empty')" class="py-24px"/>
+        <NEmpty v-if="announcements.length === 0" :description="$t('page.messageCenter.empty')" class="py-24px" />
         <NList v-else>
           <NListItem v-for="item in announcements" :key="item.messageId" @click="openMessageDetail(item.messageId)">
             <div
-                class="flex cursor-pointer flex-col gap-8px rounded-10px px-4px py-6px transition-colors hover:bg-#f7f9fc md:flex-row md:items-center md:justify-between">
+              class="flex cursor-pointer flex-col gap-8px rounded-10px px-4px py-6px transition-colors hover:bg-#f7f9fc md:flex-row md:items-center md:justify-between"
+            >
               <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-8px">
                   <span v-if="item.readStatus === 0" class="inline-block size-8px rounded-full bg-warning"></span>
@@ -368,6 +375,6 @@ watch(
       </NCard>
     </NSpin>
 
-    <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" @updated="handleMessageUpdated"/>
+    <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" @updated="handleMessageUpdated" />
   </div>
 </template>

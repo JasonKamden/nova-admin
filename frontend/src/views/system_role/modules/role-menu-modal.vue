@@ -96,20 +96,20 @@ watch(
 
     <NSpin :show="state.loading">
       <div class="mb-16px flex gap-12px">
-        <NInput v-model:value="keyword" :placeholder="$t('common.keywordSearch')" clearable/>
+        <NInput v-model:value="keyword" :placeholder="$t('common.keywordSearch')" clearable />
         <NButton @click="loadData">{{ $t('common.search') }}</NButton>
       </div>
       <NTree
-          v-model:checked-keys="checkedKeys"
-          v-model:expanded-keys="expandedKeys"
-          :data="treeOptions"
-          block-line
-          cascade
-          check-on-click
-          checkable
-          expand-on-click
-          key-field="key"
-          label-field="label"
+        v-model:checked-keys="checkedKeys"
+        v-model:expanded-keys="expandedKeys"
+        :data="treeOptions"
+        block-line
+        cascade
+        check-on-click
+        checkable
+        expand-on-click
+        key-field="key"
+        label-field="label"
       />
     </NSpin>
 

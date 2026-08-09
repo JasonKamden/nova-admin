@@ -37,28 +37,28 @@ const showSiderInverted = computed(() => !themeStore.darkMode && themeStore.layo
   <div class="flex-col-stretch gap-16px">
     <div class="i-flex-center">
       <NTabs
-          :key="themeStore.themeScheme"
-          :value="themeStore.themeScheme"
-          class="relative w-214px"
-          size="small"
-          type="segment"
-          @update:value="handleSegmentChange"
+        :key="themeStore.themeScheme"
+        :value="themeStore.themeScheme"
+        class="relative w-214px"
+        size="small"
+        type="segment"
+        @update:value="handleSegmentChange"
       >
         <NTab v-for="(_, key) in themeSchemaRecord" :key="key" :name="key">
-          <SvgIcon :icon="icons[key]" class="h-23px text-icon-small"/>
+          <SvgIcon :icon="icons[key]" class="h-23px text-icon-small" />
         </NTab>
       </NTabs>
     </div>
     <Transition name="sider-inverted">
       <SettingItem v-if="showSiderInverted" :label="$t('theme.layout.sider.inverted')">
-        <NSwitch v-model:value="themeStore.sider.inverted"/>
+        <NSwitch v-model:value="themeStore.sider.inverted" />
       </SettingItem>
     </Transition>
     <SettingItem :label="$t('theme.appearance.grayscale')">
-      <NSwitch :value="themeStore.grayscale" @update:value="handleGrayscaleChange"/>
+      <NSwitch :value="themeStore.grayscale" @update:value="handleGrayscaleChange" />
     </SettingItem>
     <SettingItem :label="$t('theme.appearance.colourWeakness')">
-      <NSwitch :value="themeStore.colourWeakness" @update:value="handleColourWeaknessChange"/>
+      <NSwitch :value="themeStore.colourWeakness" @update:value="handleColourWeaknessChange" />
     </SettingItem>
   </div>
 </template>

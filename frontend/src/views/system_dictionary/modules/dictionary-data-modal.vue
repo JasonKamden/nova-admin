@@ -84,24 +84,28 @@ watch(
     <NForm ref="formRef" :label-width="100" :model="model" :rules="rules" label-placement="left">
       <NGrid :cols="24" :x-gap="16">
         <NFormItemGi :label="$t('page.dictionary.dataLabel')" path="dictLabel" span="12">
-          <NInput v-model:value="model.dictLabel"/>
+          <NInput v-model:value="model.dictLabel" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.dataValue')" path="dictValue" span="12">
-          <NInput v-model:value="model.dictValue"/>
+          <NInput v-model:value="model.dictValue" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.tagType')" path="tagType" span="12">
-          <NSelect v-model:value="model.tagType"
-                   :options="dictTagTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+          <NSelect
+            v-model:value="model.tagType"
+            :options="dictTagTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
+          />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.sort')" path="sort" span="12">
-          <NInputNumber v-model:value="model.sort" class="w-full"/>
+          <NInputNumber v-model:value="model.sort" class="w-full" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.status')" path="status" span="12">
-          <NSelect v-model:value="model.status"
-                   :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+          <NSelect
+            v-model:value="model.status"
+            :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"
+          />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.remark')" path="remark" span="24">
-          <NInput v-model:value="model.remark" :rows="3" type="textarea"/>
+          <NInput v-model:value="model.remark" :rows="3" type="textarea" />
         </NFormItemGi>
       </NGrid>
     </NForm>

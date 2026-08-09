@@ -193,26 +193,26 @@ async function handleDelete(id: number) {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.department.keyword')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.keyword" :placeholder="$t('common.keywordSearch')" clearable/>
+        <NInput v-model:value="searchParams.keyword" :placeholder="$t('common.keywordSearch')" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.department.status')" class="pr-24px" span="24 s:12 m:6">
         <NSelect
-            v-model:value="searchParams.status"
-            :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-            clearable
+          v-model:value="searchParams.status"
+          :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+          clearable
         />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:12">
         <NSpace class="w-full" justify="end">
           <NButton @click="handleReset">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getData">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -226,7 +226,7 @@ async function handleDelete(id: number) {
           <template #default>
             <NButton v-if="showAdd" ghost size="small" type="primary" @click="openModal('add', null, null)">
               <template #icon>
-                <icon-ic-round-plus class="text-icon"/>
+                <icon-ic-round-plus class="text-icon" />
               </template>
               {{ $t('page.department.addRoot') }}
             </NButton>
@@ -235,24 +235,24 @@ async function handleDelete(id: number) {
       </template>
 
       <NDataTable
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :row-key="row => row.id"
-          :scroll-x="scrollX"
-          children-key="children"
-          class="sm:h-full"
-          size="small"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :row-key="row => row.id"
+        :scroll-x="scrollX"
+        children-key="children"
+        class="sm:h-full"
+        size="small"
       />
     </NCard>
 
     <DepartmentOperateModal
-        v-model:visible="modalVisible"
-        :department-id="activeDepartmentId"
-        :mode="operateMode"
-        :parent-id="activeParentId"
-        @submitted="getData"
+      v-model:visible="modalVisible"
+      :department-id="activeDepartmentId"
+      :mode="operateMode"
+      :parent-id="activeParentId"
+      @submitted="getData"
     />
   </div>
 </template>

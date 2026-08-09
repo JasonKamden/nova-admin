@@ -255,7 +255,7 @@ const local: App.I18n.Schema = {
         'route-view': '业务页面',
         platform_tenant: 'Tenant 管理',
         system_config: '参数管理',
-        system_department: 'Department 管理',
+        system_department: '部门管理',
         system_dictionary: '字典管理',
         system_message: '消息管理',
         system_user: '用户管理',

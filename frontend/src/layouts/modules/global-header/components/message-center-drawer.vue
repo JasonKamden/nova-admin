@@ -34,7 +34,7 @@ watch(
 <template>
   <NDrawer v-model:show="visible" :width="860" display-directive="show">
     <NDrawerContent :native-scrollbar="false" :title="$t('page.messageCenter.title')" closable>
-      <MessageCenterPanel ref="panelRef" @updated="emit('updated')" @open-detail="handleOpenDetail"/>
+      <MessageCenterPanel ref="panelRef" @updated="emit('updated')" @open-detail="handleOpenDetail" />
     </NDrawerContent>
   </NDrawer>
 </template>

@@ -126,23 +126,24 @@ watch(
             <template #header>{{ $t('page.message.contentHtml') }}</template>
             <!-- eslint-disable-next-line vue/no-v-html -->
             <div v-if="detail?.contentHtml" class="message-rich-content" v-html="detail.contentHtml"></div>
-            <NEmpty v-else :description="$t('common.noData')"/>
+            <NEmpty v-else :description="$t('common.noData')" />
           </NCard>
 
           <NCard :bordered="false" embedded size="small">
             <template #header>Attachment</template>
             <div v-if="attachments.length" class="flex-col-stretch gap-12px">
               <div
-                  v-for="file in attachments"
-                  :key="file.id"
-                  class="flex flex-wrap items-center justify-between gap-12px rounded-10px bg-#f6f8fb px-14px py-12px"
+                v-for="file in attachments"
+                :key="file.id"
+                class="flex flex-wrap items-center justify-between gap-12px rounded-10px bg-#f6f8fb px-14px py-12px"
               >
                 <div class="min-w-0 flex-1">
                   <div class="truncate text-14px font-500">{{ file.originalName }}</div>
                   <div class="mt-4px text-12px text-#666">{{ file.contentType || '-' }}</div>
                 </div>
                 <NSpace>
-                  <NButton size="small" @click="handleFileOpen(file.id, 'preview')">{{
+                  <NButton size="small" @click="handleFileOpen(file.id, 'preview')">
+                    {{
                       $t('page.file.preview')
                     }}
                   </NButton>
@@ -152,7 +153,7 @@ watch(
                 </NSpace>
               </div>
             </div>
-            <NEmpty v-else :description="$t('common.noData')"/>
+            <NEmpty v-else :description="$t('common.noData')" />
           </NCard>
         </div>
       </NSpin>

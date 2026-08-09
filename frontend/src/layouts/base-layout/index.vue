@@ -118,39 +118,39 @@ function getSiderAndCollapsedWidth(isCollapsed: boolean) {
 
 <template>
   <AdminLayout
-      v-model:sider-collapse="appStore.siderCollapse"
-      :content-class="appStore.contentXScrollable ? 'overflow-x-hidden' : ''"
-      :fixed-footer="themeStore.footer.fixed"
-      :fixed-top="themeStore.fixedHeaderAndTab"
-      :footer-height="themeStore.footer.height"
-      :footer-visible="themeStore.footer.visible"
-      :full-content="appStore.fullContent"
-      :header-height="themeStore.header.height"
-      :is-mobile="appStore.isMobile"
-      :mode="layoutMode"
-      :right-footer="themeStore.footer.right"
-      :scroll-el-id="LAYOUT_SCROLL_EL_ID"
-      :scroll-mode="themeStore.layout.scrollMode"
-      :sider-collapsed-width="siderCollapsedWidth"
-      :sider-visible="siderVisible"
-      :sider-width="siderWidth"
-      :tab-height="themeStore.tab.height"
-      :tab-visible="themeStore.tab.visible"
+    v-model:sider-collapse="appStore.siderCollapse"
+    :content-class="appStore.contentXScrollable ? 'overflow-x-hidden' : ''"
+    :fixed-footer="themeStore.footer.fixed"
+    :fixed-top="themeStore.fixedHeaderAndTab"
+    :footer-height="themeStore.footer.height"
+    :footer-visible="themeStore.footer.visible"
+    :full-content="appStore.fullContent"
+    :header-height="themeStore.header.height"
+    :is-mobile="appStore.isMobile"
+    :mode="layoutMode"
+    :right-footer="themeStore.footer.right"
+    :scroll-el-id="LAYOUT_SCROLL_EL_ID"
+    :scroll-mode="themeStore.layout.scrollMode"
+    :sider-collapsed-width="siderCollapsedWidth"
+    :sider-visible="siderVisible"
+    :sider-width="siderWidth"
+    :tab-height="themeStore.tab.height"
+    :tab-visible="themeStore.tab.visible"
   >
     <template #header>
-      <GlobalHeader v-bind="headerProps"/>
+      <GlobalHeader v-bind="headerProps" />
     </template>
     <template #tab>
-      <GlobalTab/>
+      <GlobalTab />
     </template>
     <template #sider>
-      <GlobalSider/>
+      <GlobalSider />
     </template>
-    <GlobalMenu/>
-    <GlobalContent/>
-    <ThemeDrawer/>
+    <GlobalMenu />
+    <GlobalContent />
+    <ThemeDrawer />
     <template #footer>
-      <GlobalFooter/>
+      <GlobalFooter />
     </template>
   </AdminLayout>
 </template>

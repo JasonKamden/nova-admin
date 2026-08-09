@@ -20,9 +20,9 @@ function openDetail(messageId: number) {
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px">
     <NCard :bordered="false" :title="$t('route.message_center')" class="card-wrapper" size="small">
-      <MessageCenterPanel @open-detail="openDetail"/>
+      <MessageCenterPanel @open-detail="openDetail" />
     </NCard>
 
-    <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId"/>
+    <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" />
   </div>
 </template>

@@ -8,7 +8,7 @@ defineOptions({
 
 <template>
   <div class="flex-col-stretch gap-16px">
-    <ThemePreset/>
+    <ThemePreset />
   </div>
 </template>
 

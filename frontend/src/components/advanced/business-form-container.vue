@@ -34,38 +34,38 @@ const modalStyle = computed(() => ({
 
 <template>
   <NDrawer
-      v-if="themeStore.businessFormMode === 'drawer'"
-      v-model:show="visible"
-      :mask-closable="maskClosable"
-      :width="drawerWidth"
-      display-directive="show"
+    v-if="themeStore.businessFormMode === 'drawer'"
+    v-model:show="visible"
+    :mask-closable="maskClosable"
+    :width="drawerWidth"
+    display-directive="show"
   >
     <NDrawerContent :native-scrollbar="false" :title="title" closable>
       <div class="max-h-[calc(100vh-180px)] overflow-y-auto">
-        <slot/>
+        <slot />
       </div>
       <template #footer>
-        <slot name="action"/>
+        <slot name="action" />
       </template>
     </NDrawerContent>
   </NDrawer>
 
   <NModal
-      v-else
-      v-model:show="visible"
-      :mask-closable="maskClosable"
-      :segmented="segmented ? { content: true, footer: 'soft' } : undefined"
-      :style="modalStyle"
-      preset="card"
+    v-else
+    v-model:show="visible"
+    :mask-closable="maskClosable"
+    :segmented="segmented ? { content: true, footer: 'soft' } : undefined"
+    :style="modalStyle"
+    preset="card"
   >
     <template #header>
       <div class="text-16px font-600">{{ title }}</div>
     </template>
     <div class="max-h-[calc(100vh-220px)] overflow-y-auto">
-      <slot/>
+      <slot />
     </div>
     <template #action>
-      <slot name="action"/>
+      <slot name="action" />
     </template>
   </NModal>
 </template>

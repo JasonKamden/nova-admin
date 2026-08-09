@@ -147,27 +147,31 @@ async function handleDelete(id: number) {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.config.keyword')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.keyword" :placeholder="$t('common.keywordSearch')" clearable/>
+        <NInput v-model:value="searchParams.keyword" :placeholder="$t('common.keywordSearch')" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.config.configType')" class="pr-24px" span="24 s:12 m:6">
-        <NSelect v-model:value="searchParams.configType"
-                 :options="configTypeOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable/>
+        <NSelect
+          v-model:value="searchParams.configType"
+          :options="configTypeOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable
+        />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.config.status')" class="pr-24px" span="24 s:12 m:6">
-        <NSelect v-model:value="searchParams.status"
-                 :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable/>
+        <NSelect
+          v-model:value="searchParams.status"
+          :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable
+        />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:6">
         <NSpace class="w-full" justify="end">
           <NButton @click="handleReset">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getDataByPage(1)">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -181,7 +185,7 @@ async function handleDelete(id: number) {
           <template #default>
             <NButton v-if="showAdd" ghost size="small" type="primary" @click="openModal('add')">
               <template #icon>
-                <icon-ic-round-plus class="text-icon"/>
+                <icon-ic-round-plus class="text-icon" />
               </template>
               {{ $t('common.add') }}
             </NButton>
@@ -189,19 +193,19 @@ async function handleDelete(id: number) {
         </TableHeaderOperation>
       </template>
       <NDataTable
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :pagination="mobilePagination"
-          :row-key="row => row.id"
-          :scroll-x="1600"
-          class="sm:h-full"
-          remote
-          size="small"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :pagination="mobilePagination"
+        :row-key="row => row.id"
+        :scroll-x="1600"
+        class="sm:h-full"
+        remote
+        size="small"
       />
     </NCard>
 
-    <ConfigOperateModal v-model:visible="modalVisible" :item="activeItem" :mode="operateMode" @submitted="getData"/>
+    <ConfigOperateModal v-model:visible="modalVisible" :item="activeItem" :mode="operateMode" @submitted="getData" />
   </div>
 </template>

@@ -125,26 +125,26 @@ onMounted(refreshAll);
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="filters">
       <NFormItemGi :label="$t('page.monitor.cacheName')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="filters.name" clearable/>
+        <NInput v-model:value="filters.name" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.cacheType')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="filters.type" clearable/>
+        <NInput v-model:value="filters.type" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.cacheModule')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="filters.module" clearable/>
+        <NInput v-model:value="filters.module" clearable />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:6">
         <NSpace class="w-full" justify="end">
           <NTag type="info">{{ $t('page.monitor.redisStatus') }}: {{ redisStatus }}</NTag>
           <NButton @click="resetFilters">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getData">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -158,14 +158,14 @@ onMounted(refreshAll);
         </TableHeaderOperation>
       </template>
       <NDataTable
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :row-key="row => row.code"
-          :scroll-x="scrollX"
-          class="sm:h-full"
-          size="small"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :row-key="row => row.code"
+        :scroll-x="scrollX"
+        class="sm:h-full"
+        size="small"
       />
     </NCard>
   </div>

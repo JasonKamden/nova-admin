@@ -189,49 +189,53 @@ watch(
       <NForm ref="formRef" :disabled="readonly" :label-width="110" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.message.title')" path="title" span="12">
-            <NInput v-model:value="model.title"/>
+            <NInput v-model:value="model.title" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.messageType')" path="messageType" span="12">
-            <NSelect v-model:value="model.messageType"
-                     :options="messageTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+            <NSelect
+              v-model:value="model.messageType"
+              :options="messageTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
+            />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.recipientType')" path="recipientType" span="12">
-            <NSelect v-model:value="model.recipient.recipientType"
-                     :options="recipientTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+            <NSelect
+              v-model:value="model.recipient.recipientType"
+              :options="recipientTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
+            />
           </NFormItemGi>
           <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.departments')" span="24">
             <NTreeSelect
-                v-model:value="model.recipient.departmentIds"
-                :options="departmentOptions"
-                clearable
-                key-field="key"
-                label-field="label"
-                multiple
-                value-field="value"
+              v-model:value="model.recipient.departmentIds"
+              :options="departmentOptions"
+              clearable
+              key-field="key"
+              label-field="label"
+              multiple
+              value-field="value"
             />
           </NFormItemGi>
           <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.includeChildren')" span="12">
-            <NSwitch v-model:value="model.recipient.includeChildren"/>
+            <NSwitch v-model:value="model.recipient.includeChildren" />
           </NFormItemGi>
           <NFormItemGi v-if="isRoleRecipient" :label="$t('page.message.roles')" span="24">
-            <NSelect v-model:value="model.recipient.roleIds" :options="roleOptions" clearable filterable multiple/>
+            <NSelect v-model:value="model.recipient.roleIds" :options="roleOptions" clearable filterable multiple />
           </NFormItemGi>
           <NFormItemGi v-if="isUserRecipient" :label="$t('page.message.users')" span="24">
             <NSelect
-                v-model:value="model.recipient.userIds"
-                :options="userOptions"
-                clearable
-                filterable
-                multiple
-                remote
-                @search="searchUsers"
+              v-model:value="model.recipient.userIds"
+              :options="userOptions"
+              clearable
+              filterable
+              multiple
+              remote
+              @search="searchUsers"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.contentHtml')" path="contentHtml" span="24">
-            <NInput v-model:value="model.contentHtml" :rows="8" type="textarea"/>
+            <NInput v-model:value="model.contentHtml" :rows="8" type="textarea" />
           </NFormItemGi>
           <NFormItemGi v-if="readonly && detail" :label="$t('page.message.recipientRule')" span="24">
-            <NCode :code="detail.recipientRuleJson" language="json" show-line-numbers/>
+            <NCode :code="detail.recipientRuleJson" language="json" show-line-numbers />
           </NFormItemGi>
         </NGrid>
       </NForm>

@@ -36,19 +36,19 @@ function resetScroll() {
 <template>
   <RouterView v-slot="{ Component, route }">
     <Transition
-        :name="transitionName"
-        mode="out-in"
-        @before-leave="appStore.setContentXScrollable(true)"
-        @after-leave="resetScroll"
-        @after-enter="appStore.setContentXScrollable(false)"
+      :name="transitionName"
+      mode="out-in"
+      @before-leave="appStore.setContentXScrollable(true)"
+      @after-leave="resetScroll"
+      @after-enter="appStore.setContentXScrollable(false)"
     >
       <KeepAlive :exclude="routeStore.excludeCacheRoutes" :include="routeStore.cacheRoutes">
         <component
-            :is="Component"
-            v-if="appStore.reloadFlag"
-            :key="tabStore.getTabIdByRoute(route)"
-            :class="{ 'p-16px': showPadding }"
-            class="flex-grow bg-layout transition-300"
+          :is="Component"
+          v-if="appStore.reloadFlag"
+          :key="tabStore.getTabIdByRoute(route)"
+          :class="{ 'p-16px': showPadding }"
+          class="flex-grow bg-layout transition-300"
         />
       </KeepAlive>
     </Transition>

@@ -21,7 +21,7 @@ withDefaults(defineProps<Props>(), {
       <NCollapseItem :title="$t('common.search')">
         <NForm :label-width="labelWidth" :model="model" :rules="rules" label-placement="left">
           <NGrid item-responsive responsive="screen">
-            <slot/>
+            <slot />
           </NGrid>
         </NForm>
       </NCollapseItem>

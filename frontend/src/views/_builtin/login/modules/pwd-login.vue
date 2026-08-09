@@ -102,35 +102,35 @@ onMounted(async () => {
 <template>
   <NForm ref="formRef" :model="model" :rules="rules" :show-label="false" size="large" @keyup.enter="handleSubmit">
     <NFormItem path="username">
-      <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')"/>
+      <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')" />
     </NFormItem>
     <NFormItem path="password">
       <NInput
-          v-model:value="model.password"
-          :placeholder="$t('page.login.common.passwordPlaceholder')"
-          show-password-on="click"
-          type="password"
+        v-model:value="model.password"
+        :placeholder="$t('page.login.common.passwordPlaceholder')"
+        show-password-on="click"
+        type="password"
       />
     </NFormItem>
     <NFormItem path="captchaCode">
       <div class="flex w-full items-center gap-12px">
         <NInput
-            v-model:value="model.captchaCode"
-            :placeholder="$t('page.login.pwdLogin.captchaPlaceholder')"
-            class="flex-1"
+          v-model:value="model.captchaCode"
+          :placeholder="$t('page.login.pwdLogin.captchaPlaceholder')"
+          class="flex-1"
         />
         <button
-            :disabled="captchaLoading"
-            class="h-40px w-132px cursor-pointer overflow-hidden rounded-8px border border-#e5e7eb bg-white p-0 transition hover:border-primary disabled:cursor-not-allowed dark:border-#334155 dark:bg-#111827"
-            type="button"
-            @click="refreshCaptcha"
+          :disabled="captchaLoading"
+          class="h-40px w-132px cursor-pointer overflow-hidden rounded-8px border border-#e5e7eb bg-white p-0 transition hover:border-primary disabled:cursor-not-allowed dark:border-#334155 dark:bg-#111827"
+          type="button"
+          @click="refreshCaptcha"
         >
           <span v-if="captchaLoading" class="text-12px text-text-secondary">{{ $t('common.refresh') }}</span>
           <img
-              v-else-if="captcha.imageBase64"
-              :src="captcha.imageBase64"
-              alt="captcha"
-              class="block size-full object-cover"
+            v-else-if="captcha.imageBase64"
+            :src="captcha.imageBase64"
+            alt="captcha"
+            class="block size-full object-cover"
           />
           <span v-else class="text-12px text-text-secondary">{{ $t('page.login.pwdLogin.refreshCaptcha') }}</span>
         </button>

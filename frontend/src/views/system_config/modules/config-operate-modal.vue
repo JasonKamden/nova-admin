@@ -89,27 +89,31 @@ watch(
     <NForm ref="formRef" :disabled="readonly" :label-width="100" :model="model" :rules="rules" label-placement="left">
       <NGrid :cols="24" :x-gap="16">
         <NFormItemGi :label="$t('page.config.configName')" path="configName" span="12">
-          <NInput v-model:value="model.configName"/>
+          <NInput v-model:value="model.configName" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.configCode')" path="configCode" span="12">
-          <NInput v-model:value="model.configCode" :disabled="!isAdd || readonly"/>
+          <NInput v-model:value="model.configCode" :disabled="!isAdd || readonly" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.configType')" path="configType" span="12">
-          <NSelect v-model:value="model.configType"
-                   :options="configTypeOptions.map(item => ({label: $t(item.label), value: item.value}))" />
+          <NSelect
+            v-model:value="model.configType"
+            :options="configTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
+          />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.status')" path="status" span="12">
-          <NSelect v-model:value="model.status"
-                   :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" />
+          <NSelect
+            v-model:value="model.status"
+            :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"
+          />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.sensitive')" path="sensitive" span="12">
-          <NSwitch v-model:value="model.sensitive"/>
+          <NSwitch v-model:value="model.sensitive" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.configValue')" path="configValue" span="24">
-          <NInput v-model:value="model.configValue" :rows="4" type="textarea"/>
+          <NInput v-model:value="model.configValue" :rows="4" type="textarea" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.config.remark')" path="remark" span="24">
-          <NInput v-model:value="model.remark" :rows="3" type="textarea"/>
+          <NInput v-model:value="model.remark" :rows="3" type="textarea" />
         </NFormItemGi>
       </NGrid>
     </NForm>

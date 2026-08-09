@@ -65,7 +65,7 @@ async function openMessageCenterPage() {
         <template #trigger>
           <NBadge :offset="[-2, 2]" :show="Boolean(messageStore.badgeValue)" :value="messageStore.badgeValue">
             <ButtonIcon :tooltip-content="$t('page.messageCenter.title')">
-              <SvgIcon class="text-icon-large" icon="ph:bell-ringing"/>
+              <SvgIcon class="text-icon-large" icon="ph:bell-ringing" />
             </ButtonIcon>
           </NBadge>
         </template>
@@ -90,17 +90,17 @@ async function openMessageCenterPage() {
 
       <div v-if="messageStore.recentMessages.length" class="flex-col-stretch gap-10px">
         <div
-            v-for="item in messageStore.recentMessages"
-            :key="item.messageId"
-            class="cursor-pointer rounded-12px bg-#f7f9fc px-12px py-10px transition-colors hover:bg-#eef3fb"
-            @click="openDetail(item.messageId)"
+          v-for="item in messageStore.recentMessages"
+          :key="item.messageId"
+          class="cursor-pointer rounded-12px bg-#f7f9fc px-12px py-10px transition-colors hover:bg-#eef3fb"
+          @click="openDetail(item.messageId)"
         >
           <div class="flex items-center justify-between gap-12px">
             <div class="min-w-0 flex-1">
               <div class="flex items-center gap-8px">
                 <span
-                    v-if="item.readStatus === 0"
-                    class="inline-block size-8px rounded-full bg-warning"
+                  v-if="item.readStatus === 0"
+                  class="inline-block size-8px rounded-full bg-warning"
                 ></span>
                 <span class="truncate text-14px font-600">{{ item.title }}</span>
               </div>
@@ -113,7 +113,7 @@ async function openMessageCenterPage() {
           </div>
         </div>
       </div>
-      <NEmpty v-else :description="$t('page.messageCenter.empty')" class="py-18px"/>
+      <NEmpty v-else :description="$t('page.messageCenter.empty')" class="py-18px" />
 
       <div class="mt-14px flex justify-end">
         <NButton text type="primary" @click="openMessageCenterPage">
@@ -123,5 +123,5 @@ async function openMessageCenterPage() {
     </div>
   </NPopover>
 
-  <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" @updated="handleDetailUpdated"/>
+  <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" @updated="handleDetailUpdated" />
 </template>

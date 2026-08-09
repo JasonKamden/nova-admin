@@ -210,54 +210,56 @@ watch(
       <NForm ref="formRef" :disabled="readonly" :label-width="112" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.menu.menuType')" path="menuType" span="12">
-            <NSelect v-model:value="model.menuType" :options="menuTypeOptions"/>
+            <NSelect v-model:value="model.menuType" :options="menuTypeOptions" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.parentMenu')" path="parentId" span="12">
             <NTreeSelect
-                v-model:value="model.parentId"
-                :options="menuOptions"
-                clearable
-                key-field="key"
-                label-field="label"
-                value-field="value"
+              v-model:value="model.parentId"
+              :options="menuOptions"
+              clearable
+              key-field="key"
+              label-field="label"
+              value-field="value"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.menuName')" path="menuName" span="12">
-            <NInput v-model:value="model.menuName"/>
+            <NInput v-model:value="model.menuName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.sort')" path="sort" span="12">
-            <NInputNumber v-model:value="model.sort" class="w-full"/>
+            <NInputNumber v-model:value="model.sort" class="w-full" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.routeName')" path="routeName" span="12">
-            <NInput v-model:value="model.routeName"/>
+            <NInput v-model:value="model.routeName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.routePath')" path="routePath" span="12">
-            <NInput v-model:value="model.routePath"/>
+            <NInput v-model:value="model.routePath" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.componentPath')" path="componentPath" span="12">
-            <NInput v-model:value="model.componentPath"/>
+            <NInput v-model:value="model.componentPath" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.permissionCode')" path="permissionCode" span="12">
-            <NInput v-model:value="model.permissionCode"/>
+            <NInput v-model:value="model.permissionCode" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.icon')" path="icon" span="12">
-            <NInput v-model:value="model.icon"/>
+            <NInput v-model:value="model.icon" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.i18nKey')" path="i18nKey" span="12">
-            <NInput v-model:value="model.i18nKey"/>
+            <NInput v-model:value="model.i18nKey" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.externalLink')" path="externalLink" span="24">
-            <NInput v-model:value="model.externalLink"/>
+            <NInput v-model:value="model.externalLink" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.status')" path="status" span="8">
-            <NSelect v-model:value="model.status"
-                     :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+            <NSelect
+              v-model:value="model.status"
+              :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"
+            />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.visible')" path="visible" span="8">
-            <NSwitch v-model:value="model.visible"/>
+            <NSwitch v-model:value="model.visible" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.menu.keepAlive')" path="keepAlive" span="8">
-            <NSwitch v-model:value="model.keepAlive"/>
+            <NSwitch v-model:value="model.keepAlive" />
           </NFormItemGi>
         </NGrid>
       </NForm>

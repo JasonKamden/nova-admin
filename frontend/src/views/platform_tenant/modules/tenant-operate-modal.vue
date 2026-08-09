@@ -193,34 +193,34 @@ watch(
       <NForm ref="formRef" :disabled="readonly" :label-width="110" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.tenant.tenantCode')" path="tenantCode" span="12">
-            <NInput v-model:value="model.tenantCode" :disabled="!isAdd"/>
+            <NInput v-model:value="model.tenantCode" :disabled="!isAdd" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.tenantName')" path="tenantName" span="12">
-            <NInput v-model:value="model.tenantName"/>
+            <NInput v-model:value="model.tenantName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.contactName')" path="contactName" span="12">
-            <NInput v-model:value="model.contactName"/>
+            <NInput v-model:value="model.contactName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.contactPhone')" path="contactPhone" span="12">
-            <NInput v-model:value="model.contactPhone"/>
+            <NInput v-model:value="model.contactPhone" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.contactEmail')" path="contactEmail" span="12">
-            <NInput v-model:value="model.contactEmail"/>
+            <NInput v-model:value="model.contactEmail" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.expireAt')" path="expireAt" span="12">
-            <NDatePicker v-model:value="model.expireAt" clearable type="date"/>
+            <NDatePicker v-model:value="model.expireAt" clearable type="date" />
           </NFormItemGi>
           <NFormItemGi v-if="isAdd" :label="$t('page.tenant.adminUsername')" path="adminUsername" span="12">
-            <NInput v-model:value="model.adminUsername"/>
+            <NInput v-model:value="model.adminUsername" />
           </NFormItemGi>
           <NFormItemGi v-if="isAdd" :label="$t('page.tenant.adminNickname')" path="adminNickname" span="12">
-            <NInput v-model:value="model.adminNickname"/>
+            <NInput v-model:value="model.adminNickname" />
           </NFormItemGi>
           <NFormItemGi v-if="isAdd" :label="$t('page.tenant.adminPassword')" path="adminPassword" span="24">
-            <NInput v-model:value="model.adminPassword" show-password-on="click" type="password"/>
+            <NInput v-model:value="model.adminPassword" show-password-on="click" type="password" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.tenant.remark')" path="remark" span="24">
-            <NInput v-model:value="model.remark" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea"/>
+            <NInput v-model:value="model.remark" :autosize="{ minRows: 3, maxRows: 5 }" type="textarea" />
           </NFormItemGi>
         </NGrid>
       </NForm>

@@ -44,7 +44,7 @@ const statisticData = computed<StatisticData[]>(() => [
       <NGi span="24 s:24 m:18">
         <div class="flex-y-center">
           <div class="size-72px shrink-0 overflow-hidden rd-1/2">
-            <img class="size-full" src="@/assets/imgs/soybean.jpg"/>
+            <img class="size-full" src="@/assets/imgs/soybean.jpg" />
           </div>
           <div class="pl-12px">
             <h3 class="text-18px font-semibold">
@@ -56,7 +56,7 @@ const statisticData = computed<StatisticData[]>(() => [
       </NGi>
       <NGi span="24 s:24 m:6">
         <NSpace :size="24" justify="end">
-          <NStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item"/>
+          <NStatistic v-for="item in statisticData" :key="item.id" class="whitespace-nowrap" v-bind="item" />
         </NSpace>
       </NGi>
     </NGrid>

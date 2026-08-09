@@ -197,29 +197,31 @@ async function handleFileOpen(id: number, mode: 'preview' | 'download') {
 
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <input ref="fileInputRef" class="hidden" type="file" @change="handleUploadChange"/>
+    <input ref="fileInputRef" class="hidden" type="file" @change="handleUploadChange" />
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.file.fileName')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.fileName" clearable/>
+        <NInput v-model:value="searchParams.fileName" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.file.contentType')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.contentType" clearable/>
+        <NInput v-model:value="searchParams.contentType" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.file.status')" class="pr-24px" span="24 s:12 m:6">
-        <NSelect v-model:value="searchParams.status"
-                 :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable/>
+        <NSelect
+          v-model:value="searchParams.status"
+          :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable
+        />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:6">
         <NSpace class="w-full" justify="end">
           <NButton @click="resetSearch">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getDataByPage(1)">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -229,16 +231,16 @@ async function handleFileOpen(id: number, mode: 'preview' | 'download') {
     <NCard :bordered="false" :title="$t('route.file')" class="card-wrapper sm:flex-1-hidden" size="small">
       <template #header-extra>
         <TableHeaderOperation
-            v-model:columns="columnChecks"
-            :disabled-delete="!hasChecked"
-            :loading="loading || uploading || batchDeleting"
-            @delete="handleBatchDelete"
-            @refresh="getData"
+          v-model:columns="columnChecks"
+          :disabled-delete="!hasChecked"
+          :loading="loading || uploading || batchDeleting"
+          @delete="handleBatchDelete"
+          @refresh="getData"
         >
           <template #default>
             <NButton :loading="uploading" ghost size="small" type="primary" @click="triggerUpload">
               <template #icon>
-                <icon-ic-round-plus class="text-icon"/>
+                <icon-ic-round-plus class="text-icon" />
               </template>
               {{ $t('page.file.upload') }}
             </NButton>
@@ -254,17 +256,17 @@ async function handleFileOpen(id: number, mode: 'preview' | 'download') {
         </TableHeaderOperation>
       </template>
       <NDataTable
-          v-model:checked-row-keys="checkedRowKeys"
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :pagination="mobilePagination"
-          :row-key="row => row.id"
-          :scroll-x="1900"
-          class="sm:h-full"
-          remote
-          size="small"
+        v-model:checked-row-keys="checkedRowKeys"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :pagination="mobilePagination"
+        :row-key="row => row.id"
+        :scroll-x="1900"
+        class="sm:h-full"
+        remote
+        size="small"
       />
     </NCard>
   </div>

@@ -83,7 +83,7 @@ watch(
     <NSpin :show="state.loading">
       <NForm :label-width="80" label-placement="left">
         <NFormItem :label="$t('page.user.role')">
-          <NSelect v-model:value="roleIds" :options="roleOptions" clearable filterable multiple/>
+          <NSelect v-model:value="roleIds" :options="roleOptions" clearable filterable multiple />
         </NFormItem>
       </NForm>
     </NSpin>

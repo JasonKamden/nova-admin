@@ -64,7 +64,7 @@ function toggleSelectAll(checked: boolean) {
     <template #trigger>
       <NButton size="small">
         <template #icon>
-          <icon-ant-design-setting-outlined class="text-icon"/>
+          <icon-ant-design-setting-outlined class="text-icon" />
         </template>
         {{ $t('common.columnSetting') }}
       </NButton>
@@ -72,41 +72,41 @@ function toggleSelectAll(checked: boolean) {
     <div>
       <div class="h-36px flex-y-center rd-4px pl-26px hover:(bg-primary bg-opacity-20)">
         <NCheckbox
-            :checked="selectAllChecked"
-            :disabled="visibleStats.total === 0"
-            :indeterminate="selectAllIndeterminate"
-            class="flex-1"
-            @update:checked="toggleSelectAll"
+          :checked="selectAllChecked"
+          :disabled="visibleStats.total === 0"
+          :indeterminate="selectAllIndeterminate"
+          class="flex-1"
+          @update:checked="toggleSelectAll"
         >
           {{ $t('common.selectAll') }}
         </NCheckbox>
       </div>
-      <NDivider class="!my-4px"/>
+      <NDivider class="!my-4px" />
       <VueDraggable v-model="columns" :animation="150" class="max-h-[200px] overflow-y-auto" filter=".none_draggable">
         <div
-            v-for="item in columns"
-            :key="item.key"
-            :class="{ hidden: !item.visible }"
-            class="h-36px flex-y-center justify-between gap-6px"
+          v-for="item in columns"
+          :key="item.key"
+          :class="{ hidden: !item.visible }"
+          class="h-36px flex-y-center justify-between gap-6px"
         >
           <div class="h-full flex-y-center flex-1 rd-4px hover:(bg-primary bg-opacity-20)">
-            <icon-mdi-drag class="mr-8px h-full cursor-move text-icon"/>
+            <icon-mdi-drag class="mr-8px h-full cursor-move text-icon" />
             <NCheckbox v-model:checked="item.checked" class="none_draggable flex-1">
               <template v-if="typeof item.title === 'function'">
-                <component :is="item.title"/>
+                <component :is="item.title" />
               </template>
               <template v-else>{{ item.title }}</template>
             </NCheckbox>
           </div>
           <ButtonIcon
-              :disabled="!item.checked"
-              :focusable="false"
-              :tooltip-content="$t(tooltipRecord[item.fixed!])"
-              @click="handleFixed(item)"
+            :disabled="!item.checked"
+            :focusable="false"
+            :tooltip-content="$t(tooltipRecord[item.fixed!])"
+            @click="handleFixed(item)"
           >
-            <icon-octicon-pin-16 v-if="item.fixed === 'unFixed'"/>
-            <icon-octicon-pin-16 v-else-if="item.fixed === 'left'" class="rotate-270"/>
-            <icon-octicon-pin-slash-16 v-else/>
+            <icon-octicon-pin-16 v-if="item.fixed === 'unFixed'" />
+            <icon-octicon-pin-16 v-else-if="item.fixed === 'left'" class="rotate-270" />
+            <icon-octicon-pin-slash-16 v-else />
           </ButtonIcon>
         </div>
       </VueDraggable>

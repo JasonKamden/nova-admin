@@ -21,24 +21,24 @@ const isMixHorizontalMode = computed(() =>
   <NDivider>{{ $t('theme.layout.footer.title') }}</NDivider>
   <TransitionGroup class="flex-col-stretch gap-12px" name="setting-list" tag="div">
     <SettingItem key="1" :label="$t('theme.layout.footer.visible')">
-      <NSwitch v-model:value="themeStore.footer.visible"/>
+      <NSwitch v-model:value="themeStore.footer.visible" />
     </SettingItem>
     <SettingItem
-        v-if="themeStore.footer.visible && isWrapperScrollMode"
-        key="2"
-        :label="$t('theme.layout.footer.fixed')"
+      v-if="themeStore.footer.visible && isWrapperScrollMode"
+      key="2"
+      :label="$t('theme.layout.footer.fixed')"
     >
-      <NSwitch v-model:value="themeStore.footer.fixed"/>
+      <NSwitch v-model:value="themeStore.footer.fixed" />
     </SettingItem>
     <SettingItem v-if="themeStore.footer.visible" key="3" :label="$t('theme.layout.footer.height')">
-      <NInputNumber v-model:value="themeStore.footer.height" :step="1" class="w-120px" size="small"/>
+      <NInputNumber v-model:value="themeStore.footer.height" :step="1" class="w-120px" size="small" />
     </SettingItem>
     <SettingItem
-        v-if="themeStore.footer.visible && isMixHorizontalMode"
-        key="4"
-        :label="$t('theme.layout.footer.right')"
+      v-if="themeStore.footer.visible && isMixHorizontalMode"
+      key="4"
+      :label="$t('theme.layout.footer.right')"
     >
-      <NSwitch v-model:value="themeStore.footer.right"/>
+      <NSwitch v-model:value="themeStore.footer.right" />
     </SettingItem>
   </TransitionGroup>
 </template>

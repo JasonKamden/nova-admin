@@ -168,40 +168,42 @@ watch(
       <NForm ref="formRef" :disabled="readonly" :label-width="110" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.role.roleCode')" path="roleCode" span="12">
-            <NInput v-model:value="model.roleCode" :disabled="!isAdd || readonly"/>
+            <NInput v-model:value="model.roleCode" :disabled="!isAdd || readonly" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.role.roleName')" path="roleName" span="12">
-            <NInput v-model:value="model.roleName"/>
+            <NInput v-model:value="model.roleName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.role.dataScope')" path="dataScope" span="12">
             <NSelect
-                v-model:value="model.dataScope"
-                :options="dataScopeOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+              v-model:value="model.dataScope"
+              :options="dataScopeOptions.map(item => ({ label: $t(item.label), value: item.value }))"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.role.status')" path="status" span="12">
             <NSelect
-                v-model:value="model.status"
-                :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+              v-model:value="model.status"
+              :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.role.sort')" path="sort" span="12">
-            <NInputNumber v-model:value="model.sort" class="w-full"/>
+            <NInputNumber v-model:value="model.sort" class="w-full" />
           </NFormItemGi>
-          <NFormItemGi v-if="isCustomScope" :label="$t('page.role.customDepartments')" path="customDepartmentIds"
-                       span="24">
+          <NFormItemGi
+            v-if="isCustomScope" :label="$t('page.role.customDepartments')" path="customDepartmentIds"
+            span="24"
+          >
             <NTreeSelect
-                v-model:value="model.customDepartmentIds"
-                :options="departmentOptions"
-                clearable
-                key-field="key"
-                label-field="label"
-                multiple
-                value-field="value"
+              v-model:value="model.customDepartmentIds"
+              :options="departmentOptions"
+              clearable
+              key-field="key"
+              label-field="label"
+              multiple
+              value-field="value"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.role.remark')" path="remark" span="24">
-            <NInput v-model:value="model.remark" :rows="3" type="textarea"/>
+            <NInput v-model:value="model.remark" :rows="3" type="textarea" />
           </NFormItemGi>
         </NGrid>
       </NForm>

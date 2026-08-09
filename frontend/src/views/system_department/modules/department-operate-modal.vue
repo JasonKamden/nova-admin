@@ -223,43 +223,43 @@ watch(
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.department.parentDepartment')" path="parentId" span="12">
             <NTreeSelect
-                v-model:value="model.parentId"
-                :options="parentOptions"
-                clearable
-                key-field="key"
-                label-field="label"
-                value-field="value"
+              v-model:value="model.parentId"
+              :options="parentOptions"
+              clearable
+              key-field="key"
+              label-field="label"
+              value-field="value"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.departmentCode')" path="departmentCode" span="12">
-            <NInput v-model:value="model.departmentCode" :disabled="!isAdd"/>
+            <NInput v-model:value="model.departmentCode" :disabled="!isAdd" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.departmentName')" path="departmentName" span="12">
-            <NInput v-model:value="model.departmentName"/>
+            <NInput v-model:value="model.departmentName" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.leaderUser')" path="leaderUserId" span="12">
             <NSelect
-                v-model:value="model.leaderUserId"
-                :options="leaderOptions"
-                clearable
-                filterable
-                remote
-                @search="loadLeaderOptions"
+              v-model:value="model.leaderUserId"
+              :options="leaderOptions"
+              clearable
+              filterable
+              remote
+              @search="loadLeaderOptions"
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.phone')" path="phone" span="12">
-            <NInput v-model:value="model.phone"/>
+            <NInput v-model:value="model.phone" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.email')" path="email" span="12">
-            <NInput v-model:value="model.email"/>
+            <NInput v-model:value="model.email" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.sort')" path="sort" span="12">
-            <NInputNumber v-model:value="model.sort" class="w-full"/>
+            <NInputNumber v-model:value="model.sort" class="w-full" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.department.status')" path="status" span="12">
             <NSelect
-                v-model:value="model.status"
-                :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+              v-model:value="model.status"
+              :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
             />
           </NFormItemGi>
         </NGrid>

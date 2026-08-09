@@ -90,11 +90,13 @@ watch(
       <NForm :label-width="80" :model="searchParams" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.user.username')" span="24 s:12 m:8">
-            <NInput v-model:value="searchParams.user" clearable/>
+            <NInput v-model:value="searchParams.user" clearable />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.status')" span="24 s:12 m:6">
-            <NSelect v-model:value="searchParams.readStatus"
-                     :options="readStatusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable/>
+            <NSelect
+              v-model:value="searchParams.readStatus"
+              :options="readStatusOptions.map(item => ({label: $t(item.label), value: item.value}))" clearable
+            />
           </NFormItemGi>
           <NFormItemGi span="24 m:10">
             <NSpace class="w-full" justify="end">
@@ -105,13 +107,13 @@ watch(
       </NForm>
     </div>
     <NDataTable
-        :columns="columns"
-        :data="data"
-        :loading="loading"
-        :pagination="mobilePagination"
-        :row-key="row => row.userId"
-        remote
-        size="small"
+      :columns="columns"
+      :data="data"
+      :loading="loading"
+      :pagination="mobilePagination"
+      :row-key="row => row.userId"
+      remote
+      size="small"
     />
   </NModal>
 </template>

@@ -114,16 +114,16 @@ const applyPreset = (preset: ThemePreset): void => {
 
   <div class="flex flex-col gap-3">
     <div
-        v-for="preset in presets"
-        :key="preset.id"
-        class="border border-primary/10 rounded-lg border-solid bg-white/5 p-3 backdrop-blur-10 transition-all duration-300 hover:(shadow-md -translate-y-0.5)"
+      v-for="preset in presets"
+      :key="preset.id"
+      class="border border-primary/10 rounded-lg border-solid bg-white/5 p-3 backdrop-blur-10 transition-all duration-300 hover:(shadow-md -translate-y-0.5)"
     >
       <div class="mb-2 flex items-center justify-between">
         <div class="min-w-0 w-full flex flex-1 items-center justify-between gap-2">
           <h5 class="m-0 truncate text-sm text-primary font-600">
             {{ getPresetName(preset) }}
           </h5>
-          <NBadge :value="`v${preset.version}`" class="flex-shrink-0 opacity-80" size="small" type="info"/>
+          <NBadge :value="`v${preset.version}`" class="flex-shrink-0 opacity-80" size="small" type="info" />
         </div>
         <NButton class="ml-2 flex-shrink-0" ghost round size="tiny" type="primary" @click="applyPreset(preset)">
           {{ $t('theme.appearance.preset.apply') }}
@@ -135,12 +135,12 @@ const applyPreset = (preset: ThemePreset): void => {
       <div class="flex items-center justify-between">
         <div class="flex gap-1">
           <div
-              v-for="(color, key) in { primary: preset.themeColor, ...preset.otherColor }"
-              :key="key"
-              :class="{ 'ring-1 ring-primary/50': key === 'primary' }"
-              :style="{ backgroundColor: color }"
-              :title="key"
-              class="h-3 w-3 cursor-pointer border border-white/30 rounded-full transition-transform hover:scale-110"
+            v-for="(color, key) in { primary: preset.themeColor, ...preset.otherColor }"
+            :key="key"
+            :class="{ 'ring-1 ring-primary/50': key === 'primary' }"
+            :style="{ backgroundColor: color }"
+            :title="key"
+            class="h-3 w-3 cursor-pointer border border-white/30 rounded-full transition-transform hover:scale-110"
           />
         </div>
         <div class="flex items-center gap-1">

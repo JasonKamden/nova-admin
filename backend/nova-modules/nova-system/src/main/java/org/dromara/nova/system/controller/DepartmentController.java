@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 部门TreeTable 后端接口。
  */
-@Tag(name = "Department 管理", description = "维护当前 Tenant 的部门树、状态和层级关系。")
+@Tag(name = "部门管理", description = "维护当前 Tenant 的部门树、状态和层级关系。")
 @RestController
 @RequestMapping("/api/system/departments")
 @RequiredArgsConstructor

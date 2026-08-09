@@ -116,44 +116,48 @@ function resetSearch() {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.monitor.module')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.module" clearable/>
+        <NInput v-model:value="searchParams.module" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.operator')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.operator" clearable/>
+        <NInput v-model:value="searchParams.operator" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.requestMethod')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.requestMethod" clearable/>
+        <NInput v-model:value="searchParams.requestMethod" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.requestIp')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.requestIp" clearable/>
+        <NInput v-model:value="searchParams.requestIp" clearable />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24">
         <NSpace class="w-full" justify="end">
           <NButton @click="resetSearch">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getDataByPage(1)">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
         </NSpace>
       </NFormItemGi>
     </SearchPanel>
-    <NCard :bordered="false" :title="$t('route.monitor_operation_log')" class="card-wrapper sm:flex-1-hidden"
-           size="small">
+    <NCard
+      :bordered="false" :title="$t('route.monitor_operation_log')" class="card-wrapper sm:flex-1-hidden"
+      size="small"
+    >
       <template #header-extra>
         <TableHeaderOperation v-model:columns="columnChecks" :loading="loading" @refresh="getData">
           <template #default><span class="hidden"></span></template>
         </TableHeaderOperation>
       </template>
-      <NDataTable :columns="columns" :data="data" :flex-height="!appStore.isMobile" :loading="loading"
-                  :pagination="mobilePagination" :row-key="row => row.id" class="sm:h-full" remote size="small"/>
+      <NDataTable
+        :columns="columns" :data="data" :flex-height="!appStore.isMobile" :loading="loading"
+        :pagination="mobilePagination" :row-key="row => row.id" class="sm:h-full" remote size="small"
+      />
     </NCard>
-    <OperationLogDetailModal v-model:visible="detailVisible" :log-id="activeId"/>
+    <OperationLogDetailModal v-model:visible="detailVisible" :log-id="activeId" />
   </div>
 </template>

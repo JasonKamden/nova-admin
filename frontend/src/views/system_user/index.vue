@@ -254,35 +254,35 @@ async function handleDelete(userId: number) {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.user.username')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.username" clearable/>
+        <NInput v-model:value="searchParams.username" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.user.nickname')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.nickname" clearable/>
+        <NInput v-model:value="searchParams.nickname" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.user.phone')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.phone" clearable/>
+        <NInput v-model:value="searchParams.phone" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.user.status')" class="pr-24px" span="24 s:12 m:6">
         <NSelect
-            v-model:value="searchParams.status"
-            :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-            clearable
+          v-model:value="searchParams.status"
+          :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+          clearable
         />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.user.email')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.email" clearable/>
+        <NInput v-model:value="searchParams.email" clearable />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:12">
         <NSpace class="w-full" justify="end">
           <NButton @click="handleReset">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getDataByPage(1)">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -296,7 +296,7 @@ async function handleDelete(userId: number) {
           <template #default>
             <NButton v-if="showAdd" ghost size="small" type="primary" @click="openModal('add')">
               <template #icon>
-                <icon-ic-round-plus class="text-icon"/>
+                <icon-ic-round-plus class="text-icon" />
               </template>
               {{ $t('common.add') }}
             </NButton>
@@ -305,31 +305,31 @@ async function handleDelete(userId: number) {
       </template>
 
       <NDataTable
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :pagination="mobilePagination"
-          :row-key="row => row.id"
-          :scroll-x="2200"
-          class="sm:h-full"
-          remote
-          size="small"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :pagination="mobilePagination"
+        :row-key="row => row.id"
+        :scroll-x="2200"
+        class="sm:h-full"
+        remote
+        size="small"
       />
     </NCard>
 
-    <UserOperateModal v-model:visible="modalVisible" :mode="operateMode" :user-id="activeUserId" @submitted="getData"/>
+    <UserOperateModal v-model:visible="modalVisible" :mode="operateMode" :user-id="activeUserId" @submitted="getData" />
     <UserPasswordModal
-        v-model:visible="passwordModalVisible"
-        :user-id="activeUserId"
-        :username="activeUserName"
-        @submitted="getData"
+      v-model:visible="passwordModalVisible"
+      :user-id="activeUserId"
+      :username="activeUserName"
+      @submitted="getData"
     />
     <UserRoleModal
-        v-model:visible="roleModalVisible"
-        :user-id="activeUserId"
-        :username="activeUserName"
-        @submitted="getData"
+      v-model:visible="roleModalVisible"
+      :user-id="activeUserId"
+      :username="activeUserName"
+      @submitted="getData"
     />
   </div>
 </template>

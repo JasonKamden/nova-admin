@@ -93,19 +93,19 @@ async function handleKick(sessionId: string, _username: string) {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="filterModel">
       <NFormItemGi :label="$t('page.monitor.keyword')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="filterModel.keyword" :placeholder="$t('common.keywordSearch')" clearable/>
+        <NInput v-model:value="filterModel.keyword" :placeholder="$t('common.keywordSearch')" clearable />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:18">
         <NSpace class="w-full" justify="end">
           <NButton @click="resetSearch">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getData">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -119,14 +119,14 @@ async function handleKick(sessionId: string, _username: string) {
         </TableHeaderOperation>
       </template>
       <NDataTable
-          :columns="columns"
-          :data="data"
-          :flex-height="!appStore.isMobile"
-          :loading="loading"
-          :row-key="row => row.sessionId"
-          :scroll-x="scrollX"
-          class="sm:h-full"
-          size="small"
+        :columns="columns"
+        :data="data"
+        :flex-height="!appStore.isMobile"
+        :loading="loading"
+        :row-key="row => row.sessionId"
+        :scroll-x="scrollX"
+        class="sm:h-full"
+        size="small"
       />
     </NCard>
   </div>

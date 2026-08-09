@@ -14,6 +14,7 @@ import {getServiceBaseURL} from '@/utils/service';
 export const useMessageStore = defineStore(SetupStoreId.Message, () => {
     const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
     const {baseURL} = getServiceBaseURL(import.meta.env, isHttpProxy);
+    const {baseURL: directBaseURL} = getServiceBaseURL(import.meta.env, false);
 
     const unreadCount = ref(0);
     const recentMessages = ref<Api.MessageCenter.Item[]>([]);
@@ -179,7 +180,9 @@ export const useMessageStore = defineStore(SetupStoreId.Message, () => {
         connected.value = false;
 
         try {
-            const response = await fetch(`${baseURL}/api/message-center/sse`, {
+            const sseBaseURL = isHttpProxy ? directBaseURL : baseURL;
+
+            const response = await fetch(`${sseBaseURL}/api/message-center/sse`, {
                 method: 'GET',
                 headers: {
                     Authorization,

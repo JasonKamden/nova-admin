@@ -68,7 +68,7 @@ function handleClose() {
     <slot></slot>
     <template #suffix>
       <slot name="suffix">
-        <SvgClose v-if="closable" :class="[style['svg-close']]" @pointerdown.stop="handleClose"/>
+        <SvgClose v-if="closable" :class="[style['svg-close']]" @pointerdown.stop="handleClose" />
       </slot>
     </template>
   </component>

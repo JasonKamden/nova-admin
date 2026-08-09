@@ -245,7 +245,7 @@ public class TenantServiceImpl implements TenantService {
     private Map<String, RoleEntity> initializeRoles(Long tenantId, Long userId) {
         LinkedHashMap<String, RoleEntity> result = new LinkedHashMap<>();
         createRole(result, tenantId, "tenant_admin", "租户管理员", DataScopeType.TENANT, true, 10, userId);
-        createRole(result, tenantId, "department_admin", "Department 管理员", DataScopeType.DEPARTMENT_AND_CHILDREN, true, 20, userId);
+        createRole(result, tenantId, "department_admin", "部门管理员", DataScopeType.DEPARTMENT_AND_CHILDREN, true, 20, userId);
         createRole(result, tenantId, "business_admin", "业务管理员", DataScopeType.TENANT, true, 30, userId);
         createRole(result, tenantId, "user", "普通用户", DataScopeType.SELF, true, 40, userId);
         createRole(result, tenantId, "auditor", "审计人员", DataScopeType.TENANT, true, 50, userId);

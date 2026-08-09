@@ -132,14 +132,14 @@ function handleDropdown(optionKey: App.Global.DropdownKey) {
 
 <template>
   <NDropdown
-      :options="options"
-      :show="visible"
-      :x="x"
-      :y="y"
-      placement="bottom-start"
-      trigger="manual"
-      @clickoutside="hideDropdown"
-      @select="handleDropdown"
+    :options="options"
+    :show="visible"
+    :x="x"
+    :y="y"
+    placement="bottom-start"
+    trigger="manual"
+    @clickoutside="hideDropdown"
+    @select="handleDropdown"
   />
 </template>
 

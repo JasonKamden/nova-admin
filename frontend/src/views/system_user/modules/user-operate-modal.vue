@@ -198,45 +198,45 @@ watch(
       <NForm ref="formRef" :disabled="readonly" :label-width="110" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.user.username')" path="username" span="12">
-            <NInput v-model:value="model.username" :disabled="!isAdd || readonly"/>
+            <NInput v-model:value="model.username" :disabled="!isAdd || readonly" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.nickname')" path="nickname" span="12">
-            <NInput v-model:value="model.nickname"/>
+            <NInput v-model:value="model.nickname" />
           </NFormItemGi>
           <NFormItemGi v-if="isAdd" :label="$t('page.user.initialPassword')" path="initialPassword" span="12">
-            <NInput v-model:value="model.initialPassword" show-password-on="click" type="password"/>
+            <NInput v-model:value="model.initialPassword" show-password-on="click" type="password" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.gender')" :span="isAdd ? 12 : 12" path="gender">
             <NSelect
-                v-model:value="model.gender"
-                :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-                clearable
+              v-model:value="model.gender"
+              :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+              clearable
             />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.phone')" path="phone" span="12">
-            <NInput v-model:value="model.phone"/>
+            <NInput v-model:value="model.phone" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.email')" path="email" span="12">
-            <NInput v-model:value="model.email"/>
+            <NInput v-model:value="model.email" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.department')" path="departmentId" span="12">
             <NTreeSelect
-                v-model:value="model.departmentId"
-                :options="departmentOptions"
-                clearable
-                key-field="key"
-                label-field="label"
-                value-field="value"
+              v-model:value="model.departmentId"
+              :options="departmentOptions"
+              clearable
+              key-field="key"
+              label-field="label"
+              value-field="value"
             />
           </NFormItemGi>
           <NFormItemGi v-if="isAdd" :label="$t('page.user.role')" path="roleIds" span="12">
-            <NSelect v-model:value="model.roleIds" :options="roleOptions" clearable filterable multiple/>
+            <NSelect v-model:value="model.roleIds" :options="roleOptions" clearable filterable multiple />
           </NFormItemGi>
           <NFormItemGi v-else-if="readonly" :label="$t('page.user.role')" span="12">
-            <NInput :value="detailRoleNames.join(' / ')" readonly/>
+            <NInput :value="detailRoleNames.join(' / ')" readonly />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.bio')" path="bio" span="24">
-            <NInput v-model:value="model.bio" :rows="3" type="textarea"/>
+            <NInput v-model:value="model.bio" :rows="3" type="textarea" />
           </NFormItemGi>
         </NGrid>
       </NForm>

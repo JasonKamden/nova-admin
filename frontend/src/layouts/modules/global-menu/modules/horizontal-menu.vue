@@ -16,12 +16,12 @@ const {selectedKey} = useMenu();
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
     <NMenu
-        :indent="18"
-        :options="routeStore.menus"
-        :value="selectedKey"
-        mode="horizontal"
-        responsive
-        @update:value="routerPushByKeyWithMetaQuery"
+      :indent="18"
+      :options="routeStore.menus"
+      :value="selectedKey"
+      mode="horizontal"
+      responsive
+      @update:value="routerPushByKeyWithMetaQuery"
     />
   </Teleport>
 </template>

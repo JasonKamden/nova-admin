@@ -79,7 +79,7 @@ watch(
 
     <NForm ref="formRef" :label-width="100" :model="model" :rules="rules" label-placement="left">
       <NFormItem :label="$t('page.user.resetPassword')" path="newPassword">
-        <NInput v-model:value="model.newPassword" show-password-on="click" type="password"/>
+        <NInput v-model:value="model.newPassword" show-password-on="click" type="password" />
       </NFormItem>
     </NForm>
 

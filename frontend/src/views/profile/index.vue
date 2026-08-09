@@ -239,9 +239,10 @@ onBeforeUnmount(() => {
           <div class="rounded-16px bg-gradient-to-br from-primary/12 via-white to-info/10 px-20px py-24px">
             <div class="flex flex-col items-center gap-12px text-center">
               <div
-                  class="flex size-108px items-center justify-center overflow-hidden rounded-full border-4 border-white bg-#f3f6fb shadow-sm">
-                <img v-if="avatarObjectUrl" :src="avatarObjectUrl" class="size-full object-cover"/>
-                <SvgIcon v-else class="text-72px text-#8b95a7" icon="ph:user-circle"/>
+                class="flex size-108px items-center justify-center overflow-hidden rounded-full border-4 border-white bg-#f3f6fb shadow-sm"
+              >
+                <img v-if="avatarObjectUrl" :src="avatarObjectUrl" class="size-full object-cover" />
+                <SvgIcon v-else class="text-72px text-#8b95a7" icon="ph:user-circle" />
               </div>
               <div>
                 <div class="text-20px font-600">{{ profile?.nickname || '-' }}</div>
@@ -257,8 +258,10 @@ onBeforeUnmount(() => {
               <NButton :loading="uploadingAvatar" secondary type="primary" @click="handleSelectAvatar">
                 {{ $t('page.profile.uploadAvatar') }}
               </NButton>
-              <input ref="fileInputRef" accept="image/jpeg,image/png,image/webp" class="hidden" type="file"
-                     @change="handleAvatarChange"/>
+              <input
+                ref="fileInputRef" accept="image/jpeg,image/png,image/webp" class="hidden" type="file"
+                @change="handleAvatarChange"
+              />
             </div>
           </div>
 
@@ -295,27 +298,29 @@ onBeforeUnmount(() => {
             <NForm ref="basicFormRef" :label-width="110" :model="basicModel" :rules="basicRules" label-placement="left">
               <NGrid :cols="24" :x-gap="16">
                 <NFormItemGi :label="$t('page.user.username')" span="24 m:12">
-                  <NInput :value="profile?.username || ''" disabled/>
+                  <NInput :value="profile?.username || ''" disabled />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.user.nickname')" path="nickname" span="24 m:12">
-                  <NInput v-model:value="basicModel.nickname"/>
+                  <NInput v-model:value="basicModel.nickname" />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.user.gender')" path="gender" span="24 m:12">
                   <NSelect
-                      v-model:value="basicModel.gender"
-                      :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-                      clearable
+                    v-model:value="basicModel.gender"
+                    :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+                    clearable
                   />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.user.phone')" path="phone" span="24 m:12">
-                  <NInput v-model:value="basicModel.phone" clearable/>
+                  <NInput v-model:value="basicModel.phone" clearable />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.user.email')" path="email" span="24">
-                  <NInput v-model:value="basicModel.email" clearable/>
+                  <NInput v-model:value="basicModel.email" clearable />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.user.bio')" path="bio" span="24">
-                  <NInput v-model:value="basicModel.bio" :autosize="{ minRows: 3, maxRows: 5 }" clearable
-                          type="textarea"/>
+                  <NInput
+                    v-model:value="basicModel.bio" :autosize="{ minRows: 3, maxRows: 5 }" clearable
+                    type="textarea"
+                  />
                 </NFormItemGi>
                 <NFormItemGi span="24">
                   <NSpace class="w-full" justify="end">
@@ -336,11 +341,13 @@ onBeforeUnmount(() => {
               <NDescriptionsItem :label="$t('page.user.status')">{{ statusLabel }}</NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.user.gender')">{{ genderLabel }}</NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextLabel }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.profile.currentTenant')">{{
+              <NDescriptionsItem :label="$t('page.profile.currentTenant')">
+                {{
                   profile?.tenantName || '-'
                 }}
               </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.profile.currentDepartment')">{{
+              <NDescriptionsItem :label="$t('page.profile.currentDepartment')">
+                {{
                   profile?.departmentName || '-'
                 }}
               </NDescriptionsItem>
@@ -351,7 +358,8 @@ onBeforeUnmount(() => {
               <NDescriptionsItem :label="$t('page.user.lastLoginTime')">
                 {{ profile?.lastLoginTime ? dayjs(profile.lastLoginTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
               </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.lastLoginIp')">{{
+              <NDescriptionsItem :label="$t('page.user.lastLoginIp')">
+                {{
                   profile?.lastLoginIp || '-'
                 }}
               </NDescriptionsItem>
@@ -366,17 +374,19 @@ onBeforeUnmount(() => {
               {{ $t('page.profile.passwordTip') }}
             </NAlert>
 
-            <NForm ref="passwordFormRef" :label-width="110" :model="passwordModel" :rules="passwordRules"
-                   label-placement="left">
+            <NForm
+              ref="passwordFormRef" :label-width="110" :model="passwordModel" :rules="passwordRules"
+              label-placement="left"
+            >
               <NGrid :cols="24" :x-gap="16">
                 <NFormItemGi :label="$t('page.profile.oldPassword')" path="oldPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.oldPassword" show-password-on="click" type="password"/>
+                  <NInput v-model:value="passwordModel.oldPassword" show-password-on="click" type="password" />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.profile.newPassword')" path="newPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.newPassword" show-password-on="click" type="password"/>
+                  <NInput v-model:value="passwordModel.newPassword" show-password-on="click" type="password" />
                 </NFormItemGi>
                 <NFormItemGi :label="$t('page.profile.confirmPassword')" path="confirmPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.confirmPassword" show-password-on="click" type="password"/>
+                  <NInput v-model:value="passwordModel.confirmPassword" show-password-on="click" type="password" />
                 </NFormItemGi>
                 <NFormItemGi span="24 m:12">
                   <div class="flex h-full items-center text-13px text-#666">

@@ -87,19 +87,19 @@ function handleSelect(key: string) {
 <template>
   <NSpace :size="8" :wrap="false" justify="center">
     <template v-for="action in directActions" :key="action.key">
-      <component :is="renderAction(action)"/>
+      <component :is="renderAction(action)" />
     </template>
 
     <NPopover v-if="popoverActions.length" placement="bottom-end" trigger="click">
       <template #trigger>
         <NButton ghost size="small">
           {{ $t('common.more') }}
-          <icon-mdi-chevron-down class="ml-4px text-icon"/>
+          <icon-mdi-chevron-down class="ml-4px text-icon" />
         </NButton>
       </template>
       <div class="flex-col-stretch gap-8px">
         <template v-for="action in popoverActions" :key="action.key">
-          <component :is="renderAction(action)"/>
+          <component :is="renderAction(action)" />
         </template>
       </div>
     </NPopover>
@@ -107,7 +107,7 @@ function handleSelect(key: string) {
     <NDropdown v-else-if="dropdownActions.length" :options="dropdownOptions" trigger="click" @select="handleSelect">
       <NButton ghost size="small">
         {{ $t('common.more') }}
-        <icon-mdi-chevron-down class="ml-4px text-icon"/>
+        <icon-mdi-chevron-down class="ml-4px text-icon" />
       </NButton>
     </NDropdown>
   </NSpace>

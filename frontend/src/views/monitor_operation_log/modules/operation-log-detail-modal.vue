@@ -34,29 +34,32 @@ watch(
         <NDescriptions :column="2" bordered class="mb-16px">
           <NDescriptionsItem label="ID">{{ detail.basic.id }}</NDescriptionsItem>
           <NDescriptionsItem :label="$t('page.monitor.module')">{{ detail.basic.module }}</NDescriptionsItem>
-          <NDescriptionsItem :label="$t('page.monitor.operationType')">{{
+          <NDescriptionsItem :label="$t('page.monitor.operationType')">
+            {{
               detail.basic.operationType
             }}
           </NDescriptionsItem>
           <NDescriptionsItem :label="$t('page.monitor.operator')">{{ detail.basic.username || '-' }}</NDescriptionsItem>
-          <NDescriptionsItem :label="$t('page.monitor.requestIp')">{{
+          <NDescriptionsItem :label="$t('page.monitor.requestIp')">
+            {{
               detail.basic.requestIp || '-'
             }}
           </NDescriptionsItem>
-          <NDescriptionsItem :label="$t('page.monitor.durationMs')">{{
+          <NDescriptionsItem :label="$t('page.monitor.durationMs')">
+            {{
               detail.basic.durationMs ?? '-'
             }}
           </NDescriptionsItem>
         </NDescriptions>
         <NCollapse :default-expanded-names="['request', 'response', 'exception']">
           <NCollapseItem name="request" title="Request">
-            <NCode :code="JSON.stringify(detail.request, null, 2)" language="json" word-wrap/>
+            <NCode :code="JSON.stringify(detail.request, null, 2)" language="json" word-wrap />
           </NCollapseItem>
           <NCollapseItem name="response" title="Response">
-            <NCode :code="JSON.stringify(detail.response, null, 2)" language="json" word-wrap/>
+            <NCode :code="JSON.stringify(detail.response, null, 2)" language="json" word-wrap />
           </NCollapseItem>
           <NCollapseItem name="exception" title="Exception">
-            <NCode :code="JSON.stringify(detail.exception, null, 2)" language="json" word-wrap/>
+            <NCode :code="JSON.stringify(detail.exception, null, 2)" language="json" word-wrap />
           </NCollapseItem>
         </NCollapse>
       </template>

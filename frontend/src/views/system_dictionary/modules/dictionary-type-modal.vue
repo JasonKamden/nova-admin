@@ -77,17 +77,19 @@ watch(
     <NForm ref="formRef" :label-width="100" :model="model" :rules="rules" label-placement="left">
       <NGrid :cols="24" :x-gap="16">
         <NFormItemGi :label="$t('page.dictionary.typeName')" path="dictName" span="12">
-          <NInput v-model:value="model.dictName"/>
+          <NInput v-model:value="model.dictName" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.typeCode')" path="dictCode" span="12">
-          <NInput v-model:value="model.dictCode" :disabled="!isAdd"/>
+          <NInput v-model:value="model.dictCode" :disabled="!isAdd" />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.status')" path="status" span="12">
-          <NSelect v-model:value="model.status"
-                   :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
+          <NSelect
+            v-model:value="model.status"
+            :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"
+          />
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.remark')" path="remark" span="24">
-          <NInput v-model:value="model.remark" :rows="3" type="textarea"/>
+          <NInput v-model:value="model.remark" :rows="3" type="textarea" />
         </NFormItemGi>
       </NGrid>
     </NForm>

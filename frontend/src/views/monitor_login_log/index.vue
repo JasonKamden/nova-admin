@@ -75,29 +75,29 @@ function resetSearch() {
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
     <SearchPanel :model="searchParams">
       <NFormItemGi :label="$t('page.monitor.username')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.username" clearable/>
+        <NInput v-model:value="searchParams.username" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.ip')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.ip" clearable/>
+        <NInput v-model:value="searchParams.ip" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.status')" class="pr-24px" span="24 s:12 m:6">
         <NSelect
-            v-model:value="searchParams.loginStatus"
-            :options="[{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 0 }]"
-            clearable
+          v-model:value="searchParams.loginStatus"
+          :options="[{ label: $t('common.enabled'), value: 1 }, { label: $t('common.disabled'), value: 0 }]"
+          clearable
         />
       </NFormItemGi>
       <NFormItemGi class="pr-24px" span="24 m:6">
         <NSpace class="w-full" justify="end">
           <NButton @click="resetSearch">
             <template #icon>
-              <icon-ic-round-refresh class="text-icon"/>
+              <icon-ic-round-refresh class="text-icon" />
             </template>
             {{ $t('common.reset') }}
           </NButton>
           <NButton ghost type="primary" @click="getDataByPage(1)">
             <template #icon>
-              <icon-ic-round-search class="text-icon"/>
+              <icon-ic-round-search class="text-icon" />
             </template>
             {{ $t('common.search') }}
           </NButton>
@@ -110,8 +110,10 @@ function resetSearch() {
           <template #default><span class="hidden"></span></template>
         </TableHeaderOperation>
       </template>
-      <NDataTable :columns="columns" :data="data" :flex-height="!appStore.isMobile" :loading="loading"
-                  :pagination="mobilePagination" :row-key="row => row.id" class="sm:h-full" remote size="small"/>
+      <NDataTable
+        :columns="columns" :data="data" :flex-height="!appStore.isMobile" :loading="loading"
+        :pagination="mobilePagination" :row-key="row => row.id" class="sm:h-full" remote size="small"
+      />
     </NCard>
   </div>
 </template>

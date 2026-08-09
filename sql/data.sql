@@ -26,7 +26,7 @@ ON DUPLICATE KEY UPDATE status=1;
 INSERT INTO sys_role(id, tenant_id, role_code, role_name, data_scope, built_in, sort, status, create_by, create_time,
                      update_by, update_time, deleted, version)
 VALUES (10001, 1001, 'tenant_admin', '租户管理员', 'TENANT', 1, 10, 1, 1, NOW(), 1, NOW(), 0, 0),
-       (10002, 1001, 'department_admin', 'Department 管理员', 'DEPARTMENT_AND_CHILDREN', 1, 20, 1, 1, NOW(), 1, NOW(),
+       (10002, 1001, 'department_admin', '部门管理员', 'DEPARTMENT_AND_CHILDREN', 1, 20, 1, 1, NOW(), 1, NOW(),
         0, 0),
        (10003, 1001, 'business_admin', '业务管理员', 'TENANT', 1, 30, 1, 1, NOW(), 1, NOW(), 0, 0),
        (10004, 1001, 'user', '普通用户', 'SELF', 1, 40, 1, 1, NOW(), 1, NOW(), 0, 0),
@@ -71,7 +71,7 @@ VALUES (1, 'DIRECTORY', NULL, '系统管理', 'system', '/system', NULL, NULL, '
         NOW(), 0, 0),
        (17, 'BUTTON', 10, '导出用户', NULL, NULL, NULL, 'system:user:export', NULL, NULL, 7, 1, 0, 0, 1, NOW(), 1,
         NOW(), 0, 0),
-       (20, 'MENU', 1, 'Department 管理', 'system_department', '/system/department', 'view.system_department',
+       (20, 'MENU', 1, '部门管理', 'system_department', '/system/department', 'view.system_department',
         'system:department:list', 'carbon:tree-view-alt', 'route.system_department', 20, 1, 1, 1, 1, NOW(), 1, NOW(), 0,
         0),
        (21, 'BUTTON', 20, '新增Department', NULL, NULL, NULL, 'system:department:add', NULL, NULL, 1, 1, 0, 0, 1, NOW(),

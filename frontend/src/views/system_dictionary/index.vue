@@ -285,7 +285,7 @@ async function handleDataSubmitted() {
         <NCard :bordered="false" :title="$t('page.dictionary.typeTitle')" class="card-wrapper h-full" size="small">
           <template #header-extra>
             <NSpace>
-              <NInput v-model:value="typeKeyword" :placeholder="$t('common.keywordSearch')" class="w-220px" clearable/>
+              <NInput v-model:value="typeKeyword" :placeholder="$t('common.keywordSearch')" class="w-220px" clearable />
               <NButton @click="getTypes">{{ $t('common.search') }}</NButton>
               <NButton v-if="showAdd" ghost size="small" type="primary" @click="openTypeModal('add')">
                 {{ $t('common.add') }}
@@ -294,13 +294,13 @@ async function handleDataSubmitted() {
           </template>
 
           <NDataTable
-              :columns="typeColumns"
-              :data="typeData"
-              :loading="typeLoading"
-              :row-key="row => row.id"
-              :row-props="row => ({ onClick: () => selectType(row) })"
-              :scroll-x="typeScrollX"
-              size="small"
+            :columns="typeColumns"
+            :data="typeData"
+            :loading="typeLoading"
+            :row-key="row => row.id"
+            :row-props="row => ({ onClick: () => selectType(row) })"
+            :scroll-x="typeScrollX"
+            size="small"
           />
         </NCard>
       </NGi>
@@ -317,20 +317,26 @@ async function handleDataSubmitted() {
             <TableHeaderOperation v-model:columns="columnChecks" :loading="dataLoading" @refresh="getDataRows">
               <template #default>
                 <NSpace>
-                  <NInput v-model:value="dataSearchParams.label" :placeholder="$t('page.dictionary.dataLabel')"
-                          class="w-160px" clearable/>
-                  <NInput v-model:value="dataSearchParams.value" :placeholder="$t('page.dictionary.dataValue')"
-                          class="w-160px" clearable/>
+                  <NInput
+                    v-model:value="dataSearchParams.label" :placeholder="$t('page.dictionary.dataLabel')"
+                    class="w-160px" clearable
+                  />
+                  <NInput
+                    v-model:value="dataSearchParams.value" :placeholder="$t('page.dictionary.dataValue')"
+                    class="w-160px" clearable
+                  />
                   <NSelect
-                      v-model:value="dataSearchParams.status"
-                      :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-                      class="w-120px"
-                      clearable
+                    v-model:value="dataSearchParams.status"
+                    :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+                    class="w-120px"
+                    clearable
                   />
                   <NButton :disabled="!activeTypeId" @click="getDataByPage(1)">{{ $t('common.search') }}</NButton>
                   <NButton :disabled="!activeTypeId" @click="handleResetDataSearch">{{ $t('common.reset') }}</NButton>
-                  <NButton v-if="showAdd" :disabled="!activeTypeId" ghost size="small" type="primary"
-                           @click="openDataModal('add')">
+                  <NButton
+                    v-if="showAdd" :disabled="!activeTypeId" ghost size="small" type="primary"
+                    @click="openDataModal('add')"
+                  >
                     {{ $t('common.add') }}
                   </NButton>
                 </NSpace>
@@ -339,32 +345,32 @@ async function handleDataSubmitted() {
           </template>
 
           <NDataTable
-              :columns="dataColumns"
-              :data="dataRows"
-              :flex-height="!appStore.isMobile"
-              :loading="dataLoading"
-              :pagination="mobilePagination"
-              :row-key="row => row.id"
-              class="sm:h-full"
-              remote
-              size="small"
+            :columns="dataColumns"
+            :data="dataRows"
+            :flex-height="!appStore.isMobile"
+            :loading="dataLoading"
+            :pagination="mobilePagination"
+            :row-key="row => row.id"
+            class="sm:h-full"
+            remote
+            size="small"
           />
         </NCard>
       </NGi>
     </NGrid>
 
     <DictionaryTypeModal
-        v-model:visible="typeModalVisible"
-        :mode="typeOperateMode"
-        :type-item="activeType"
-        @submitted="handleTypeSubmitted"
+      v-model:visible="typeModalVisible"
+      :mode="typeOperateMode"
+      :type-item="activeType"
+      @submitted="handleTypeSubmitted"
     />
     <DictionaryDataModal
-        v-model:visible="dataModalVisible"
-        :data-item="activeData"
-        :mode="dataOperateMode"
-        :type-id="activeTypeId"
-        @submitted="handleDataSubmitted"
+      v-model:visible="dataModalVisible"
+      :data-item="activeData"
+      :mode="dataOperateMode"
+      :type-id="activeTypeId"
+      @submitted="handleDataSubmitted"
     />
   </div>
 </template>
