@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue';
+import {computed, ref, useSlots, watch} from 'vue';
 import {useThemeStore} from '@/store/modules/theme';
 
 defineOptions({
@@ -19,9 +19,11 @@ const props = withDefaults(defineProps<Props>(), {
   defaultExpanded: undefined
 });
 
+const slots = useSlots();
 const themeStore = useThemeStore();
 const collapseName = 'search';
 const expandedNames = ref<string[]>([]);
+const hasActions = computed(() => Boolean(slots.actions));
 const initialExpanded = computed(() =>
   props.defaultExpanded === undefined ? themeStore.searchPanelDefaultExpanded : props.defaultExpanded
 );
@@ -42,10 +44,20 @@ watch(
         <NForm :label-width="labelWidth" :model="model" :rules="rules" label-placement="left">
           <NGrid item-responsive responsive="screen">
             <slot />
-            <slot name="actions" />
+            <NFormItemGi v-if="hasActions" class="search-panel-actions pr-24px" span="24">
+              <div class="flex w-full justify-end">
+                <slot name="actions" />
+              </div>
+            </NFormItemGi>
           </NGrid>
         </NForm>
       </NCollapseItem>
     </NCollapse>
   </NCard>
 </template>
+
+<style scoped>
+.search-panel-actions :deep(.n-space) {
+  justify-content: flex-end;
+}
+</style>

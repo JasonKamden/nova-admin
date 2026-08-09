@@ -171,6 +171,10 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
                 return null;
             }
 
+            if (route.name === 'system_menu') {
+                return null;
+            }
+
             return route;
         });
 

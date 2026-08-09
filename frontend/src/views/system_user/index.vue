@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {downloadUserExport, fetchDeleteUser, fetchUpdateUserStatus} from '@/service/api';
 import {genderOptions, statusOptions, statusRecord} from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
@@ -83,12 +84,14 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'departmentName',
       title: $t('page.user.department'),
       minWidth: 180,
+      ellipsis: {tooltip: true},
       render: row => row.departmentName || '-'
     },
     {
       key: 'roles',
       title: $t('page.user.role'),
       minWidth: 220,
+      ellipsis: {tooltip: true},
       render: row => row.roles?.length ? row.roles.map(item => item.roleName).join(' / ') : '-'
     },
     {
@@ -111,6 +114,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'email',
       title: $t('page.user.email'),
       minWidth: 220,
+      ellipsis: {tooltip: true},
       render: row => row.email || '-'
     },
     {
@@ -126,13 +130,13 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'lastLoginTime',
       title: $t('page.user.lastLoginTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.lastLoginTime)
     },
     {
       key: 'createTime',
       title: $t('page.user.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.createTime)
     },
     {

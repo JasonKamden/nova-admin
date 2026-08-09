@@ -9,6 +9,7 @@ import {useAuthStore} from '@/store/modules/auth';
 import {useContextStore} from '@/store/modules/context';
 import {useMessageStore} from '@/store/modules/message';
 import {useRouteStore} from '@/store/modules/route';
+import {formatContextType, normalizeBusinessText} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
 import MessageDetailDrawer from '@/layouts/modules/global-header/components/message-detail-drawer.vue';
 
@@ -96,8 +97,13 @@ const cards = computed(() => {
 
 const recentOperations = computed(() => tenantDashboard.value?.recentOperations || []);
 const announcements = computed(() => messageStore.recentMessages.slice(0, 5));
+const welcomeSummary = computed(() =>
+  isPlatform.value
+    ? formatContextType(authStore.userInfo.contextType)
+    : `${normalizeBusinessText(contextStore.current.tenantName)} / ${normalizeBusinessText(authStore.userInfo.departmentName)}`
+);
 const quickEntries = computed(() => {
-  const excludedPaths = new Set(['/home', '/profile', '/message/center']);
+  const excludedPaths = new Set(['/home', '/profile', '/message/center', '/system/menu']);
   const entries: Array<{ key: string; label: string; path: string }> = [];
 
   function walk(menus: App.Global.Menu[]) {
@@ -258,37 +264,26 @@ watch(
 
 <template>
   <div class="flex-col-stretch gap-16px">
-    <NCard :bordered="false" class="card-wrapper" size="small">
-      <div class="flex flex-col gap-8px lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div class="text-22px font-600">
-            {{ $t('page.home.greeting', {userName: authStore.userInfo.nickname || authStore.userInfo.username}) }}
-          </div>
-          <div class="mt-8px text-#666">
-            {{
-              isPlatform ? $t('page.home.platformDesc') : $t('page.home.tenantDesc', {tenantName: contextStore.current.tenantName || '-'})
-            }}
-          </div>
-        </div>
-        <NTag round type="info">
-          {{
-            isPlatform ? 'PLATFORM' : `${contextStore.current.tenantName || 'TENANT'} / ${authStore.userInfo.departmentName || '-'}`
-          }}
-        </NTag>
-      </div>
-    </NCard>
-
     <NSpin :show="loading">
-      <NCard v-if="!isPlatform" :bordered="false" class="card-wrapper mb-16px" size="small">
-        <div class="grid gap-12px lg:grid-cols-[minmax(0,1fr)_320px]">
+      <NCard :bordered="false" class="card-wrapper" size="small">
+        <div class="grid gap-16px lg:grid-cols-[minmax(0,1fr)_360px]">
           <div>
-            <div class="text-13px text-#666">{{ $t('page.home.currentSpace') }}</div>
-            <div class="mt-6px text-20px font-600">
-              {{ tenantDashboard?.currentSpace || contextStore.current.tenantName || '-' }}
+            <div class="text-22px font-600">
+              {{ $t('page.home.greeting', {userName: authStore.userInfo.nickname || authStore.userInfo.username}) }}
             </div>
-            <div class="mt-10px text-13px text-#666">
-              {{ $t('page.home.currentDepartment') }}:
-              {{ tenantDashboard?.department || authStore.userInfo.departmentName || '-' }}
+            <div class="mt-8px text-#666">
+              {{
+                isPlatform
+                  ? $t('page.home.platformDesc')
+                  : $t('page.home.tenantDesc', {tenantName: normalizeBusinessText(contextStore.current.tenantName)})
+              }}
+            </div>
+            <div class="mt-14px flex flex-wrap items-center gap-10px">
+              <NTag round type="info">{{ welcomeSummary }}</NTag>
+              <NTag v-if="!isPlatform" round type="default">
+                {{ $t('page.home.currentDepartment') }}:
+                {{ normalizeBusinessText(tenantDashboard?.department || authStore.userInfo.departmentName) }}
+              </NTag>
             </div>
           </div>
 
@@ -314,7 +309,7 @@ watch(
         </div>
       </NCard>
 
-      <NGrid :x-gap="gap" :y-gap="16" cols="1 s:2 xl:4" responsive="screen">
+      <NGrid :x-gap="gap" :y-gap="16" class="mt-16px" cols="1 s:2 xl:4" responsive="screen">
         <NGi v-for="card in cards" :key="card.key">
           <NCard :bordered="false" class="card-wrapper" size="small">
             <div class="flex items-center justify-between gap-12px">
@@ -333,12 +328,12 @@ watch(
       <NGrid v-if="!isPlatform" :x-gap="gap" :y-gap="16" class="mt-16px" item-responsive responsive="screen">
         <NGi span="24 s:24 m:15">
           <NCard :bordered="false" :title="$t('page.home.loginTrend')" class="card-wrapper" size="small">
-            <div ref="lineChartRef" class="h-320px"></div>
+            <div ref="lineChartRef" class="h-280px"></div>
           </NCard>
         </NGi>
         <NGi span="24 s:24 m:9">
           <NCard :bordered="false" :title="$t('page.home.userStatus')" class="card-wrapper" size="small">
-            <div ref="pieChartRef" class="h-320px"></div>
+            <div ref="pieChartRef" class="h-280px"></div>
           </NCard>
         </NGi>
       </NGrid>
@@ -346,7 +341,7 @@ watch(
       <NGrid v-if="isPlatform" :x-gap="gap" :y-gap="16" class="mt-16px" item-responsive responsive="screen">
         <NGi span="24 s:24 m:10">
           <NCard :bordered="false" :title="$t('page.home.platformOverview')" class="card-wrapper" size="small">
-            <div ref="pieChartRef" class="h-320px"></div>
+            <div ref="pieChartRef" class="h-280px"></div>
           </NCard>
         </NGi>
         <NGi span="24 s:24 m:14">

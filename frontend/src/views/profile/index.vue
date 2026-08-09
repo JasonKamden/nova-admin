@@ -4,8 +4,9 @@ import {genderOptions, statusRecord} from '@/constants/business';
 import {useFormRules, useNaiveForm} from '@/hooks/common/form';
 import {$t} from '@/locales';
 import {fetchProfile, fetchUpdateProfile, fetchUpdateProfileAvatar, fetchUpdateProfilePassword} from '@/service/api';
+import {useAppStore} from '@/store/modules/app';
 import {useAuthStore} from '@/store/modules/auth';
-import {formatContextType} from '@/utils/context';
+import {formatContextType, normalizeBusinessText} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
 import AuthenticatedAvatar from '@/components/business/authenticated-avatar.vue';
 
@@ -13,6 +14,7 @@ defineOptions({
   name: 'ProfilePage'
 });
 
+const appStore = useAppStore();
 const authStore = useAuthStore();
 const {createRequiredRule, createConfirmPwdRule, patternRules} = useFormRules();
 const {formRef: basicFormRef, validate: validateBasic, restoreValidation: restoreBasicValidation} = useNaiveForm();
@@ -84,15 +86,16 @@ const statusLabel = computed(() => {
 const contextLabel = computed(() => formatContextType(profile.value?.contextType));
 const contextSummary = computed(() => {
   if (profile.value?.contextType === 'PLATFORM') {
-    return 'Platform';
+    return formatContextType('PLATFORM');
   }
 
-  return profile.value?.tenantName || 'Tenant';
+  return normalizeBusinessText(profile.value?.tenantName) || formatContextType('TENANT');
 });
 const genderLabel = computed(() => {
   const gender = genderOptions.find(item => item.value === (profile.value?.gender || ''));
   return gender ? $t(gender.label) : $t('page.user.genderUnknown');
 });
+const uploadingLabel = computed(() => (appStore.locale === 'zh-CN' ? '上传中...' : 'Uploading...'));
 
 function resetPasswordModel() {
   passwordModel.oldPassword = '';
@@ -212,7 +215,7 @@ void loadProfile();
                 <div
                   class="absolute inset-0 flex items-center justify-center bg-black/45 text-12px text-white opacity-0 transition-opacity group-hover:opacity-100"
                 >
-                  {{ uploadingAvatar ? 'Uploading...' : $t('page.profile.uploadAvatar') }}
+                  {{ uploadingAvatar ? uploadingLabel : $t('page.profile.uploadAvatar') }}
                 </div>
               </div>
               <div>
@@ -235,8 +238,8 @@ void loadProfile();
 
           <NDescriptions :column="1" class="mt-16px" label-placement="top" size="small">
             <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextSummary }}</NDescriptionsItem>
-            <NDescriptionsItem :label="$t('page.profile.currentTenant')">{{ profile?.tenantName || '-' }}</NDescriptionsItem>
-            <NDescriptionsItem :label="$t('page.profile.currentDepartment')">{{ profile?.departmentName || '-' }}</NDescriptionsItem>
+            <NDescriptionsItem :label="$t('page.profile.currentTenant')">{{ normalizeBusinessText(profile?.tenantName) }}</NDescriptionsItem>
+            <NDescriptionsItem :label="$t('page.profile.currentDepartment')">{{ normalizeBusinessText(profile?.departmentName) }}</NDescriptionsItem>
             <NDescriptionsItem :label="$t('page.user.role')">
               <NSpace v-if="roleTags.length" size="small">
                 <NTag v-for="role in roleTags" :key="role.id" size="small" type="default">{{ role.roleName }}</NTag>
@@ -333,12 +336,12 @@ void loadProfile();
                 <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextLabel }}</NDescriptionsItem>
                 <NDescriptionsItem :label="$t('page.profile.currentTenant')">
                   {{
-                    profile?.tenantName || '-'
+                    normalizeBusinessText(profile?.tenantName)
                   }}
                 </NDescriptionsItem>
                 <NDescriptionsItem :label="$t('page.profile.currentDepartment')">
                   {{
-                    profile?.departmentName || '-'
+                    normalizeBusinessText(profile?.departmentName)
                   }}
                 </NDescriptionsItem>
                 <NDescriptionsItem :label="$t('page.user.role')">

@@ -3,6 +3,7 @@ import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {fetchDeleteTenant, fetchTenantOptions, fetchTenantPage, fetchUpdateTenantStatus} from '@/service/api';
 import {statusOptions, statusRecord} from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
@@ -112,12 +113,13 @@ const {
       key: 'contactEmail',
       title: $t('page.tenant.contactEmail'),
       minWidth: 220,
+      ellipsis: {tooltip: true},
       render: row => row.contactEmail || '-'
     },
     {
       key: 'createTime',
       title: $t('page.tenant.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.createTime)
     },
     {

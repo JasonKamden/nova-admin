@@ -66,7 +66,13 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
       render: row => (row.refreshable ? $t('common.yesOrNo.yes') : $t('common.yesOrNo.no'))
     },
     {key: 'status', title: $t('page.monitor.cacheStatus'), minWidth: 100, render: row => row.status || '-'},
-    {key: 'description', title: $t('page.monitor.description'), minWidth: 200, render: row => row.description || '-'},
+    {
+      key: 'description',
+      title: $t('page.monitor.description'),
+      minWidth: 220,
+      ellipsis: {tooltip: true},
+      render: row => row.description || '-'
+    },
     {
       key: 'operate',
       title: $t('common.operate'),

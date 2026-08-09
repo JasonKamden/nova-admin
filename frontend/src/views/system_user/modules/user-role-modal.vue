@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import { fetchUpdateUserRoles, fetchUserRoles } from '@/service/api';
 import { $t } from '@/locales';
+import { useThemeStore } from '@/store/modules/theme';
 import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
 import RoleSelectorTable from '@/components/business/relation-selector/role-selector-table.vue';
 
@@ -22,7 +23,9 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 const visible = defineModel<boolean>('visible', { default: false });
+const themeStore = useThemeStore();
 
+const containerWidth = computed(() => (themeStore.businessFormMode === 'modal' ? 780 : 680));
 const state = reactive({
   loading: false,
   submitting: false
@@ -68,7 +71,7 @@ watch(
 </script>
 
 <template>
-  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.user.roleTitle')} - ${username}`" :width="1080">
+  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.user.roleTitle')} - ${username}`" :width="containerWidth">
     <NSpin :show="state.loading">
       <RoleSelectorTable v-model:selected-ids="roleIds" />
     </NSpin>

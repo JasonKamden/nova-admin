@@ -14,6 +14,7 @@ import {
   messageTypeOptions,
   recipientTypeOptions
 } from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
@@ -66,7 +67,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     searchParams.value.pageSize = params.pageSize || 10;
   },
   columns: () => [
-    {key: 'title', title: $t('page.message.title'), minWidth: 180},
+    {key: 'title', title: $t('page.message.title'), minWidth: 220, ellipsis: {tooltip: true}},
     {
       key: 'messageType',
       title: $t('page.message.messageType'),
@@ -101,13 +102,13 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'createTime',
       title: $t('page.message.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.createTime)
     },
     {
       key: 'sendTime',
       title: $t('page.message.sendTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.sendTime)
     },
     {
@@ -294,7 +295,7 @@ async function handleDelete(id: number) {
       <NFormItemGi :label="$t('page.message.creator')" class="pr-24px" span="24 s:12 m:6">
         <NInput v-model:value="searchParams.creator" clearable />
       </NFormItemGi>
-      <NFormItemGi class="pr-24px" span="24 m:12">
+      <template #actions>
         <NSpace class="w-full" justify="end">
           <NButton @click="handleReset">
             <template #icon>
@@ -309,7 +310,7 @@ async function handleDelete(id: number) {
             {{ $t('common.search') }}
           </NButton>
         </NSpace>
-      </NFormItemGi>
+      </template>
     </SearchPanel>
 
     <NCard :bordered="false" :title="$t('route.system_message')" class="card-wrapper sm:flex-1-hidden" size="small">

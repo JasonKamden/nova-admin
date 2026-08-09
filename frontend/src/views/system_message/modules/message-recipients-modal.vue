@@ -1,6 +1,7 @@
 <script lang="tsx" setup>
 import {ref, watch} from 'vue';
 import {NTag} from 'naive-ui';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {fetchMessageRecipients} from '@/service/api';
 import {readStatusOptions, readStatusRecord} from '@/constants/business';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
@@ -40,7 +41,13 @@ const {columns, data, loading, getDataByPage, mobilePagination} = useNaivePagina
   columns: () => [
     {key: 'username', title: $t('page.user.username'), minWidth: 140},
     {key: 'nickname', title: $t('page.user.nickname'), minWidth: 140},
-    {key: 'departmentName', title: $t('page.user.department'), minWidth: 160, render: row => row.departmentName || '-'},
+    {
+      key: 'departmentName',
+      title: $t('page.user.department'),
+      minWidth: 180,
+      ellipsis: {tooltip: true},
+      render: row => row.departmentName || '-'
+    },
     {
       key: 'readStatus',
       title: $t('page.message.status'),
@@ -54,13 +61,13 @@ const {columns, data, loading, getDataByPage, mobilePagination} = useNaivePagina
     {
       key: 'receiveTime',
       title: $t('page.message.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.receiveTime)
     },
     {
       key: 'readTime',
       title: $t('page.message.sendTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.readTime)
     }
   ]

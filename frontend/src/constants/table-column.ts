@@ -1,0 +1,9 @@
+export const TABLE_COLUMN_WIDTH = {
+  DATE: 112,
+  TIME: 88,
+  DATETIME: 168,
+  DATETIME_MINUTE: 148,
+  STATUS: 96,
+  HTTP_METHOD: 88,
+  IP: 132
+} as const;

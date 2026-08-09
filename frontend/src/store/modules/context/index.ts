@@ -8,6 +8,7 @@ import {
 } from '@/service/api';
 import {localStg} from '@/utils/storage';
 import {SetupStoreId} from '@/enum';
+import {formatContextType, normalizeBusinessText} from '@/utils/context';
 
 export const useContextStore = defineStore(SetupStoreId.Context, () => {
     const current: Api.Route.CurrentContext = reactive({
@@ -22,7 +23,9 @@ export const useContextStore = defineStore(SetupStoreId.Context, () => {
     });
 
     const isPlatform = computed(() => current.contextType === 'PLATFORM');
-    const contextLabel = computed(() => (isPlatform.value ? '平台管理' : current.tenantName || 'Tenant'));
+    const contextLabel = computed(() =>
+        isPlatform.value ? '平台管理' : normalizeBusinessText(current.tenantName) || formatContextType('TENANT')
+    );
 
     function persistCurrent() {
         localStg.set('contextType', current.contextType);

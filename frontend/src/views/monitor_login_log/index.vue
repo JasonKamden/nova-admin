@@ -2,6 +2,7 @@
 import {ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {fetchLoginLogPage} from '@/service/api';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
@@ -30,7 +31,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     searchParams.value.pageSize = params.pageSize || 10;
   },
   columns: () => [
-    {key: 'username', title: $t('page.monitor.username'), minWidth: 140},
+    {key: 'username', title: $t('page.monitor.username'), width: 140},
     {key: 'contextType', title: $t('page.profile.currentContext'), width: 120, align: 'center', render: row => formatContextType(row.contextType)},
     {key: 'loginType', title: $t('page.monitor.loginType'), minWidth: 120, render: row => row.loginType || '-'},
     {
@@ -41,18 +42,19 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       render: row => <NTag
           type={row.loginStatus === 1 ? 'success' : 'error'}>{row.loginStatus === 1 ? $t('common.enabled') : $t('common.disabled')}</NTag>
     },
-    {key: 'ip', title: $t('page.monitor.ip'), minWidth: 140, render: row => row.ip || '-'},
+    {key: 'ip', title: $t('page.monitor.ip'), width: TABLE_COLUMN_WIDTH.IP, render: row => row.ip || '-'},
     {
       key: 'failureReason',
       title: $t('page.monitor.failureReason'),
-      minWidth: 180,
+      minWidth: 200,
+      ellipsis: {tooltip: true},
       render: row => row.failureReason || '-'
     },
-    {key: 'requestId', title: 'RequestId', minWidth: 180, render: row => row.requestId || '-'},
+    {key: 'requestId', title: 'RequestId', minWidth: 180, ellipsis: {tooltip: true}, render: row => row.requestId || '-'},
     {
       key: 'loginTime',
       title: $t('page.monitor.loginTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.loginTime)
     }
   ]
@@ -89,22 +91,20 @@ function resetSearch() {
         />
       </NFormItemGi>
       <template #actions>
-        <NFormItemGi class="pr-24px" span="24 m:6">
-          <NSpace class="w-full" justify="end">
-            <NButton @click="resetSearch">
-              <template #icon>
-                <icon-ic-round-refresh class="text-icon" />
-              </template>
-              {{ $t('common.reset') }}
-            </NButton>
-            <NButton ghost type="primary" @click="getDataByPage(1)">
-              <template #icon>
-                <icon-ic-round-search class="text-icon" />
-              </template>
-              {{ $t('common.search') }}
-            </NButton>
-          </NSpace>
-        </NFormItemGi>
+        <NSpace class="w-full" justify="end">
+          <NButton @click="resetSearch">
+            <template #icon>
+              <icon-ic-round-refresh class="text-icon" />
+            </template>
+            {{ $t('common.reset') }}
+          </NButton>
+          <NButton ghost type="primary" @click="getDataByPage(1)">
+            <template #icon>
+              <icon-ic-round-search class="text-icon" />
+            </template>
+            {{ $t('common.search') }}
+          </NButton>
+        </NSpace>
       </template>
     </SearchPanel>
     <NCard :bordered="false" :title="$t('route.monitor_login_log')" class="card-wrapper sm:flex-1-hidden" size="small">

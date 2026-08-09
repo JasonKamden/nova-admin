@@ -4,6 +4,8 @@ import type {TreeOption} from 'naive-ui';
 import {NButton, NEllipsis} from 'naive-ui';
 import {fetchMenuTree, fetchRoleMenuIds, fetchUpdateRoleMenus} from '@/service/api';
 import {$t} from '@/locales';
+import {useThemeStore} from '@/store/modules/theme';
+import {normalizeBusinessText} from '@/utils/context';
 import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
 
 defineOptions({
@@ -23,6 +25,7 @@ interface Emits {
 
 const emit = defineEmits<Emits>();
 const visible = defineModel<boolean>('visible', {default: false});
+const themeStore = useThemeStore();
 
 const state = reactive({
   loading: false,
@@ -34,12 +37,13 @@ const menuTree = ref<Api.Menu.Item[]>([]);
 const checkedKeys = ref<number[]>([]);
 const expandedKeys = ref<number[]>([]);
 
+const containerWidth = computed(() => (themeStore.businessFormMode === 'modal' ? 740 : 640));
 const treeOptions = computed(() => toTreeOptions(menuTree.value));
 
 function toTreeOptions(nodes: Api.Menu.Item[]): TreeOption[] {
   return nodes.map(node => ({
     key: node.id,
-    label: node.menuName,
+    label: normalizeBusinessText(node.menuName),
     children: node.children?.length ? toTreeOptions(node.children) : undefined
   }));
 }
@@ -123,7 +127,7 @@ watch(
 </script>
 
 <template>
-  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.role.menuTitle')} - ${roleName}`" :width="620">
+  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.role.menuTitle')} - ${roleName}`" :width="containerWidth">
     <NSpin :show="state.loading">
       <div class="mb-16px flex-col-stretch gap-12px">
         <div class="flex flex-wrap gap-12px">

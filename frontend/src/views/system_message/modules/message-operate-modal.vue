@@ -34,6 +34,8 @@ const isAdd = computed(() => props.mode === 'add');
 const title = computed(() => $t(isAdd.value ? 'page.message.addTitle' : readonly.value ? 'page.message.detailTitle' : 'page.message.editTitle'));
 
 const state = reactive({ loading: false, submitting: false });
+const roleSelectorVisible = ref(false);
+const userSelectorVisible = ref(false);
 const model = reactive<Api.Message.CreateReq>({
   title: '',
   messageType: 'ANNOUNCEMENT',
@@ -60,9 +62,19 @@ const rules = {
 const isDepartmentRecipient = computed(() => model.recipient.recipientType === 'DEPARTMENT');
 const isRoleRecipient = computed(() => model.recipient.recipientType === 'ROLE');
 const isUserRecipient = computed(() => model.recipient.recipientType === 'USER');
+const selectedRoleCount = computed(() => model.recipient.roleIds.length);
+const selectedUserCount = computed(() => model.recipient.userIds.length);
 
 function closeModal() {
   visible.value = false;
+}
+
+function closeRoleSelector() {
+  roleSelectorVisible.value = false;
+}
+
+function closeUserSelector() {
+  userSelectorVisible.value = false;
 }
 
 function resetModel() {
@@ -162,26 +174,26 @@ watch(
 </script>
 
 <template>
-  <BusinessFormContainer v-model:visible="visible" :title="title" :width="860">
+  <BusinessFormContainer v-model:visible="visible" :title="title" :width="960">
     <NSpin :show="state.loading">
       <NForm ref="formRef" :disabled="readonly" :label-width="110" :model="model" :rules="rules" label-placement="left">
         <NGrid :cols="24" :x-gap="16">
           <NFormItemGi :label="$t('page.message.title')" path="title" span="12">
             <NInput v-model:value="model.title" />
           </NFormItemGi>
-          <NFormItemGi :label="$t('page.message.messageType')" path="messageType" span="12">
+          <NFormItemGi :label="$t('page.message.messageType')" path="messageType" span="6">
             <NSelect
               v-model:value="model.messageType"
               :options="messageTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
             />
           </NFormItemGi>
-          <NFormItemGi :label="$t('page.message.recipientType')" path="recipientType" span="12">
+          <NFormItemGi :label="$t('page.message.recipientType')" path="recipientType" span="6">
             <NSelect
               v-model:value="model.recipient.recipientType"
               :options="recipientTypeOptions.map(item => ({label: $t(item.label), value: item.value}))"
             />
           </NFormItemGi>
-          <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.departments')" span="24">
+          <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.departments')" span="18">
             <NTreeSelect
               v-model:value="model.recipient.departmentIds"
               :options="departmentOptions"
@@ -192,19 +204,34 @@ watch(
               value-field="value"
             />
           </NFormItemGi>
-          <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.includeChildren')" span="12">
+          <NFormItemGi v-if="isDepartmentRecipient" :label="$t('page.message.includeChildren')" span="6">
             <NSwitch v-model:value="model.recipient.includeChildren" />
           </NFormItemGi>
           <NFormItemGi v-if="isRoleRecipient" :label="$t('page.message.roles')" span="24">
-            <RoleSelectorTable v-model:selected-ids="model.recipient.roleIds" :disabled="readonly" />
+            <div class="flex flex-wrap items-center justify-between gap-12px rounded-12px border border-#e5e7eb px-14px py-12px">
+              <span class="text-14px text-text-secondary">
+                {{ $t('common.selectedItems', {count: selectedRoleCount}) }}
+              </span>
+              <NButton :disabled="readonly" ghost type="primary" @click="roleSelectorVisible = true">
+                {{ $t('page.message.roles') }}
+              </NButton>
+            </div>
           </NFormItemGi>
           <NFormItemGi v-if="isUserRecipient" :label="$t('page.message.users')" span="24">
-            <UserSelectorTable v-model:selected-ids="model.recipient.userIds" :disabled="readonly" />
+            <div class="flex flex-wrap items-center justify-between gap-12px rounded-12px border border-#e5e7eb px-14px py-12px">
+              <span class="text-14px text-text-secondary">
+                {{ $t('common.selectedItems', {count: selectedUserCount}) }}
+              </span>
+              <NButton :disabled="readonly" ghost type="primary" @click="userSelectorVisible = true">
+                {{ $t('page.message.users') }}
+              </NButton>
+            </div>
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.contentHtml')" path="contentHtml" span="24">
             <RichTextEditor
               v-if="!readonly"
               v-model="model.contentHtml"
+              :min-height="280"
               :placeholder="$t('page.message.editorPlaceholder')"
             />
             <RichHtmlContent v-else :html="model.contentHtml" />
@@ -224,6 +251,32 @@ watch(
         <NButton v-if="!readonly" :loading="state.submitting" type="primary" @click="handleSubmit">
           {{ $t('common.confirm') }}
         </NButton>
+      </NSpace>
+    </template>
+  </BusinessFormContainer>
+
+  <BusinessFormContainer
+    v-model:visible="roleSelectorVisible"
+    :title="$t('page.message.roles')"
+    :width="760"
+  >
+    <RoleSelectorTable v-model:selected-ids="model.recipient.roleIds" :disabled="readonly" />
+    <template #action>
+      <NSpace justify="end">
+        <NButton @click="closeRoleSelector">{{ $t('common.close') }}</NButton>
+      </NSpace>
+    </template>
+  </BusinessFormContainer>
+
+  <BusinessFormContainer
+    v-model:visible="userSelectorVisible"
+    :title="$t('page.message.users')"
+    :width="800"
+  >
+    <UserSelectorTable v-model:selected-ids="model.recipient.userIds" :disabled="readonly" />
+    <template #action>
+      <NSpace justify="end">
+        <NButton @click="closeUserSelector">{{ $t('common.close') }}</NButton>
       </NSpace>
     </template>
   </BusinessFormContainer>

@@ -124,10 +124,26 @@
 - SearchPanel `actions` slot migration on touched pages: PASS by typecheck/lint/build
 - `monitor_online` detail drawer/client-summary changes: PASS by typecheck/lint/build
 - `monitor_operation_log` search/column polish changes: PASS by typecheck/lint/build
+- `home` merged welcome/quick-entry layout and reduced chart-height polish: PASS in real browser on August 9, 2026
+- `system_dictionary` final layout and real dictionary data rendering at `/system/dictionary`: PASS in real browser on
+  August 9, 2026
+- `system_message` draft modal final layout at `/system/message`: PASS in real browser on August 9, 2026
+- `system_message` recipient type switch `全部用户 -> 按角色`: PASS in real browser on August 9, 2026
+- `system_message` role recipient dedicated selector popup: PASS in real browser on August 9, 2026
+- Tenant sidebar no longer shows `菜单管理` after route-filter fix: PASS in real browser on August 9, 2026
+- Tenant home quick entries no longer include `/system/menu` after exclusion fix: PASS by route fix + rebuild on August 9, 2026
+- zh-CN business-text normalization now removes remaining visible `Tenant` wording and repairs mojibake menu labels in
+  the `system_role` menu grant tree: PASS in real browser on August 9, 2026
+- Touched list-page time columns now use the shared datetime width convention, and long-text columns use consistent
+  ellipsis handling: PASS by typecheck/lint/build on August 9, 2026
+- `system_role` menu grant drawer regression after switching `业务表单打开方式 -> 侧边弹窗`: PASS in real browser on August 9, 2026
+- `system_user` role assignment drawer regression after switching `业务表单打开方式 -> 侧边弹窗`: PASS in real browser on August 9, 2026
 
 ### Browser Notes
 
 - Real browser regression in this round confirmed: login page load, captcha render, successful real login, and
   post-login `/home` render: PASS
-- In-app browser wrapper on August 9, 2026 exposed a narrower interaction surface than the earlier run, so deeper
-  automated assertions for Header dropdown and Profile click-path were not fully re-scripted in this same pass.
+- Real browser regression in this same pass additionally confirmed `/home`, `/system/dictionary`, `/system/message`,
+  message draft recipient-type switch, and role selector popup: PASS
+- Real browser regression in this latest pass additionally confirmed `/system/role` menu grant and `/system/user` role
+  assignment under real modal/drawer switching, with clean role-menu tree labels: PASS

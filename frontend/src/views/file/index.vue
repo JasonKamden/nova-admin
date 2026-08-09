@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue';
 import {NButton, NPopconfirm, NSpace} from 'naive-ui';
 import {statusOptions} from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {fetchBatchDeleteFiles, fetchDeleteFile, fetchFilePage, fetchUploadFile} from '@/service/api';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
@@ -44,7 +45,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       type: 'selection',
       multiple: true
     },
-    {key: 'originalName', title: $t('page.file.fileName'), minWidth: 220},
+    {key: 'originalName', title: $t('page.file.fileName'), minWidth: 220, ellipsis: {tooltip: true}},
     {key: 'contentType', title: $t('page.file.contentType'), minWidth: 160, render: row => row.contentType || '-'},
     {
       key: 'storageType',
@@ -64,7 +65,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       }
     },
     {key: 'fileSize', title: $t('page.file.fileSize'), width: 110, align: 'center'},
-    {key: 'sha256', title: $t('page.file.sha256'), minWidth: 220, render: row => row.sha256 || '-'},
+    {key: 'sha256', title: $t('page.file.sha256'), minWidth: 220, ellipsis: {tooltip: true}, render: row => row.sha256 || '-'},
     {
       key: 'ownerUserId',
       title: $t('page.file.ownerUserId'),
@@ -75,7 +76,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'createTime',
       title: $t('page.file.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.createTime)
     },
     {

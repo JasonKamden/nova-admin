@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {configTypeOptions, statusOptions, statusRecord} from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {fetchConfigPage, fetchDeleteConfig} from '@/service/api';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
@@ -46,7 +47,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
   columns: () => [
     {key: 'configName', title: $t('page.config.configName'), minWidth: 150},
     {key: 'configCode', title: $t('page.config.configCode'), minWidth: 160},
-    {key: 'configValue', title: $t('page.config.configValue'), minWidth: 180},
+    {key: 'configValue', title: $t('page.config.configValue'), minWidth: 220, ellipsis: {tooltip: true}},
     {
       key: 'configType',
       title: $t('page.config.configType'),
@@ -81,11 +82,11 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
         return <NTag type={config?.type || 'default'}>{$t(config?.label || 'common.noData')}</NTag>;
       }
     },
-    {key: 'remark', title: $t('page.config.remark'), minWidth: 180, render: row => row.remark || '-'},
+    {key: 'remark', title: $t('page.config.remark'), minWidth: 220, ellipsis: {tooltip: true}, render: row => row.remark || '-'},
     {
       key: 'updateTime',
       title: $t('page.config.updateTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.updateTime)
     },
     {

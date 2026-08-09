@@ -6,6 +6,8 @@ import {useAuth} from '@/hooks/business/auth';
 import {useNaiveTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {useContextStore} from '@/store/modules/context';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {formatContextType} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
 import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
@@ -15,12 +17,15 @@ import TableRowActions from '@/components/advanced/table-row-actions.vue';
 defineOptions({name: 'MonitorOnline'});
 
 const appStore = useAppStore();
+const contextStore = useContextStore();
 const {hasAuth} = useAuth();
 const filterModel = ref({keyword: null as string | null});
 const kickingId = ref<string | null>(null);
 const detailVisible = ref(false);
 const activeRow = ref<Api.Monitor.OnlineUserItem | null>(null);
 const showKick = computed(() => hasAuth('monitor:online:kick'));
+const clientLabel = computed(() => (appStore.locale === 'zh-CN' ? '客户端' : 'Client'));
+const forceLogoutLabel = computed(() => (appStore.locale === 'zh-CN' ? '强制下线' : 'Force Logout'));
 
 const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
   api: () => fetchOnlineUserList(filterModel.value.keyword),
@@ -29,38 +34,54 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
     return error ? [] : rows;
   },
   columns: () => [
-    {key: 'username', title: $t('page.monitor.username'), minWidth: 140},
-    {key: 'contextType', title: $t('page.profile.currentContext'), width: 120, align: 'center', render: row => formatContextType(row.contextType)},
-    {key: 'tenantName', title: $t('page.monitor.tenantName'), minWidth: 160, render: row => row.tenantName || '-'},
+    {key: 'username', title: $t('page.monitor.username'), width: 130},
+    ...(contextStore.isPlatform
+      ? [
+          {
+            key: 'contextType',
+            title: $t('page.profile.currentContext'),
+            width: 110,
+            align: 'center' as const,
+            render: (row: Api.Monitor.OnlineUserItem) => formatContextType(row.contextType)
+          },
+          {
+            key: 'tenantName',
+            title: $t('page.monitor.tenantName'),
+            minWidth: 140,
+            render: (row: Api.Monitor.OnlineUserItem) => row.tenantName || '-'
+          }
+        ]
+      : []),
     {
       key: 'departmentName',
       title: $t('page.monitor.departmentName'),
-      minWidth: 160,
+      width: 150,
       render: row => row.departmentName || '-'
     },
-    {key: 'ip', title: $t('page.monitor.ip'), minWidth: 140, render: row => row.ip || '-'},
+    {key: 'ip', title: $t('page.monitor.ip'), width: TABLE_COLUMN_WIDTH.IP, render: row => row.ip || '-'},
     {
       key: 'userAgent',
-      title: 'Client',
-      minWidth: 220,
+      title: clientLabel.value,
+      width: 200,
+      ellipsis: {tooltip: true},
       render: row => parseUserAgent(row.userAgent)
     },
     {
       key: 'loginTime',
       title: $t('page.monitor.loginTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.loginTime)
     },
     {
       key: 'lastActivityTime',
       title: $t('page.monitor.lastActivityTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.lastActivityTime)
     },
     {
       key: 'operate',
       title: $t('common.operate'),
-      width: 180,
+      width: 110,
       align: 'center',
       render: row => (
           <TableRowActions
@@ -76,7 +97,7 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
                 },
                 {
                   key: 'kick',
-                  label: 'Force Logout',
+                  label: forceLogoutLabel.value,
                   type: 'error',
                   show: showKick.value,
                   loading: kickingId.value === row.sessionId,
@@ -126,22 +147,20 @@ async function handleKick(sessionId: string, _username: string) {
         <NInput v-model:value="filterModel.keyword" :placeholder="$t('common.keywordSearch')" clearable />
       </NFormItemGi>
       <template #actions>
-        <NFormItemGi class="pr-24px" span="24 m:18">
-          <NSpace class="w-full" justify="end">
-            <NButton @click="resetSearch">
-              <template #icon>
-                <icon-ic-round-refresh class="text-icon" />
-              </template>
-              {{ $t('common.reset') }}
-            </NButton>
-            <NButton ghost type="primary" @click="getData">
-              <template #icon>
-                <icon-ic-round-search class="text-icon" />
-              </template>
-              {{ $t('common.search') }}
-            </NButton>
-          </NSpace>
-        </NFormItemGi>
+        <NSpace class="w-full" justify="end">
+          <NButton @click="resetSearch">
+            <template #icon>
+              <icon-ic-round-refresh class="text-icon" />
+            </template>
+            {{ $t('common.reset') }}
+          </NButton>
+          <NButton ghost type="primary" @click="getData">
+            <template #icon>
+              <icon-ic-round-search class="text-icon" />
+            </template>
+            {{ $t('common.search') }}
+          </NButton>
+        </NSpace>
       </template>
     </SearchPanel>
     <NCard :bordered="false" :title="$t('route.monitor_online')" class="card-wrapper sm:flex-1-hidden" size="small">
@@ -165,15 +184,15 @@ async function handleKick(sessionId: string, _username: string) {
     <BusinessFormContainer v-model:visible="detailVisible" :title="$t('common.detail')" :width="720">
       <NDescriptions v-if="activeRow" :column="2" bordered label-placement="left" size="small">
         <NDescriptionsItem :label="$t('page.user.username')">{{ activeRow.username }}</NDescriptionsItem>
-        <NDescriptionsItem :label="$t('page.profile.currentContext')">
+        <NDescriptionsItem v-if="contextStore.isPlatform" :label="$t('page.profile.currentContext')">
           {{ formatContextType(activeRow.contextType) }}
         </NDescriptionsItem>
-        <NDescriptionsItem :label="$t('page.monitor.tenantName')">{{ activeRow.tenantName || '-' }}</NDescriptionsItem>
+        <NDescriptionsItem v-if="contextStore.isPlatform" :label="$t('page.monitor.tenantName')">{{ activeRow.tenantName || '-' }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.monitor.departmentName')">{{ activeRow.departmentName || '-' }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.monitor.ip')">{{ activeRow.ip || '-' }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.monitor.loginTime')">{{ formatDateTime(activeRow.loginTime) }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.monitor.lastActivityTime')">{{ formatDateTime(activeRow.lastActivityTime) }}</NDescriptionsItem>
-        <NDescriptionsItem label="Client">{{ parseUserAgent(activeRow.userAgent) }}</NDescriptionsItem>
+        <NDescriptionsItem :label="clientLabel">{{ parseUserAgent(activeRow.userAgent) }}</NDescriptionsItem>
         <NDescriptionsItem :label="$t('page.monitor.userAgent')" :span="2">{{ activeRow.userAgent || '-' }}</NDescriptionsItem>
       </NDescriptions>
       <template #action>

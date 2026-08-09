@@ -3,6 +3,7 @@ import {BACKEND_ERROR_CODE, createFlatRequest} from '@sa/axios';
 import {useAuthStore} from '@/store/modules/auth';
 import {getServiceBaseURL} from '@/utils/service';
 import {$t} from '@/locales';
+import {normalizeBusinessText} from '@/utils/context';
 import {getAuthorization, showErrorMsg} from './shared';
 import type {RequestInstanceState} from './type';
 
@@ -30,6 +31,7 @@ export const request = createFlatRequest(
         async onBackendFail(response) {
             const authStore = useAuthStore();
             const responseCode = String(response.data.code);
+            const normalizedMessage = normalizeBusinessText(response.data.message);
 
             function handleLogout() {
                 authStore.resetStore();
@@ -39,7 +41,7 @@ export const request = createFlatRequest(
                 handleLogout();
                 window.removeEventListener('beforeunload', handleLogout);
 
-                request.state.errMsgStack = request.state.errMsgStack.filter(msg => msg !== response.data.message);
+                request.state.errMsgStack = request.state.errMsgStack.filter(msg => msg !== normalizedMessage);
             }
 
             // when the backend response code is in `logoutCodes`, it means the user will be logged out and redirected to login page
@@ -51,15 +53,15 @@ export const request = createFlatRequest(
 
             // when the backend response code is in `modalLogoutCodes`, it means the user will be logged out by displaying a modal
             const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || [];
-            if (modalLogoutCodes.includes(responseCode) && !request.state.errMsgStack?.includes(response.data.message)) {
-                request.state.errMsgStack = [...(request.state.errMsgStack || []), response.data.message];
+            if (modalLogoutCodes.includes(responseCode) && !request.state.errMsgStack?.includes(normalizedMessage)) {
+                request.state.errMsgStack = [...(request.state.errMsgStack || []), normalizedMessage];
 
                 // prevent the user from refreshing the page
                 window.addEventListener('beforeunload', handleLogout);
 
                 window.$dialog?.error({
                     title: $t('common.error'),
-                    content: response.data.message,
+                    content: normalizedMessage,
                     positiveText: $t('common.confirm'),
                     maskClosable: false,
                     closeOnEsc: false,

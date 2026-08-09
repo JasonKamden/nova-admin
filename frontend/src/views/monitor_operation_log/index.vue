@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {fetchOperationLogPage} from '@/service/api';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
@@ -15,10 +16,10 @@ defineOptions({name: 'MonitorOperationLog'});
 const appStore = useAppStore();
 const detailVisible = ref(false);
 const activeId = ref<number | null>(null);
-const requestMethodOptions = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].map(item => ({label: item, value: item}));
+const requestMethodOptions = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'].map(item => ({label: item, value: item}));
 const statusOptions = computed(() => [
   {label: 'SUCCESS', value: 'SUCCESS'},
-  {label: 'FAILED', value: 'FAILED'}
+  {label: 'FAIL', value: 'FAILED'}
 ]);
 
 const searchParams = ref<Api.Monitor.OperationLogPageParams>({
@@ -49,16 +50,16 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'requestMethod',
       title: $t('page.monitor.requestMethod'),
-      width: 100,
+      width: TABLE_COLUMN_WIDTH.HTTP_METHOD,
       align: 'center',
       render: row => row.requestMethod || '-'
     },
-    {key: 'requestUri', title: $t('page.monitor.requestUri'), minWidth: 220, ellipsis: {tooltip: true}, render: row => row.requestUri || '-'},
-    {key: 'requestIp', title: $t('page.monitor.requestIp'), minWidth: 140, render: row => row.requestIp || '-'},
+    {key: 'requestUri', title: $t('page.monitor.requestUri'), minWidth: 240, ellipsis: {tooltip: true}, render: row => row.requestUri || '-'},
+    {key: 'requestIp', title: $t('page.monitor.requestIp'), width: TABLE_COLUMN_WIDTH.IP, render: row => row.requestIp || '-'},
     {
       key: 'status',
       title: $t('page.monitor.status'),
-      width: 100,
+      width: TABLE_COLUMN_WIDTH.STATUS,
       align: 'center',
       render: row => <NTag type={row.status === 'SUCCESS' ? 'success' : 'warning'}>{row.status || '-'}</NTag>
     },
@@ -72,7 +73,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'operationTime',
       title: $t('page.monitor.operationTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.operationTime)
     },
     {
@@ -148,22 +149,20 @@ function handleTimeRange(value: [number, number] | null) {
         />
       </NFormItemGi>
       <template #actions>
-        <NFormItemGi class="pr-24px" span="24">
-          <NSpace class="w-full" justify="end">
-            <NButton @click="resetSearch">
-              <template #icon>
-                <icon-ic-round-refresh class="text-icon" />
-              </template>
-              {{ $t('common.reset') }}
-            </NButton>
-            <NButton ghost type="primary" @click="getDataByPage(1)">
-              <template #icon>
-                <icon-ic-round-search class="text-icon" />
-              </template>
-              {{ $t('common.search') }}
-            </NButton>
-          </NSpace>
-        </NFormItemGi>
+        <NSpace class="w-full" justify="end">
+          <NButton @click="resetSearch">
+            <template #icon>
+              <icon-ic-round-refresh class="text-icon" />
+            </template>
+            {{ $t('common.reset') }}
+          </NButton>
+          <NButton ghost type="primary" @click="getDataByPage(1)">
+            <template #icon>
+              <icon-ic-round-search class="text-icon" />
+            </template>
+            {{ $t('common.search') }}
+          </NButton>
+        </NSpace>
       </template>
     </SearchPanel>
     <NCard

@@ -2,6 +2,7 @@
 import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {dataScopeOptions, statusOptions, statusRecord} from '@/constants/business';
+import {TABLE_COLUMN_WIDTH} from '@/constants/table-column';
 import {fetchDeleteRole, fetchRolePage, fetchUpdateRoleStatus} from '@/service/api';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
@@ -70,7 +71,8 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'dataScope',
       title: $t('page.role.dataScope'),
-      minWidth: 200,
+      minWidth: 220,
+      ellipsis: {tooltip: true},
       render: row => {
         const option = dataScopeOptions.find(item => item.value === row.dataScope);
         return option ? $t(option.label) : row.dataScope;
@@ -103,13 +105,14 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
     {
       key: 'remark',
       title: $t('page.role.remark'),
-      minWidth: 200,
+      minWidth: 220,
+      ellipsis: {tooltip: true},
       render: row => row.remark || '-'
     },
     {
       key: 'createTime',
       title: $t('page.role.createTime'),
-      minWidth: 180,
+      width: TABLE_COLUMN_WIDTH.DATETIME,
       render: row => formatDateTime(row.createTime)
     },
     {

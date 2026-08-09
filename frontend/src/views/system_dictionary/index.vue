@@ -299,10 +299,8 @@ void loadTypes();
         <template #header>
           <div class="flex items-center justify-between gap-12px">
             <span>{{ $t('page.dictionary.typeTitle') }}</span>
-            <NButton v-if="showAdd" circle ghost size="small" type="primary" @click="openTypeModal('add')">
-              <template #icon>
-                <icon-ic-round-plus class="text-icon" />
-              </template>
+            <NButton v-if="showAdd" size="small" type="primary" @click="openTypeModal('add')">
+              {{ $t('common.add') }}
             </NButton>
           </div>
         </template>
@@ -412,14 +410,7 @@ void loadTypes();
         </NTooltip>
       </div>
 
-      <NCard :bordered="false" class="card-wrapper min-w-0 flex-1" size="small">
-        <template #header>
-          <div class="flex items-center gap-8px">
-            <span>{{ $t('page.dictionary.dataTitle') }}</span>
-            <NTag v-if="activeTypeId" type="info">{{ activeTypeName }}</NTag>
-          </div>
-        </template>
-
+      <div class="min-w-0 flex flex-1 flex-col gap-16px">
         <SearchPanel :model="dataSearchParams">
           <NFormItemGi :label="$t('page.dictionary.dataLabel')" class="pr-24px" span="24 s:12 m:6">
             <NInput v-model:value="dataSearchParams.label" :disabled="!hasTypeSelection" clearable />
@@ -447,45 +438,53 @@ void loadTypes();
           </template>
         </SearchPanel>
 
-        <div class="flex-1 overflow-hidden">
-          <TableHeaderOperation v-model:columns="columnChecks" :loading="dataLoading" @refresh="getDataRows">
-            <template #default>
-              <NButton
-                v-if="showAdd"
-                :disabled="!hasTypeSelection"
-                ghost
-                size="small"
-                type="primary"
-                @click="openDataModal('add')"
-              >
-                <template #icon>
-                  <icon-ic-round-plus class="text-icon" />
-                </template>
-                {{ $t('common.add') }}
-              </NButton>
-            </template>
-          </TableHeaderOperation>
+        <NCard :bordered="false" class="card-wrapper min-h-0 min-w-0 flex-1" size="small">
+          <template #header>
+            <div class="flex items-center gap-8px">
+              <span>{{ `${$t('page.dictionary.dataTitle')} · ${activeTypeName || $t('common.noData')}` }}</span>
+            </div>
+          </template>
 
-          <NDataTable
-            v-if="hasTypeSelection"
-            :columns="dataColumns"
-            :data="dataRows"
-            :flex-height="!appStore.isMobile"
-            :loading="dataLoading"
-            :pagination="mobilePagination"
-            :row-key="row => row.id"
-            class="sm:h-full"
-            remote
-            size="small"
-          />
+          <div class="flex-1 overflow-hidden">
+            <TableHeaderOperation v-model:columns="columnChecks" :loading="dataLoading" @refresh="getDataRows">
+              <template #default>
+                <NButton
+                  v-if="showAdd"
+                  :disabled="!hasTypeSelection"
+                  ghost
+                  size="small"
+                  type="primary"
+                  @click="openDataModal('add')"
+                >
+                  <template #icon>
+                    <icon-ic-round-plus class="text-icon" />
+                  </template>
+                  {{ $t('common.add') }}
+                </NButton>
+              </template>
+            </TableHeaderOperation>
 
-          <NEmpty
-            v-else
-            :description="$t('page.dictionary.selectTypeTip')"
-            class="flex h-[320px] items-center justify-center"
-          />
-        </div>
-      </NCard>
+            <NDataTable
+              v-if="hasTypeSelection"
+              :columns="dataColumns"
+              :data="dataRows"
+              :flex-height="!appStore.isMobile"
+              :loading="dataLoading"
+              :pagination="mobilePagination"
+              :row-key="row => row.id"
+              class="sm:h-full"
+              remote
+              size="small"
+            />
+
+            <NEmpty
+              v-else
+              :description="$t('page.dictionary.selectTypeTip')"
+              class="flex h-[320px] items-center justify-center"
+            />
+          </div>
+        </NCard>
+      </div>
     </div>
 
     <DictionaryTypeModal

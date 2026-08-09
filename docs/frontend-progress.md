@@ -144,3 +144,19 @@
   wider ellipsis-friendly description/request columns.
 - Done: terminology cleanup in this round removes several remaining `Tenant 用户 / Department / Context` mixed labels
   from visible zh-CN page copy in the touched areas.
+- Done: `home` welcome area now merges greeting, current tenant/department summary, and quick entries into a single
+  top card, with chart heights reduced for lower-scroll desktop regression.
+- Done: `system_dictionary` now uses the final left-panel + collapse-button + search-panel + data-card structure, and
+  the real dictionary data table is confirmed to render from `/api/system/dictionaries/types/{typeId}/data`.
+- Done: `system_message` draft form is now the final large-form layout, and ROLE / USER recipients were upgraded from
+  embedded tables to compact selected-count summaries plus dedicated selector popups.
+- Done: tenant-context route filtering now explicitly removes `system_menu`, which closes the real regression where
+  tenant sidebar and home quick entries still exposed `菜单管理`.
+- Done: the zh-CN business-text cleanup now also repairs backend-returned mojibake menu labels in addition to replacing
+  remaining `Tenant / Department / Context` mixed wording in touched surfaces.
+- Done: touched list pages in this pass (`platform_tenant`, `system_role`, `system_user`, `system_message`,
+  `system_message` recipient detail, `system_config`, `file`, `monitor_cache`) now follow the same time-column width
+  and long-text ellipsis conventions.
+- Done: real browser regression in this pass confirms `system_role` menu grant and `system_user` role assignment both
+  work under global `BusinessFormContainer` modal/drawer switching, and the role-menu tree no longer shows raw
+  `Tenant` wording or mojibake labels after normalization.
