@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import {reactive, ref, watch} from 'vue';
-import {fetchRoleOptions, fetchUpdateUserRoles, fetchUserRoles} from '@/service/api';
-import {$t} from '@/locales';
+import { reactive, ref, watch } from 'vue';
+import { fetchUpdateUserRoles, fetchUserRoles } from '@/service/api';
+import { $t } from '@/locales';
+import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
+import RoleSelectorTable from '@/components/business/relation-selector/role-selector-table.vue';
 
 defineOptions({
   name: 'UserRoleModal'
@@ -19,7 +21,7 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>();
-const visible = defineModel<boolean>('visible', {default: false});
+const visible = defineModel<boolean>('visible', { default: false });
 
 const state = reactive({
   loading: false,
@@ -27,21 +29,12 @@ const state = reactive({
 });
 
 const roleIds = ref<number[]>([]);
-const roleOptions = ref<Array<{ label: string; value: number }>>([]);
-
 async function loadData() {
   state.loading = true;
 
-  const [rolesResp, selectedResp] = await Promise.all([fetchRoleOptions(null), fetchUserRoles(props.userId!)]);
+  const selectedResp = await fetchUserRoles(props.userId!);
 
   state.loading = false;
-
-  if (!rolesResp.error) {
-    roleOptions.value = rolesResp.data.map(item => ({
-      label: `${item.roleName} (${item.roleCode})`,
-      value: item.id
-    }));
-  }
 
   if (!selectedResp.error) {
     roleIds.value = selectedResp.data.map(item => item.id);
@@ -65,27 +58,19 @@ async function handleSubmit() {
 }
 
 watch(
-    () => visible.value,
-    async show => {
-      if (show && props.userId) {
-        await loadData();
-      }
+  () => visible.value,
+  async show => {
+    if (show && props.userId) {
+      await loadData();
     }
+  }
 );
 </script>
 
 <template>
-  <NModal v-model:show="visible" :mask-closable="false" class="w-560px" preset="card">
-    <template #header>
-      <div class="text-16px font-600">{{ $t('page.user.roleTitle') }} - {{ username }}</div>
-    </template>
-
+  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.user.roleTitle')} - ${username}`" :width="1080">
     <NSpin :show="state.loading">
-      <NForm :label-width="80" label-placement="left">
-        <NFormItem :label="$t('page.user.role')">
-          <NSelect v-model:value="roleIds" :options="roleOptions" clearable filterable multiple />
-        </NFormItem>
-      </NForm>
+      <RoleSelectorTable v-model:selected-ids="roleIds" />
     </NSpin>
 
     <template #action>
@@ -94,5 +79,5 @@ watch(
         <NButton :loading="state.submitting" type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
       </NSpace>
     </template>
-  </NModal>
+  </BusinessFormContainer>
 </template>

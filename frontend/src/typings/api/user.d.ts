@@ -56,6 +56,13 @@ declare namespace Api {
             roleIds: number[];
         }
 
+        interface ImportResult {
+            total: number;
+            success: number;
+            failed: number;
+            errors: string[];
+        }
+
         interface PageParams extends Api.Common.PageParams {
             username: string | null;
             nickname: string | null;

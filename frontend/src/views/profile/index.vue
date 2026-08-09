@@ -75,7 +75,6 @@ const passwordRules = {
 };
 
 const roleTags = computed(() => profile.value?.roles || []);
-const roleSummary = computed(() => `${roleTags.value.length} role${roleTags.value.length === 1 ? '' : 's'}`);
 const statusLabel = computed(() => {
   const status = profile.value?.status;
 
@@ -267,15 +266,14 @@ onBeforeUnmount(() => {
 
           <div class="mt-16px flex-col-stretch gap-12px">
             <div class="text-14px font-600">{{ $t('page.profile.identityTitle') }}</div>
-            <div class="grid grid-cols-2 gap-12px">
-              <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-                <div class="text-12px text-#7b8798">{{ $t('page.profile.currentContext') }}</div>
-                <div class="mt-6px text-14px font-600">{{ contextSummary }}</div>
-              </div>
-              <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-                <div class="text-12px text-#7b8798">{{ $t('page.user.role') }}</div>
-                <div class="mt-6px text-14px font-600">{{ roleSummary }}</div>
-              </div>
+            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
+              <div class="text-12px text-#7b8798">{{ $t('page.profile.currentContext') }}</div>
+              <div class="mt-6px text-14px font-600">{{ contextSummary }}</div>
+            </div>
+
+            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
+              <div class="text-12px text-#7b8798">{{ $t('page.profile.currentTenant') }}</div>
+              <div class="mt-6px text-14px font-600">{{ profile?.tenantName || '-' }}</div>
             </div>
 
             <div class="rounded-12px bg-#f7f9fc px-14px py-12px">

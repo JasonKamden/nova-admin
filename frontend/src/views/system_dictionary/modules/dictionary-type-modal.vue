@@ -13,7 +13,7 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<{ submitted: [] }>();
+const emit = defineEmits<{ submitted: [{ item: Api.Dictionary.TypeItem; mode: 'add' | 'edit' }] }>();
 const visible = defineModel<boolean>('visible', {default: false});
 const {formRef, validate, restoreValidation} = useNaiveForm();
 const {createRequiredRule} = useFormRules();
@@ -52,7 +52,7 @@ async function handleSubmit() {
   if (!response.error) {
     window.$message?.success($t(isAdd.value ? 'common.addSuccess' : 'common.updateSuccess'));
     closeModal();
-    emit('submitted');
+    emit('submitted', {item: response.data, mode: props.mode});
   }
 }
 

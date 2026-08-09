@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.redisson.api.RedissonClient;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 /**
  * Redisson Topic 跨节点分发，节点内再投递 SSE。
@@ -30,6 +32,26 @@ public class MessagePushService {
      * @param event 消息推送事件
      */
     public void publish(MessagePushEvent event) {
+        if (TransactionSynchronizationManager.isSynchronizationActive() &&
+                TransactionSynchronizationManager.isActualTransactionActive()) {
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCommit() {
+                    doPublish(event);
+                }
+            });
+            return;
+        }
+
+        doPublish(event);
+    }
+
+    /**
+     * 将事件广播到 Redisson Topic，由各节点转发到本地 SSE 连接。
+     *
+     * @param event 消息推送事件
+     */
+    private void doPublish(MessagePushEvent event) {
         redissonClient.getTopic(TOPIC).publish(event);
     }
 

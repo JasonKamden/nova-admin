@@ -1,20 +1,23 @@
 <script lang="ts" setup>
-import {computed, reactive, ref, watch} from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
 import {
   fetchCreateMessage,
   fetchDepartmentSelector,
   fetchMessageDetail,
-  fetchRoleOptions,
-  fetchUpdateMessage,
-  fetchUserPage
+  fetchUpdateMessage
 } from '@/service/api';
-import {messageTypeOptions, recipientTypeOptions} from '@/constants/business';
-import {useFormRules, useNaiveForm} from '@/hooks/common/form';
-import {$t} from '@/locales';
+import { messageTypeOptions, recipientTypeOptions } from '@/constants/business';
+import { useFormRules, useNaiveForm } from '@/hooks/common/form';
+import { $t } from '@/locales';
 import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
-import {toDepartmentTreeOptions} from '@/views/system_department/modules/shared';
+import MessageAttachmentPicker from '@/components/business/message-attachment-picker.vue';
+import RichHtmlContent from '@/components/business/rich-html-content.vue';
+import RichTextEditor from '@/components/business/rich-text-editor.vue';
+import RoleSelectorTable from '@/components/business/relation-selector/role-selector-table.vue';
+import UserSelectorTable from '@/components/business/relation-selector/user-selector-table.vue';
+import { toDepartmentTreeOptions } from '@/views/system_department/modules/shared';
 
-defineOptions({name: 'MessageOperateModal'});
+defineOptions({ name: 'MessageOperateModal' });
 
 interface Props {
   mode: 'add' | 'edit' | 'detail';
@@ -23,14 +26,14 @@ interface Props {
 
 const props = defineProps<Props>();
 const emit = defineEmits<{ submitted: [] }>();
-const visible = defineModel<boolean>('visible', {default: false});
-const {formRef, validate, restoreValidation} = useNaiveForm();
-const {createRequiredRule} = useFormRules();
+const visible = defineModel<boolean>('visible', { default: false });
+const { formRef, validate, restoreValidation } = useNaiveForm();
+const { createRequiredRule } = useFormRules();
 const readonly = computed(() => props.mode === 'detail');
 const isAdd = computed(() => props.mode === 'add');
 const title = computed(() => $t(isAdd.value ? 'page.message.addTitle' : readonly.value ? 'page.message.detailTitle' : 'page.message.editTitle'));
 
-const state = reactive({loading: false, submitting: false});
+const state = reactive({ loading: false, submitting: false });
 const model = reactive<Api.Message.CreateReq>({
   title: '',
   messageType: 'ANNOUNCEMENT',
@@ -46,8 +49,6 @@ const model = reactive<Api.Message.CreateReq>({
 });
 const detail = ref<Api.Message.Detail | null>(null);
 const departmentOptions = ref<Api.Department.TreeOption[]>([]);
-const roleOptions = ref<Array<{ label: string; value: number }>>([]);
-const userOptions = ref<Array<{ label: string; value: number }>>([]);
 
 const rules = {
   title: createRequiredRule($t('page.message.form.title')),
@@ -80,32 +81,9 @@ function resetModel() {
 }
 
 async function loadDepartments() {
-  const {data, error} = await fetchDepartmentSelector();
+  const { data, error } = await fetchDepartmentSelector();
   if (!error) {
     departmentOptions.value = toDepartmentTreeOptions(data);
-  }
-}
-
-async function loadRoles() {
-  const {data, error} = await fetchRoleOptions(null);
-  if (!error) {
-    roleOptions.value = data.map(item => ({label: `${item.roleName} (${item.roleCode})`, value: item.id}));
-  }
-}
-
-async function searchUsers(keyword = '') {
-  const {data, error} = await fetchUserPage({
-    pageNum: 1,
-    pageSize: 20,
-    username: keyword || null,
-    nickname: keyword || null,
-    phone: null,
-    email: null,
-    departmentId: null,
-    status: 1
-  });
-  if (!error) {
-    userOptions.value = data.records.map(item => ({label: `${item.nickname} (${item.username})`, value: item.id}));
   }
 }
 
@@ -114,7 +92,7 @@ async function loadDetail() {
     return;
   }
   state.loading = true;
-  const {data, error} = await fetchMessageDetail(props.messageId);
+  const { data, error } = await fetchMessageDetail(props.messageId);
   state.loading = false;
   if (!error) {
     detail.value = data;
@@ -161,7 +139,7 @@ async function handleSubmit() {
       roleIds: isRoleRecipient.value ? model.recipient.roleIds : [],
       userIds: isUserRecipient.value ? model.recipient.userIds : []
     },
-    fileIds: []
+    fileIds: model.fileIds
   };
   const response = isAdd.value ? await fetchCreateMessage(payload) : await fetchUpdateMessage(props.messageId!, payload);
   state.submitting = false;
@@ -173,13 +151,13 @@ async function handleSubmit() {
 }
 
 watch(
-    () => visible.value,
-    async show => {
-      if (!show) return;
-      resetModel();
-      restoreValidation();
-      await Promise.all([loadDepartments(), loadRoles(), searchUsers(), loadDetail()]);
-    }
+  () => visible.value,
+  async show => {
+    if (!show) return;
+    resetModel();
+    restoreValidation();
+    await Promise.all([loadDepartments(), loadDetail()]);
+  }
 );
 </script>
 
@@ -218,21 +196,21 @@ watch(
             <NSwitch v-model:value="model.recipient.includeChildren" />
           </NFormItemGi>
           <NFormItemGi v-if="isRoleRecipient" :label="$t('page.message.roles')" span="24">
-            <NSelect v-model:value="model.recipient.roleIds" :options="roleOptions" clearable filterable multiple />
+            <RoleSelectorTable v-model:selected-ids="model.recipient.roleIds" :disabled="readonly" />
           </NFormItemGi>
           <NFormItemGi v-if="isUserRecipient" :label="$t('page.message.users')" span="24">
-            <NSelect
-              v-model:value="model.recipient.userIds"
-              :options="userOptions"
-              clearable
-              filterable
-              multiple
-              remote
-              @search="searchUsers"
-            />
+            <UserSelectorTable v-model:selected-ids="model.recipient.userIds" :disabled="readonly" />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.message.contentHtml')" path="contentHtml" span="24">
-            <NInput v-model:value="model.contentHtml" :rows="8" type="textarea" />
+            <RichTextEditor
+              v-if="!readonly"
+              v-model="model.contentHtml"
+              :placeholder="$t('page.message.editorPlaceholder')"
+            />
+            <RichHtmlContent v-else :html="model.contentHtml" />
+          </NFormItemGi>
+          <NFormItemGi :label="$t('page.message.attachments')" span="24">
+            <MessageAttachmentPicker v-model:file-ids="model.fileIds" />
           </NFormItemGi>
           <NFormItemGi v-if="readonly && detail" :label="$t('page.message.recipientRule')" span="24">
             <NCode :code="detail.recipientRuleJson" language="json" show-line-numbers />

@@ -2,7 +2,7 @@
 import {computed, ref} from 'vue';
 import dayjs from 'dayjs';
 import {NButton, NSpace, NTag} from 'naive-ui';
-import {fetchDeleteUser, fetchUpdateUserStatus} from '@/service/api';
+import {downloadUserExport, fetchDeleteUser, fetchUpdateUserStatus} from '@/service/api';
 import {genderOptions, statusOptions, statusRecord} from '@/constants/business';
 import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
@@ -11,6 +11,7 @@ import {useAppStore} from '@/store/modules/app';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 import UserOperateModal from './modules/user-operate-modal.vue';
+import UserImportModal from './modules/user-import-modal.vue';
 import UserPasswordModal from './modules/user-password-modal.vue';
 import UserRoleModal from './modules/user-role-modal.vue';
 
@@ -35,6 +36,7 @@ const searchParams = ref<Api.User.PageParams>({
 });
 
 const modalVisible = ref(false);
+const importModalVisible = ref(false);
 const passwordModalVisible = ref(false);
 const roleModalVisible = ref(false);
 const operateMode = ref<OperateMode>('add');
@@ -42,8 +44,11 @@ const activeUserId = ref<number | null>(null);
 const activeUserName = ref('');
 const actionLoadingId = ref<number | null>(null);
 const deletingId = ref<number | null>(null);
+const exporting = ref(false);
 
 const showAdd = computed(() => hasAuth('system:user:add'));
+const showImport = computed(() => hasAuth('system:user:import'));
+const showExport = computed(() => hasAuth('system:user:export'));
 const showUpdate = computed(() => hasAuth('system:user:update'));
 const showDelete = computed(() => hasAuth('system:user:delete'));
 const showPassword = computed(() => hasAuth('system:user:password'));
@@ -248,6 +253,18 @@ async function handleDelete(userId: number) {
     await getDataByPage(1);
   }
 }
+
+async function handleExport() {
+  exporting.value = true;
+
+  try {
+    await downloadUserExport(searchParams.value);
+  } catch {
+    window.$message?.error($t('common.error'));
+  } finally {
+    exporting.value = false;
+  }
+}
 </script>
 
 <template>
@@ -300,6 +317,18 @@ async function handleDelete(userId: number) {
               </template>
               {{ $t('common.add') }}
             </NButton>
+            <NButton v-if="showImport" ghost size="small" type="primary" @click="importModalVisible = true">
+              <template #icon>
+                <icon-mdi-file-import-outline class="text-icon" />
+              </template>
+              {{ $t('common.import') }}
+            </NButton>
+            <NButton v-if="showExport" :loading="exporting" ghost size="small" type="primary" @click="handleExport">
+              <template #icon>
+                <icon-mdi-file-export-outline class="text-icon" />
+              </template>
+              {{ $t('common.export') }}
+            </NButton>
           </template>
         </TableHeaderOperation>
       </template>
@@ -319,6 +348,7 @@ async function handleDelete(userId: number) {
     </NCard>
 
     <UserOperateModal v-model:visible="modalVisible" :mode="operateMode" :user-id="activeUserId" @submitted="getData" />
+    <UserImportModal v-model:visible="importModalVisible" @submitted="getDataByPage(1)" />
     <UserPasswordModal
       v-model:visible="passwordModalVisible"
       :user-id="activeUserId"

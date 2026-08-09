@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import {computed, ref, watch} from 'vue';
+import {useRouter} from 'vue-router';
 import {fetchPlatformDashboard, fetchTenantDashboard} from '@/service/api';
 import {useEcharts} from '@/hooks/common/echarts';
 import {$t} from '@/locales';
@@ -7,6 +8,7 @@ import {useAppStore} from '@/store/modules/app';
 import {useAuthStore} from '@/store/modules/auth';
 import {useContextStore} from '@/store/modules/context';
 import {useMessageStore} from '@/store/modules/message';
+import {useRouteStore} from '@/store/modules/route';
 import MessageDetailDrawer from '@/layouts/modules/global-header/components/message-detail-drawer.vue';
 
 defineOptions({
@@ -17,6 +19,8 @@ const appStore = useAppStore();
 const authStore = useAuthStore();
 const contextStore = useContextStore();
 const messageStore = useMessageStore();
+const routeStore = useRouteStore();
+const router = useRouter();
 
 const loading = ref(false);
 const tenantDashboard = ref<Api.Dashboard.TenantDashboard | null>(null);
@@ -55,12 +59,6 @@ const cards = computed(() => {
         label: $t('page.home.platformUserCount'),
         value: platformDashboard.value.platformUserCount,
         icon: 'carbon:user-admin'
-      },
-      {
-        key: 'todayLoginCount',
-        label: $t('page.home.todayLoginCount'),
-        value: platformDashboard.value.todayLoginCount,
-        icon: 'carbon:login'
       }
     ];
   }
@@ -68,18 +66,6 @@ const cards = computed(() => {
   if (!tenantDashboard.value) return [];
 
   return [
-    {
-      key: 'currentSpace',
-      label: $t('page.home.currentSpace'),
-      value: tenantDashboard.value.currentSpace || '-',
-      icon: 'carbon:workspace'
-    },
-    {
-      key: 'currentDepartment',
-      label: $t('page.home.currentDepartment'),
-      value: tenantDashboard.value.department || '-',
-      icon: 'carbon:tree-view-alt'
-    },
     {
       key: 'userCount',
       label: $t('page.home.userCount'),
@@ -109,6 +95,30 @@ const cards = computed(() => {
 
 const recentOperations = computed(() => tenantDashboard.value?.recentOperations || []);
 const announcements = computed(() => messageStore.recentMessages.slice(0, 5));
+const quickEntries = computed(() => {
+  const excludedPaths = new Set(['/home', '/profile', '/message/center']);
+  const entries: Array<{ key: string; label: string; path: string }> = [];
+
+  function walk(menus: App.Global.Menu[]) {
+    menus.forEach(menu => {
+      if (entries.length >= 4) return;
+
+      if (menu.children?.length) {
+        walk(menu.children);
+      } else if (menu.routePath && !excludedPaths.has(menu.routePath)) {
+        entries.push({
+          key: menu.key,
+          label: menu.label,
+          path: menu.routePath
+        });
+      }
+    });
+  }
+
+  walk(routeStore.menus);
+
+  return entries.slice(0, 4);
+});
 
 const {domRef: lineChartRef, updateOptions: updateLineChart} = useEcharts(() => ({
   tooltip: {trigger: 'axis'},
@@ -221,6 +231,10 @@ function openMessageDetail(messageId: number) {
   detailVisible.value = true;
 }
 
+function navigateTo(path: string) {
+  void router.push(path);
+}
+
 async function handleMessageUpdated() {
   await messageStore.refreshRecent();
 }
@@ -264,7 +278,42 @@ watch(
     </NCard>
 
     <NSpin :show="loading">
-      <NGrid :x-gap="gap" :y-gap="16" cols="1 s:2 m:3 xl:5" responsive="screen">
+      <NCard v-if="!isPlatform" :bordered="false" class="card-wrapper mb-16px" size="small">
+        <div class="grid gap-12px lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div>
+            <div class="text-13px text-#666">{{ $t('page.home.currentSpace') }}</div>
+            <div class="mt-6px text-20px font-600">
+              {{ tenantDashboard?.currentSpace || contextStore.current.tenantName || '-' }}
+            </div>
+            <div class="mt-10px text-13px text-#666">
+              {{ $t('page.home.currentDepartment') }}:
+              {{ tenantDashboard?.department || authStore.userInfo.departmentName || '-' }}
+            </div>
+          </div>
+
+          <div class="rounded-14px bg-#f8fafc px-16px py-14px">
+            <div class="text-13px text-#666">{{ $t('page.home.quickAccess') }}</div>
+            <div class="mt-12px grid grid-cols-2 gap-10px">
+              <template v-if="quickEntries.length">
+                <NButton
+                  v-for="entry in quickEntries"
+                  :key="entry.key"
+                  block
+                  ghost
+                  size="small"
+                  type="primary"
+                  @click="navigateTo(entry.path)"
+                >
+                  {{ entry.label }}
+                </NButton>
+              </template>
+              <NEmpty v-else :description="$t('common.noData')" class="col-span-2 py-12px" />
+            </div>
+          </div>
+        </div>
+      </NCard>
+
+      <NGrid :x-gap="gap" :y-gap="16" cols="1 s:2 xl:4" responsive="screen">
         <NGi v-for="card in cards" :key="card.key">
           <NCard :bordered="false" class="card-wrapper" size="small">
             <div class="flex items-center justify-between gap-12px">
@@ -345,7 +394,7 @@ watch(
       </NCard>
 
       <NCard
-        v-if="!isPlatform" :bordered="false" :title="$t('page.messageCenter.title')" class="mt-16px card-wrapper"
+        v-if="!isPlatform" :bordered="false" :title="$t('page.home.announcements')" class="mt-16px card-wrapper"
         size="small"
       >
         <template #header-extra>

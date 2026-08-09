@@ -110,6 +110,14 @@
   create/update/delete with cleanup.
 - Message browser regression is complete for real page login and real table render; API regression is complete for
   draft create/detail/update/delete plus preview/send/recipient query/withdraw with cleanup.
-- Backend menu i18n keys like `route.system_user`, `route.system_role`, and later modules still appear in the UI
-  because localized route labels are not finished yet.
-- Footer still contains inherited `Soybean` copyright text and is outside the P0 login/auth acceptance scope.
+- Done: Header `MessageBell`, `Message Store`, formal `Message Center` route page, and browser-level SSE regression are
+  now closed end-to-end on the real backend.
+- Done: browser SSE direct-backend preflight in dev proxy mode is fixed by backend global CORS handling plus
+  `OPTIONS` auth-bypass for `/api/**`.
+- Done: message push events are now published after transaction commit instead of inside an uncommitted transaction,
+  which closes the last gap where the event arrived but the page refreshed against stale unread data.
+- Done: the formal message center route path is verified at `/message/center`, and the Home quick-entry exclusion now
+  matches that real path instead of the stale `/message-center` alias.
+- Done: route labels used in this stage (`file`, `monitor`, `system_dictionary`, `system_config`,
+  `system_message`, `message_center`) now render through i18n instead of exposing raw route keys.
+- Done: footer and remaining inherited branding in this scope now use `Nova`.

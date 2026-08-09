@@ -222,13 +222,34 @@ async function handlePreview(id: number) {
 }
 
 async function handleSend(id: number) {
-  sendLoadingId.value = id;
-  const {error} = await fetchSendMessage(id);
-  sendLoadingId.value = null;
-  if (!error) {
-    window.$message?.success($t('common.updateSuccess'));
-    await getData();
+  previewLoadingId.value = id;
+  const row = data.value.find(item => item.id === id);
+  const {data: summary, error} = await fetchPreviewMessageRecipients(id);
+  previewLoadingId.value = null;
+
+  if (error || !row) {
+    return;
   }
+
+  window.$dialog?.info({
+    title: $t('page.message.sendPreviewTitle'),
+    positiveText: $t('page.message.confirmSend'),
+    negativeText: $t('common.cancel'),
+    content: `${row.title}\n${$t('page.message.messageType')}: ${
+      $t(messageTypeOptions.find(item => item.value === row.messageType)?.label || 'common.noData')
+    }\n${$t('page.message.recipientType')}: ${
+      $t(recipientTypeOptions.find(item => item.value === row.recipientType)?.label || 'common.noData')
+    }\n${$t('page.message.expectedRecipients', {count: summary.total})}`,
+    async onPositiveClick() {
+      sendLoadingId.value = id;
+      const {error: sendError} = await fetchSendMessage(id);
+      sendLoadingId.value = null;
+      if (!sendError) {
+        window.$message?.success($t('common.updateSuccess'));
+        await getData();
+      }
+    }
+  });
 }
 
 async function handleWithdraw(id: number) {

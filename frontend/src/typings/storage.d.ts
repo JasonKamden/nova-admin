@@ -43,5 +43,9 @@ declare namespace StorageType {
         lastLoginUserId: string;
         /** The remembered username on the login page */
         rememberedUsername: string;
+        /** Dictionary left type panel collapsed state */
+        dictionaryTypePanelCollapsed: CommonType.YesOrNo;
+        /** Recently switched tenant ids in context switcher */
+        recentContextTenantIds: number[];
     }
 }

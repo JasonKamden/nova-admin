@@ -85,6 +85,11 @@
 - `profile` real browser data render in `PLATFORM` context: PASS
 - `profile` basic-info update regression:
   nickname change reflects on page and Header immediately, and restored to `平台管理员`: PASS
+- `message_center` formal route page render at `/message/center`: PASS
+- Browser direct SSE connection preflight `OPTIONS /api/message-center/sse`: PASS
+- Browser real SSE push refresh on `/message/center` after sending a new message in current Tenant Context: PASS
+- Browser real SSE no longer reports CORS policy errors in dev proxy mode: PASS
+- `dashboard` Tenant announcements list refreshes with newly delivered messages after SSE/message-center fix: PASS
 - `system_dictionary` real page regression:
   `GET /api/system/dictionaries/types`, `POST /api/system/dictionaries/types`,
   `PUT /api/system/dictionaries/types/{id}`, `DELETE /api/system/dictionaries/types/{id}`,
@@ -101,6 +106,8 @@
   `POST /api/system/messages/{id}/recipient-preview`, `POST /api/system/messages/{id}/send`,
   `GET /api/system/messages/{id}/recipients`, `POST /api/system/messages/{id}/withdraw`: PASS
 - `system_message` real browser login and page render at `/system/message`: PASS
-- Some backend route i18n keys are still displayed literally, for example `route.system_user`, `route.system_role`,
-  `route.system_dictionary`, `route.system_config`, `route.system_message`, `route.monitor`, and `route.file`.
-- Layout footer still carries inherited `Soybean` branding text.
+- Home quick-entry exclusion now uses the real hidden route path `/message/center` instead of the stale `/message-center`
+  alias: PASS
+- Route i18n keys used in this round (`route.file`, `route.monitor`, `route.system_dictionary`,
+  `route.system_config`, `route.system_message`) are rendered as localized labels instead of raw keys: PASS
+- Layout footer and branding text now use `Nova`: PASS

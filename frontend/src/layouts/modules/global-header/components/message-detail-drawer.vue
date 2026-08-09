@@ -4,8 +4,9 @@ import dayjs from 'dayjs';
 import {messageTypeOptions} from '@/constants/business';
 import {$t} from '@/locales';
 import {fetchFileDetail} from '@/service/api';
-import {getAuthorization} from '@/service/request/shared';
 import {useMessageStore} from '@/store/modules/message';
+import RichHtmlContent from '@/components/business/rich-html-content.vue';
+import {openFileByMode} from '@/utils/file';
 
 defineOptions({
   name: 'MessageDetailDrawer'
@@ -67,30 +68,11 @@ async function loadDetail() {
 }
 
 async function handleFileOpen(fileId: number, mode: 'preview' | 'download') {
-  const response = await fetch(`/api/files/${fileId}/${mode}`, {
-    headers: {
-      Authorization: getAuthorization() || ''
-    }
-  });
-
-  if (!response.ok) {
-    window.$message?.error('Request failed');
-    return;
+  try {
+    await openFileByMode(fileId, mode);
+  } catch {
+    window.$message?.error($t('common.error'));
   }
-
-  const blob = await response.blob();
-  const url = URL.createObjectURL(blob);
-
-  if (mode === 'preview') {
-    window.open(url, '_blank');
-    return;
-  }
-
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = '';
-  link.click();
-  URL.revokeObjectURL(url);
 }
 
 watch(
@@ -124,8 +106,7 @@ watch(
 
           <NCard :bordered="false" embedded size="small">
             <template #header>{{ $t('page.message.contentHtml') }}</template>
-            <!-- eslint-disable-next-line vue/no-v-html -->
-            <div v-if="detail?.contentHtml" class="message-rich-content" v-html="detail.contentHtml"></div>
+            <RichHtmlContent v-if="detail?.contentHtml" :html="detail.contentHtml" />
             <NEmpty v-else :description="$t('common.noData')" />
           </NCard>
 
@@ -160,25 +141,3 @@ watch(
     </NDrawerContent>
   </NDrawer>
 </template>
-
-<style scoped>
-.message-rich-content {
-  line-height: 1.7;
-  word-break: break-word;
-}
-
-.message-rich-content :deep(p) {
-  margin: 0 0 12px;
-}
-
-.message-rich-content :deep(table) {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.message-rich-content :deep(td),
-.message-rich-content :deep(th) {
-  border: 1px solid #e5e7eb;
-  padding: 8px 10px;
-}
-</style>

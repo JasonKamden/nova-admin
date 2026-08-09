@@ -1,17 +1,20 @@
 <script lang="tsx" setup>
-import {computed, ref} from 'vue';
-import {NButton, NPopconfirm, NSpace, NTag} from 'naive-ui';
+import { computed, ref, watch } from 'vue';
+import type { DropdownOption } from 'naive-ui';
+import { NButton, NDropdown, NPopconfirm, NSpace, NTag } from 'naive-ui';
 import {
   fetchDeleteDictionaryData,
   fetchDeleteDictionaryType,
   fetchDictionaryDataPage,
   fetchDictionaryTypes
 } from '@/service/api';
-import {dictTagTypeOptions, statusOptions, statusRecord} from '@/constants/business';
-import {useAuth} from '@/hooks/business/auth';
-import {defaultTransform, useNaivePaginatedTable, useNaiveTable} from '@/hooks/common/table';
-import {$t} from '@/locales';
-import {useAppStore} from '@/store/modules/app';
+import { dictTagTypeOptions, statusOptions, statusRecord } from '@/constants/business';
+import { useAuth } from '@/hooks/business/auth';
+import { defaultTransform, useNaivePaginatedTable } from '@/hooks/common/table';
+import { $t } from '@/locales';
+import { useAppStore } from '@/store/modules/app';
+import { localStg } from '@/utils/storage';
+import SearchPanel from '@/components/advanced/search-panel.vue';
 import DictionaryDataModal from './modules/dictionary-data-modal.vue';
 import DictionaryTypeModal from './modules/dictionary-type-modal.vue';
 
@@ -22,10 +25,15 @@ defineOptions({
 type TypeOperateMode = 'add' | 'edit';
 type DataOperateMode = 'add' | 'edit';
 
+const DICTIONARY_PANEL_COLLAPSED_KEY = 'dictionaryTypePanelCollapsed';
+
 const appStore = useAppStore();
-const {hasAuth} = useAuth();
+const { hasAuth } = useAuth();
 
 const typeKeyword = ref<string | null>(null);
+const typeList = ref<Api.Dictionary.TypeItem[]>([]);
+const typeLoading = ref(false);
+const typePanelCollapsed = ref(localStg.get(DICTIONARY_PANEL_COLLAPSED_KEY) === 'Y');
 const activeTypeId = ref<number | null>(null);
 const activeTypeName = ref('');
 const activeTypeCode = ref('');
@@ -49,75 +57,7 @@ const dataSearchParams = ref<Api.Dictionary.DataPageParams>({
 const showAdd = computed(() => hasAuth('system:dictionary:add'));
 const showUpdate = computed(() => hasAuth('system:dictionary:update'));
 const showDelete = computed(() => hasAuth('system:dictionary:delete'));
-
-const {
-  columns: typeColumns,
-  data: typeData,
-  loading: typeLoading,
-  getData: getTypes,
-  scrollX: typeScrollX
-} = useNaiveTable({
-  api: () => fetchDictionaryTypes(typeKeyword.value),
-  transform: response => {
-    const {data, error} = response;
-    return error ? [] : data;
-  },
-  columns: () => [
-    {
-      key: 'dictName',
-      title: $t('page.dictionary.typeName'),
-      minWidth: 180
-    },
-    {
-      key: 'dictCode',
-      title: $t('page.dictionary.typeCode'),
-      minWidth: 160
-    },
-    {
-      key: 'dataCount',
-      title: $t('page.dictionary.dataCount'),
-      width: 90,
-      align: 'center'
-    },
-    {
-      key: 'status',
-      title: $t('page.dictionary.status'),
-      width: 90,
-      align: 'center',
-      render: row => {
-        const config = statusRecord[row.status as keyof typeof statusRecord];
-        return <NTag type={config?.type || 'default'}>{$t(config?.label || 'common.noData')}</NTag>;
-      }
-    },
-    {
-      key: 'operate',
-      title: $t('common.operate'),
-      width: 200,
-      align: 'center',
-      render: row => (
-          <NSpace justify="center" size={8}>
-            {showUpdate.value ? (
-                <NButton ghost size="small" type="primary" onClick={() => openTypeModal('edit', row)}>
-                  {$t('common.edit')}
-                </NButton>
-            ) : null}
-            {showDelete.value ? (
-                <NPopconfirm onPositiveClick={() => handleDeleteType(row.id)}>
-                  {{
-                    default: () => $t('page.dictionary.deleteTypeConfirm', {name: row.dictName}),
-                    trigger: () => (
-                        <NButton ghost size="small" type="error" loading={typeDeletingId.value === row.id}>
-                          {$t('common.delete')}
-                        </NButton>
-                    )
-                  }}
-                </NPopconfirm>
-            ) : null}
-          </NSpace>
-      )
-    }
-  ]
-});
+const hasTypeSelection = computed(() => Boolean(activeTypeId.value));
 
 const {
   columns: dataColumns,
@@ -130,7 +70,7 @@ const {
 } = useNaivePaginatedTable({
   api: () => {
     if (!activeTypeId.value) {
-      return Promise.resolve({data: {records: [], total: 0, pageNum: 1, pageSize: 10}, error: null} as any);
+      return Promise.resolve({ data: { records: [], total: 0, pageNum: 1, pageSize: 10 }, error: null } as any);
     }
 
     return fetchDictionaryDataPage(activeTypeId.value, dataSearchParams.value);
@@ -144,12 +84,12 @@ const {
     {
       key: 'dictLabel',
       title: $t('page.dictionary.dataLabel'),
-      minWidth: 140
+      minWidth: 160
     },
     {
       key: 'dictValue',
       title: $t('page.dictionary.dataValue'),
-      minWidth: 140
+      minWidth: 160
     },
     {
       key: 'tagType',
@@ -157,8 +97,7 @@ const {
       minWidth: 120,
       render: (row: Api.Dictionary.DataItem) => {
         const option = dictTagTypeOptions.find(item => item.value === (row.tagType || 'default'));
-        return row.tagType ?
-            <NTag type={(row.tagType as any) || 'default'}>{$t(option?.label || 'common.noData')}</NTag> : '-';
+        return row.tagType ? <NTag type={(row.tagType as any) || 'default'}>{$t(option?.label || 'common.noData')}</NTag> : '-';
       }
     },
     {
@@ -181,7 +120,7 @@ const {
     {
       key: 'remark',
       title: $t('page.dictionary.remark'),
-      minWidth: 160,
+      minWidth: 180,
       render: (row: Api.Dictionary.DataItem) => row.remark || '-'
     },
     {
@@ -190,37 +129,67 @@ const {
       width: 180,
       align: 'center',
       render: (row: Api.Dictionary.DataItem) => (
-          <NSpace justify="center" size={8}>
-            {showUpdate.value ? (
-                <NButton ghost size="small" type="primary" onClick={() => openDataModal('edit', row)}>
-                  {$t('common.edit')}
-                </NButton>
-            ) : null}
-            {showDelete.value ? (
-                <NPopconfirm onPositiveClick={() => handleDeleteData(row.id)}>
-                  {{
-                    default: () => $t('page.dictionary.deleteDataConfirm', {name: row.dictLabel}),
-                    trigger: () => (
-                        <NButton ghost size="small" type="error" loading={dataDeletingId.value === row.id}>
-                          {$t('common.delete')}
-                        </NButton>
-                    )
-                  }}
-                </NPopconfirm>
-            ) : null}
-          </NSpace>
+        <NSpace justify="center" size={8}>
+          {showUpdate.value ? (
+            <NButton ghost size="small" type="primary" onClick={() => openDataModal('edit', row)}>
+              {$t('common.edit')}
+            </NButton>
+          ) : null}
+          {showDelete.value ? (
+            <NPopconfirm onPositiveClick={() => handleDeleteData(row.id)}>
+              {{
+                default: () => $t('page.dictionary.deleteDataConfirm', { name: row.dictLabel }),
+                trigger: () => (
+                  <NButton ghost size="small" type="error" loading={dataDeletingId.value === row.id}>
+                    {$t('common.delete')}
+                  </NButton>
+                )
+              }}
+            </NPopconfirm>
+          ) : null}
+        </NSpace>
       )
     }
   ]
 });
 
-function selectType(row: Api.Dictionary.TypeItem) {
-  activeType.value = row;
-  activeTypeId.value = row.id;
-  activeTypeName.value = row.dictName;
-  activeTypeCode.value = row.dictCode;
-  dataSearchParams.value.pageNum = 1;
-  getDataByPage(1);
+function applyActiveType(typeItem: Api.Dictionary.TypeItem | null, reloadData = true) {
+  activeType.value = typeItem;
+  activeTypeId.value = typeItem?.id || null;
+  activeTypeName.value = typeItem?.dictName || '';
+  activeTypeCode.value = typeItem?.dictCode || '';
+
+  if (reloadData) {
+    dataSearchParams.value.pageNum = 1;
+    void getDataByPage(1);
+  }
+}
+
+function resolveActiveType(preferredId?: number | null) {
+  if (!typeList.value.length) {
+    applyActiveType(null);
+    return;
+  }
+
+  const targetId = preferredId ?? activeTypeId.value;
+  const nextType = typeList.value.find(item => item.id === targetId) || typeList.value[0];
+
+  applyActiveType(nextType);
+}
+
+async function loadTypes(preferredId?: number | null) {
+  typeLoading.value = true;
+  const { data, error } = await fetchDictionaryTypes(typeKeyword.value?.trim() || null);
+  typeLoading.value = false;
+
+  if (!error) {
+    typeList.value = data;
+    resolveActiveType(preferredId);
+  }
+}
+
+function selectType(typeItem: Api.Dictionary.TypeItem) {
+  applyActiveType(typeItem);
 }
 
 function openTypeModal(mode: TypeOperateMode, row?: Api.Dictionary.TypeItem) {
@@ -235,116 +204,268 @@ function openDataModal(mode: DataOperateMode, row?: Api.Dictionary.DataItem) {
   dataModalVisible.value = true;
 }
 
+function handleSearchTypes() {
+  void loadTypes();
+}
+
+function toggleTypePanel() {
+  typePanelCollapsed.value = !typePanelCollapsed.value;
+}
+
 function handleResetDataSearch() {
   dataSearchParams.value.label = null;
   dataSearchParams.value.value = null;
   dataSearchParams.value.status = null;
-  getDataByPage(1);
+  void getDataByPage(1);
+}
+
+function getTypeDropdownOptions(typeItem: Api.Dictionary.TypeItem): DropdownOption[] {
+  return [
+    {
+      key: `edit-${typeItem.id}`,
+      label: $t('common.edit'),
+      show: showUpdate.value
+    },
+    {
+      key: `delete-${typeItem.id}`,
+      label: $t('common.delete'),
+      show: showDelete.value
+    }
+  ].filter(item => item.show !== false);
+}
+
+function handleTypeAction(key: string, typeItem: Api.Dictionary.TypeItem) {
+  if (key.startsWith('edit-')) {
+    openTypeModal('edit', typeItem);
+    return;
+  }
+
+  if (key.startsWith('delete-')) {
+    void handleDeleteType(typeItem.id);
+  }
 }
 
 async function handleDeleteType(id: number) {
+  const currentIndex = typeList.value.findIndex(item => item.id === id);
+  const fallbackType = typeList.value[currentIndex + 1] || typeList.value[currentIndex - 1] || null;
+
   typeDeletingId.value = id;
-  const {error} = await fetchDeleteDictionaryType(id);
+  const { error } = await fetchDeleteDictionaryType(id);
   typeDeletingId.value = null;
+
   if (!error) {
     window.$message?.success($t('common.deleteSuccess'));
-    if (activeTypeId.value === id) {
-      activeTypeId.value = null;
-      activeType.value = null;
-    }
-    await getTypes();
-    await getDataByPage(1);
+    await loadTypes(activeTypeId.value === id ? fallbackType?.id || null : activeTypeId.value);
   }
 }
 
 async function handleDeleteData(id: number) {
   dataDeletingId.value = id;
-  const {error} = await fetchDeleteDictionaryData(id);
+  const { error } = await fetchDeleteDictionaryData(id);
   dataDeletingId.value = null;
+
   if (!error) {
     window.$message?.success($t('common.deleteSuccess'));
     await getDataByPage(1);
-    await getTypes();
+    await loadTypes(activeTypeId.value);
   }
 }
 
-async function handleTypeSubmitted() {
-  await getTypes();
+async function handleTypeSubmitted(payload?: { item: Api.Dictionary.TypeItem; mode: TypeOperateMode }) {
+  await loadTypes(payload?.item.id ?? activeTypeId.value);
 }
 
 async function handleDataSubmitted() {
   await getDataByPage(dataSearchParams.value.pageNum);
-  await getTypes();
+  await loadTypes(activeTypeId.value);
 }
+
+watch(typePanelCollapsed, value => {
+  localStg.set(DICTIONARY_PANEL_COLLAPSED_KEY, value ? 'Y' : 'N');
+});
+
+void loadTypes();
 </script>
 
 <template>
   <div class="min-h-500px flex-col-stretch gap-16px overflow-hidden lt-sm:overflow-auto">
-    <NGrid :cols="24" :x-gap="16" class="min-h-0 flex-1">
-      <NGi class="min-h-0" span="24 l:9">
-        <NCard :bordered="false" :title="$t('page.dictionary.typeTitle')" class="card-wrapper h-full" size="small">
-          <template #header-extra>
-            <NSpace>
-              <NInput v-model:value="typeKeyword" :placeholder="$t('common.keywordSearch')" class="w-220px" clearable />
-              <NButton @click="getTypes">{{ $t('common.search') }}</NButton>
-              <NButton v-if="showAdd" ghost size="small" type="primary" @click="openTypeModal('add')">
-                {{ $t('common.add') }}
+    <div class="min-h-0 flex flex-1 items-stretch gap-12px">
+      <NCard
+        v-if="!typePanelCollapsed"
+        :bordered="false"
+        class="card-wrapper h-full w-280px shrink-0"
+        size="small"
+      >
+        <template #header>
+          <div class="flex items-center justify-between gap-12px">
+            <span>{{ $t('page.dictionary.typeTitle') }}</span>
+            <NButton v-if="showAdd" circle ghost size="small" type="primary" @click="openTypeModal('add')">
+              <template #icon>
+                <icon-ic-round-plus class="text-icon" />
+              </template>
+            </NButton>
+          </div>
+        </template>
+
+        <div class="flex-col-stretch gap-12px">
+          <NInput
+            v-model:value="typeKeyword"
+            :placeholder="$t('common.keywordSearch')"
+            clearable
+            @clear="handleSearchTypes"
+            @keyup.enter="handleSearchTypes"
+          >
+            <template #suffix>
+              <NButton quaternary size="tiny" @click="handleSearchTypes">
+                <template #icon>
+                  <icon-ic-round-search class="text-icon" />
+                </template>
+              </NButton>
+            </template>
+          </NInput>
+
+          <NSpin :show="typeLoading">
+            <div class="flex-col-stretch gap-8px overflow-y-auto pr-4px">
+              <button
+                v-for="item in typeList"
+                :key="item.id"
+                class="w-full rounded-12px border-none px-12px py-10px text-left transition-colors"
+                :class="
+                  item.id === activeTypeId
+                    ? 'bg-primary text-white shadow-sm'
+                    : 'bg-#f8fafc text-text hover:bg-#f1f5f9 dark:bg-#1f2937 dark:hover:bg-#334155'
+                "
+                type="button"
+                @click="selectType(item)"
+              >
+                <div class="flex items-start justify-between gap-8px">
+                  <div class="min-w-0 flex-1">
+                    <div class="truncate text-14px font-600">{{ item.dictName }}</div>
+                    <div
+                      class="truncate text-12px"
+                      :class="item.id === activeTypeId ? 'text-white/75' : 'text-text-secondary'"
+                    >
+                      {{ item.dictCode }}
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-6px">
+                    <NTag :bordered="false" :type="item.id === activeTypeId ? 'default' : 'info'" size="small">
+                      {{ item.dataCount }}
+                    </NTag>
+
+                    <NDropdown
+                      v-if="showUpdate || showDelete"
+                      :options="getTypeDropdownOptions(item)"
+                      trigger="click"
+                      @select="key => handleTypeAction(String(key), item)"
+                    >
+                      <NButton
+                        quaternary
+                        size="tiny"
+                        :type="item.id === activeTypeId ? 'default' : 'primary'"
+                        @click.stop
+                      >
+                        <template #icon>
+                          <icon-mdi-dots-horizontal class="text-icon" />
+                        </template>
+                      </NButton>
+                    </NDropdown>
+                  </div>
+                </div>
+
+                <div class="mt-8px flex items-center justify-between gap-8px">
+                  <span
+                    class="text-12px"
+                    :class="item.id === activeTypeId ? 'text-white/75' : 'text-text-secondary'"
+                  >
+                    {{ $t(statusRecord[item.status as keyof typeof statusRecord]?.label || 'common.noData') }}
+                  </span>
+                  <NButton
+                    v-if="typeDeletingId === item.id"
+                    quaternary
+                    size="tiny"
+                    type="error"
+                  >
+                    {{ $t('common.delete') }}
+                  </NButton>
+                </div>
+              </button>
+
+              <NEmpty v-if="!typeList.length && !typeLoading" :description="$t('common.noData')" class="py-24px" />
+            </div>
+          </NSpin>
+        </div>
+      </NCard>
+
+      <div class="flex items-center">
+        <NTooltip placement="right">
+          <template #trigger>
+            <NButton circle quaternary @click="toggleTypePanel">
+              <template #icon>
+                <icon-mdi-chevron-right v-if="typePanelCollapsed" class="text-icon" />
+                <icon-mdi-chevron-left v-else class="text-icon" />
+              </template>
+            </NButton>
+          </template>
+          {{ $t(typePanelCollapsed ? 'page.dictionary.expandTypePanel' : 'page.dictionary.collapseTypePanel') }}
+        </NTooltip>
+      </div>
+
+      <NCard :bordered="false" class="card-wrapper min-w-0 flex-1" size="small">
+        <template #header>
+          <div class="flex items-center gap-8px">
+            <span>{{ $t('page.dictionary.dataTitle') }}</span>
+            <NTag v-if="activeTypeId" type="info">{{ activeTypeName }}</NTag>
+          </div>
+        </template>
+
+        <SearchPanel :model="dataSearchParams">
+          <NFormItemGi :label="$t('page.dictionary.dataLabel')" class="pr-24px" span="24 s:12 m:6">
+            <NInput v-model:value="dataSearchParams.label" :disabled="!hasTypeSelection" clearable />
+          </NFormItemGi>
+          <NFormItemGi :label="$t('page.dictionary.dataValue')" class="pr-24px" span="24 s:12 m:6">
+            <NInput v-model:value="dataSearchParams.value" :disabled="!hasTypeSelection" clearable />
+          </NFormItemGi>
+          <NFormItemGi :label="$t('page.dictionary.status')" class="pr-24px" span="24 s:12 m:6">
+            <NSelect
+              v-model:value="dataSearchParams.status"
+              :disabled="!hasTypeSelection"
+              :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+              clearable
+            />
+          </NFormItemGi>
+          <NFormItemGi class="pr-24px" span="24 s:12 m:6">
+            <NSpace class="w-full" justify="end">
+              <NButton :disabled="!hasTypeSelection" @click="handleResetDataSearch">{{ $t('common.reset') }}</NButton>
+              <NButton :disabled="!hasTypeSelection" ghost type="primary" @click="getDataByPage(1)">
+                {{ $t('common.search') }}
               </NButton>
             </NSpace>
-          </template>
+          </NFormItemGi>
+        </SearchPanel>
+
+        <div class="flex-1 overflow-hidden">
+          <TableHeaderOperation v-model:columns="columnChecks" :loading="dataLoading" @refresh="getDataRows">
+            <template #default>
+              <NButton
+                v-if="showAdd"
+                :disabled="!hasTypeSelection"
+                ghost
+                size="small"
+                type="primary"
+                @click="openDataModal('add')"
+              >
+                <template #icon>
+                  <icon-ic-round-plus class="text-icon" />
+                </template>
+                {{ $t('common.add') }}
+              </NButton>
+            </template>
+          </TableHeaderOperation>
 
           <NDataTable
-            :columns="typeColumns"
-            :data="typeData"
-            :loading="typeLoading"
-            :row-key="row => row.id"
-            :row-props="row => ({ onClick: () => selectType(row) })"
-            :scroll-x="typeScrollX"
-            size="small"
-          />
-        </NCard>
-      </NGi>
-
-      <NGi class="min-h-0" span="24 l:15">
-        <NCard :bordered="false" class="card-wrapper h-full" size="small">
-          <template #header>
-            <div class="flex items-center gap-8px">
-              <span>{{ $t('page.dictionary.dataTitle') }}</span>
-              <NTag v-if="activeTypeId" type="info">{{ activeTypeName }} / {{ activeTypeCode }}</NTag>
-            </div>
-          </template>
-          <template #header-extra>
-            <TableHeaderOperation v-model:columns="columnChecks" :loading="dataLoading" @refresh="getDataRows">
-              <template #default>
-                <NSpace>
-                  <NInput
-                    v-model:value="dataSearchParams.label" :placeholder="$t('page.dictionary.dataLabel')"
-                    class="w-160px" clearable
-                  />
-                  <NInput
-                    v-model:value="dataSearchParams.value" :placeholder="$t('page.dictionary.dataValue')"
-                    class="w-160px" clearable
-                  />
-                  <NSelect
-                    v-model:value="dataSearchParams.status"
-                    :options="statusOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-                    class="w-120px"
-                    clearable
-                  />
-                  <NButton :disabled="!activeTypeId" @click="getDataByPage(1)">{{ $t('common.search') }}</NButton>
-                  <NButton :disabled="!activeTypeId" @click="handleResetDataSearch">{{ $t('common.reset') }}</NButton>
-                  <NButton
-                    v-if="showAdd" :disabled="!activeTypeId" ghost size="small" type="primary"
-                    @click="openDataModal('add')"
-                  >
-                    {{ $t('common.add') }}
-                  </NButton>
-                </NSpace>
-              </template>
-            </TableHeaderOperation>
-          </template>
-
-          <NDataTable
+            v-if="hasTypeSelection"
             :columns="dataColumns"
             :data="dataRows"
             :flex-height="!appStore.isMobile"
@@ -355,9 +476,15 @@ async function handleDataSubmitted() {
             remote
             size="small"
           />
-        </NCard>
-      </NGi>
-    </NGrid>
+
+          <NEmpty
+            v-else
+            :description="$t('page.dictionary.selectTypeTip')"
+            class="flex h-[320px] items-center justify-center"
+          />
+        </div>
+      </NCard>
+    </div>
 
     <DictionaryTypeModal
       v-model:visible="typeModalVisible"
