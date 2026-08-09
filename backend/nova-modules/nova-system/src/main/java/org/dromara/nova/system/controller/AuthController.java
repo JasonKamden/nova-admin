@@ -72,8 +72,14 @@ public class AuthController {
         return R.ok(authService.currentMenus());
     }
 
-/**
- * 当前用户按钮权限。
- *
- * @return 统一响应对象；data 字段结构及字段含义由对应响应 DTO 的 @Schema / JavaDoc 定
-�
+    /**
+     * 当前用户按钮权限。
+     *
+     * @return 统一响应对象；data 字段结构及字段含义由对应响应 DTO 的 @Schema / JavaDoc 定义。
+     */
+    @GetMapping("/permissions")
+    @Operation(summary = "当前用户按钮权限", description = "当前用户按钮权限。接口执行服务端权限、Context 和业务规则校验。")
+    public R<List<String>> permissions() {
+        return R.ok(authService.currentPermissions());
+    }
+}
