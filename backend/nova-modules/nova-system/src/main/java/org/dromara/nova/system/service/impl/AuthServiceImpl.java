@@ -10,9 +10,11 @@ import org.dromara.nova.common.core.exception.BusinessException;
 import org.dromara.nova.common.security.model.CurrentLoginUser;
 import org.dromara.nova.common.security.util.LoginUserUtils;
 import org.dromara.nova.system.dto.request.LoginReqDto;
+import org.dromara.nova.system.dto.response.CaptchaRespDto;
 import org.dromara.nova.system.dto.response.LoginRespDto;
 import org.dromara.nova.system.dto.response.MenuRespDto;
 import org.dromara.nova.system.entity.UserEntity;
+import org.dromara.nova.system.security.LoginCaptchaService;
 import org.dromara.nova.system.mapper.UserMapper;
 import org.dromara.nova.system.security.LoginAttemptGuard;
 import org.dromara.nova.system.service.AuthService;
@@ -42,6 +44,17 @@ public class AuthServiceImpl implements AuthService {
     private final OnlineUserService onlineUserService;
     private final MenuService menuService;
     private final LoginAttemptGuard loginAttemptGuard;
+    private final LoginCaptchaService loginCaptchaService;
+
+    /**
+     * 生成图形验证码。
+     *
+     * @return 验证码响应 DTO
+     */
+    @Override
+    public CaptchaRespDto captcha() {
+        return loginCaptchaService.generate();
+    }
 
     /**
      * 校验登录账号、密码、用户状态和 Tenant 可用性，并创建 Sa-Token 登录会话。
@@ -51,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public LoginRespDto login(LoginReqDto request) {
+        loginCaptchaService.validate(request.captchaId(), request.captchaCode());
         loginAttemptGuard.check(request.username());
         UserEntity user = userMapper.selectOneByQuery(QueryWrapper.create().where(USER_ENTITY.USERNAME.eq(request.username())).and(USER_ENTITY.DELETED.eq(false)));
         if (user == null) {

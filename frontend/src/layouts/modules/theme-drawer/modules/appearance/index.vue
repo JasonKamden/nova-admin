@@ -10,9 +10,9 @@ defineOptions({
 
 <template>
   <div class="flex-col-stretch gap-16px">
-    <ThemeSchema/>
-    <ThemeColor/>
-    <ThemeRadius/>
+    <ThemeSchema />
+    <ThemeColor />
+    <ThemeRadius />
   </div>
 </template>
 

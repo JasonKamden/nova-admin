@@ -28,3 +28,36 @@
   an explicit placeholder view instead of fake CRUD pages.
 - `pnpm lint --fix` applied broad formatting/style fixes across the frontend workspace, so the final diff is larger than
   the Phase 1 logic-only surface.
+
+## 2026-08-09
+
+### P0 Real Login Integration
+
+- Done: backend `java -jar` instance is running locally on `http://127.0.0.1:8080` for frontend real-login regression.
+- Done: frontend dev server continues to target local `8080` in test mode and real browser login is verified.
+- Done: login page now keeps only password login and removes demo login/register/other-account entry points.
+- Done: login now integrates backend captcha with mount-time loading, click refresh, and automatic refresh after login failure.
+- Done: request layer no longer sends the `apifoxToken` demo header.
+- Done: header `ContextSwitcher` completed real backend switch regression against `/api/context/platform` and
+  `/api/context/tenant/{tenantId}`.
+- Done: logout flow regression issue was fixed by sending `/api/auth/logout` before clearing local auth state and by
+  adding a reset reentry guard.
+
+### Verification
+
+- Backend `http://127.0.0.1:8080/actuator/health`: PASS
+- Frontend `http://127.0.0.1:9527/login/pwd-login`: PASS
+- `pnpm typecheck`: PASS
+- `pnpm lint`: PASS
+- Real browser login: PASS
+- Captcha one-time use: PASS
+- Captcha expiry: PASS
+- Context switch `PLATFORM -> TENANT -> PLATFORM`: PASS
+- Browser refresh keeps current session: PASS
+- UI logout returns to login page and hits backend logout once: PASS
+
+### Remaining notes
+
+- Phase 2+ business pages still render the explicit placeholder page; this round only covered login/auth/context regression.
+- Backend menu i18n keys like `route.system_user` still appear in the UI because localized route labels are not finished yet.
+- Footer still contains inherited `Soybean` copyright text and is outside the P0 login/auth acceptance scope.

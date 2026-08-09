@@ -1,6 +1,6 @@
 const local: App.I18n.Schema = {
     system: {
-        title: 'Soybean 管理系统',
+        title: 'Nova 管理系统',
         updateTitle: '系统版本更新通知',
         updateContent: '检测到系统有新版本发布，是否立即刷新页面？',
         updateConfirm: '立即刷新',
@@ -247,6 +247,9 @@ const local: App.I18n.Schema = {
             pwdLogin: {
                 title: '密码登录',
                 rememberMe: '记住我',
+                captchaPlaceholder: '请输入图形验证码',
+                refreshCaptcha: '点击刷新验证码',
+                submit: '登录',
                 forgetPassword: '忘记密码？',
                 register: '注册账号',
                 otherAccountLogin: '其他账号登录',

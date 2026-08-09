@@ -32,29 +32,29 @@ const {isFullscreen, toggle} = useFullscreen();
 
 <template>
   <DarkModeContainer class="h-full flex-y-center px-12px shadow-header">
-    <GlobalLogo v-if="showLogo" :style="{ width: themeStore.sider.width + 'px' }" class="h-full"/>
-    <MenuToggler v-if="showMenuToggler" :collapsed="appStore.siderCollapse" @click="appStore.toggleSiderCollapse"/>
+    <GlobalLogo v-if="showLogo" :style="{ width: themeStore.sider.width + 'px' }" class="h-full" />
+    <MenuToggler v-if="showMenuToggler" :collapsed="appStore.siderCollapse" @click="appStore.toggleSiderCollapse" />
     <div v-if="showMenu" :id="GLOBAL_HEADER_MENU_ID" class="h-full flex-y-center flex-1-hidden"></div>
     <div v-else class="h-full flex-y-center flex-1-hidden">
-      <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-12px"/>
+      <GlobalBreadcrumb v-if="!appStore.isMobile" class="ml-12px" />
     </div>
     <div class="h-full flex-y-center justify-end">
-      <ContextSwitcher/>
-      <GlobalSearch v-if="themeStore.header.globalSearch.visible"/>
-      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle"/>
+      <ContextSwitcher />
+      <GlobalSearch v-if="themeStore.header.globalSearch.visible" />
+      <FullScreen v-if="!appStore.isMobile" :full="isFullscreen" @click="toggle" />
       <LangSwitch
-          v-if="themeStore.header.multilingual.visible"
-          :lang="appStore.locale"
-          :lang-options="appStore.localeOptions"
-          @change-lang="appStore.changeLocale"
+        v-if="themeStore.header.multilingual.visible"
+        :lang="appStore.locale"
+        :lang-options="appStore.localeOptions"
+        @change-lang="appStore.changeLocale"
       />
       <ThemeSchemaSwitch
-          :is-dark="themeStore.darkMode"
-          :theme-schema="themeStore.themeScheme"
-          @switch="themeStore.toggleThemeScheme"
+        :is-dark="themeStore.darkMode"
+        :theme-schema="themeStore.themeScheme"
+        @switch="themeStore.toggleThemeScheme"
       />
-      <ThemeButton/>
-      <UserAvatar/>
+      <ThemeButton />
+      <UserAvatar />
     </div>
   </DarkModeContainer>
 </template>

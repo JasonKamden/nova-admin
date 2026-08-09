@@ -8,6 +8,7 @@ import org.dromara.nova.common.core.model.R;
 import org.dromara.nova.common.log.annotation.OperationAudit;
 import org.dromara.nova.common.security.model.CurrentLoginUser;
 import org.dromara.nova.system.dto.request.LoginReqDto;
+import org.dromara.nova.system.dto.response.CaptchaRespDto;
 import org.dromara.nova.system.dto.response.LoginRespDto;
 import org.dromara.nova.system.dto.response.MenuRespDto;
 import org.dromara.nova.system.service.AuthService;
@@ -24,6 +25,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+
+    /**
+     * 获取匿名图形验证码。
+     *
+     * @return 统一响应对象；data 字段结构及字段含义由对应响应 DTO 的 @Schema / JavaDoc 定义。
+     */
+    @GetMapping("/captcha")
+    @Operation(summary = "获取图形验证码", description = "获取匿名图形验证码，用于账号密码登录前校验。")
+    public R<CaptchaRespDto> captcha() {
+        return R.ok(authService.captcha());
+    }
 
     /**
      * 账号密码登录。

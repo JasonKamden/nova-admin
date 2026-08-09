@@ -23,7 +23,7 @@ spring:
     redis:
       host: ${REDIS_HOST:127.0.0.1}
       port: ${REDIS_PORT:6379}
-      password: ${REDIS_PASSWORD:}
+      password: ${REDIS_PASSWORD:123456}
       timeout: 5s
   jackson:
     time-zone: Asia/Shanghai
@@ -40,7 +40,7 @@ sa-token:
   active-timeout: ${TOKEN_ACTIVE_TIMEOUT_SECONDS:86400}
   is-read-header: true
   is-read-cookie: false
-  is-share: false
+  is-share: true
 
 storage:
   type: ${STORAGE_TYPE:LOCAL}

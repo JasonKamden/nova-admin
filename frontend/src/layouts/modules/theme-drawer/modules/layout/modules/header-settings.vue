@@ -14,17 +14,17 @@ const themeStore = useThemeStore();
   <NDivider>{{ $t('theme.layout.header.title') }}</NDivider>
   <TransitionGroup class="flex-col-stretch gap-12px" name="setting-list" tag="div">
     <SettingItem key="1" :label="$t('theme.layout.header.height')">
-      <NInputNumber v-model:value="themeStore.header.height" :step="1" class="w-120px" size="small"/>
+      <NInputNumber v-model:value="themeStore.header.height" :step="1" class="w-120px" size="small" />
     </SettingItem>
     <SettingItem key="2" :label="$t('theme.layout.header.breadcrumb.visible')">
-      <NSwitch v-model:value="themeStore.header.breadcrumb.visible"/>
+      <NSwitch v-model:value="themeStore.header.breadcrumb.visible" />
     </SettingItem>
     <SettingItem
-        v-if="themeStore.header.breadcrumb.visible"
-        key="3"
-        :label="$t('theme.layout.header.breadcrumb.showIcon')"
+      v-if="themeStore.header.breadcrumb.visible"
+      key="3"
+      :label="$t('theme.layout.header.breadcrumb.showIcon')"
     >
-      <NSwitch v-model:value="themeStore.header.breadcrumb.showIcon"/>
+      <NSwitch v-model:value="themeStore.header.breadcrumb.showIcon" />
     </SettingItem>
   </TransitionGroup>
 </template>

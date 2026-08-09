@@ -85,10 +85,10 @@ function getGradientColor(color: CardData['color']) {
     <!-- define component start: GradientBg -->
     <DefineGradientBg v-slot="{ $slots, gradientColor }">
       <div
-          :style="{ backgroundImage: gradientColor, borderRadius: themeStore.themeRadius + 'px' }"
-          class="px-16px pb-4px pt-8px text-white"
+        :style="{ backgroundImage: gradientColor, borderRadius: themeStore.themeRadius + 'px' }"
+        class="px-16px pb-4px pt-8px text-white"
       >
-        <component :is="$slots.default"/>
+        <component :is="$slots.default" />
       </div>
     </DefineGradientBg>
     <!-- define component end: GradientBg -->
@@ -98,12 +98,12 @@ function getGradientColor(color: CardData['color']) {
         <GradientBg :gradient-color="getGradientColor(item.color)" class="flex-1">
           <h3 class="text-16px">{{ item.title }}</h3>
           <div class="flex justify-between pt-12px">
-            <SvgIcon :icon="item.icon" class="text-32px"/>
+            <SvgIcon :icon="item.icon" class="text-32px" />
             <CountTo
-                :end-value="item.value"
-                :prefix="item.unit"
-                :start-value="1"
-                class="text-30px text-white dark:text-dark"
+              :end-value="item.value"
+              :prefix="item.unit"
+              :start-value="1"
+              class="text-30px text-white dark:text-dark"
             />
           </div>
         </GradientBg>

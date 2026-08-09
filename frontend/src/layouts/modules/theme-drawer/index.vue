@@ -39,15 +39,15 @@ const drawerWidth = computed(() => {
 
       <div class="min-h-400px">
         <KeepAlive>
-          <AppearanceSettings v-if="activeTab === 'appearance'"/>
-          <LayoutSettings v-else-if="activeTab === 'layout'"/>
-          <GeneralSettings v-else-if="activeTab === 'general'"/>
-          <PresetSettings v-else-if="activeTab === 'preset'"/>
+          <AppearanceSettings v-if="activeTab === 'appearance'" />
+          <LayoutSettings v-else-if="activeTab === 'layout'" />
+          <GeneralSettings v-else-if="activeTab === 'general'" />
+          <PresetSettings v-else-if="activeTab === 'preset'" />
         </KeepAlive>
       </div>
 
       <template #footer>
-        <ConfigOperation/>
+        <ConfigOperation />
       </template>
     </NDrawerContent>
   </NDrawer>

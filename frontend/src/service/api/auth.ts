@@ -1,13 +1,16 @@
 import {request} from '../request';
 
-export function fetchLogin(username: string, password: string) {
+export function fetchCaptcha() {
+    return request<Api.Auth.CaptchaResp>({
+        url: '/api/auth/captcha'
+    });
+}
+
+export function fetchLogin(data: Api.Auth.LoginReq) {
     return request<Api.Auth.LoginResp>({
         url: '/api/auth/login',
         method: 'post',
-        data: {
-            username,
-            password
-        }
+        data
     });
 }
 

@@ -115,35 +115,35 @@ function handleClickMask() {
 <template>
   <div :class="[commonClass]" :style="cssVars" class="relative h-full">
     <div
-        :id="isWrapperScroll ? scrollElId : undefined"
-        :class="[commonClass, scrollWrapperClass, { 'overflow-y-auto': isWrapperScroll }]"
-        class="h-full flex flex-col"
+      :id="isWrapperScroll ? scrollElId : undefined"
+      :class="[commonClass, scrollWrapperClass, { 'overflow-y-auto': isWrapperScroll }]"
+      class="h-full flex flex-col"
     >
       <!-- Header -->
       <template v-if="showHeader">
         <header
-            v-show="!fullContent"
-            :class="[
+          v-show="!fullContent"
+          :class="[
             style['layout-header'],
             commonClass,
             headerLeftGapClass,
             { 'absolute top-0 left-0 w-full': fixedHeaderAndTab }
           ]"
-            class="flex-shrink-0"
+          class="flex-shrink-0"
         >
           <slot name="header"></slot>
         </header>
         <div
-            v-show="!fullContent && fixedHeaderAndTab"
-            :class="[style['layout-header-placement']]"
-            class="flex-shrink-0 overflow-hidden"
+          v-show="!fullContent && fixedHeaderAndTab"
+          :class="[style['layout-header-placement']]"
+          class="flex-shrink-0 overflow-hidden"
         ></div>
       </template>
 
       <!-- Tab -->
       <template v-if="showTab">
         <div
-            :class="[
+          :class="[
             style['layout-tab'],
             commonClass,
             tabClass,
@@ -151,28 +151,28 @@ function handleClickMask() {
             leftGapClass,
             { 'absolute left-0 w-full': fixedHeaderAndTab }
           ]"
-            class="flex-shrink-0"
+          class="flex-shrink-0"
         >
           <slot name="tab"></slot>
         </div>
         <div
-            v-show="fullContent || fixedHeaderAndTab"
-            :class="[style['layout-tab-placement']]"
-            class="flex-shrink-0 overflow-hidden"
+          v-show="fullContent || fixedHeaderAndTab"
+          :class="[style['layout-tab-placement']]"
+          class="flex-shrink-0 overflow-hidden"
         ></div>
       </template>
 
       <!-- Sider -->
       <template v-if="showSider">
         <aside
-            v-show="!fullContent"
-            :class="[
+          v-show="!fullContent"
+          :class="[
             commonClass,
             siderClass,
             siderPaddingClass,
             siderCollapse ? style['layout-sider_collapsed'] : style['layout-sider']
           ]"
-            class="absolute left-0 top-0 h-full"
+          class="absolute left-0 top-0 h-full"
         >
           <slot name="sider"></slot>
         </aside>
@@ -181,29 +181,29 @@ function handleClickMask() {
       <!-- Mobile Sider -->
       <template v-if="showMobileSider">
         <aside
-            :class="[
+          :class="[
             commonClass,
             mobileSiderClass,
             style['layout-mobile-sider'],
             siderCollapse ? 'overflow-hidden' : style['layout-sider']
           ]"
-            class="absolute left-0 top-0 h-full w-0 bg-white"
+          class="absolute left-0 top-0 h-full w-0 bg-white"
         >
           <slot name="sider"></slot>
         </aside>
         <div
-            v-show="!siderCollapse"
-            :class="[style['layout-mobile-sider-mask']]"
-            class="absolute left-0 top-0 h-full w-full bg-[rgba(0,0,0,0.2)]"
-            @click="handleClickMask"
+          v-show="!siderCollapse"
+          :class="[style['layout-mobile-sider-mask']]"
+          class="absolute left-0 top-0 h-full w-full bg-[rgba(0,0,0,0.2)]"
+          @click="handleClickMask"
         ></div>
       </template>
 
       <!-- Main Content -->
       <main
-          :id="isContentScroll ? scrollElId : undefined"
-          :class="[commonClass, contentClass, leftGapClass, { 'overflow-y-auto': isContentScroll }]"
-          class="flex flex-col flex-grow"
+        :id="isContentScroll ? scrollElId : undefined"
+        :class="[commonClass, contentClass, leftGapClass, { 'overflow-y-auto': isContentScroll }]"
+        class="flex flex-col flex-grow"
       >
         <slot></slot>
       </main>
@@ -211,22 +211,22 @@ function handleClickMask() {
       <!-- Footer -->
       <template v-if="showFooter">
         <footer
-            v-show="!fullContent"
-            :class="[
+          v-show="!fullContent"
+          :class="[
             style['layout-footer'],
             commonClass,
             footerClass,
             footerLeftGapClass,
             { 'absolute left-0 bottom-0 w-full': fixedFooter }
           ]"
-            class="flex-shrink-0"
+          class="flex-shrink-0"
         >
           <slot name="footer"></slot>
         </footer>
         <div
-            v-show="!fullContent && fixedFooter"
-            :class="[style['layout-footer-placement']]"
-            class="flex-shrink-0 overflow-hidden"
+          v-show="!fullContent && fixedFooter"
+          :class="[style['layout-footer-placement']]"
+          class="flex-shrink-0 overflow-hidden"
         ></div>
       </template>
     </div>

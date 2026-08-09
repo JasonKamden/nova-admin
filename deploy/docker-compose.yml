@@ -38,36 +38,7 @@ services:
     ports: [ "9000:9000", "9001:9001" ]
     volumes: [ "minio-data:/data" ]
 
-  backend:
-    build:
-      context: ..
-      dockerfile: deploy/backend/Dockerfile
-    image: nova-admin-backend:local
-    container_name: nova-backend
-    restart: unless-stopped
-    depends_on:
-      mysql: { condition: service_healthy }
-      redis: { condition: service_started }
-      minio: { condition: service_started }
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-nova_admin}
-      MYSQL_USERNAME: root
-      MYSQL_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD in deploy/.env}
-      REDIS_HOST: redis
-      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD in deploy/.env}
-      STORAGE_TYPE: ${STORAGE_TYPE:-MINIO}
-      MINIO_ENDPOINT: http://minio:9000
-      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:?set MINIO_ROOT_USER in deploy/.env}
-      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in deploy/.env}
-      MINIO_BUCKET: nova
-      SERVER_PORT: 8080
-    ports: [ "8080:8080" ]
-    volumes:
-      - backend-data:/app/data
-
 volumes:
   mysql-data:
   redis-data:
   minio-data:
-  backend-data:

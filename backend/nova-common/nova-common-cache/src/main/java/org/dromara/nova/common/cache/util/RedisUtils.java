@@ -41,6 +41,16 @@ public class RedisUtils {
     }
 
     /**
+     * 原子读取并删除指定 Redis Key。
+     *
+     * @param key Redis Key
+     * @return 删除前的值
+     */
+    public String getAndDelete(String key) {
+        return stringRedisTemplate.opsForValue().getAndDelete(key);
+    }
+
+    /**
      * 删除指定存储路径对应的物理对象。
      *
      * @param key Redis Key

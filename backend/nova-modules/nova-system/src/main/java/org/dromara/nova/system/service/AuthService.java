@@ -2,6 +2,7 @@ package org.dromara.nova.system.service;
 
 import org.dromara.nova.common.security.model.CurrentLoginUser;
 import org.dromara.nova.system.dto.request.LoginReqDto;
+import org.dromara.nova.system.dto.response.CaptchaRespDto;
 import org.dromara.nova.system.dto.response.LoginRespDto;
 import org.dromara.nova.system.dto.response.MenuRespDto;
 
@@ -11,6 +12,11 @@ import java.util.List;
  * 登录认证、当前用户菜单和权限查询业务契约。
  */
 public interface AuthService {
+    /**
+     * 生成图形验证码。
+     */
+    CaptchaRespDto captcha();
+
     /**
      * 校验账号密码并创建登录会话。
      */

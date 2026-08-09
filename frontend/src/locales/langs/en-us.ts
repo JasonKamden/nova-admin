@@ -1,6 +1,6 @@
 const local: App.I18n.Schema = {
     system: {
-        title: 'SoybeanAdmin',
+        title: 'Nova Admin System',
         updateTitle: 'System Version Update Notification',
         updateContent: 'A new version of the system has been detected. Do you want to refresh the page immediately?',
         updateConfirm: 'Refresh immediately',
@@ -251,6 +251,9 @@ const local: App.I18n.Schema = {
             pwdLogin: {
                 title: 'Password Login',
                 rememberMe: 'Remember me',
+                captchaPlaceholder: 'Please enter captcha',
+                refreshCaptcha: 'Click to refresh captcha',
+                submit: 'Login',
                 forgetPassword: 'Forget password?',
                 register: 'Register',
                 otherAccountLogin: 'Other Account Login',

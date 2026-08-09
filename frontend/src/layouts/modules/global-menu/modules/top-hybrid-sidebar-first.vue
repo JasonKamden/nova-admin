@@ -37,24 +37,24 @@ function handleSelectMenu(key: string) {
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
     <NMenu
-        :indent="18"
-        :options="secondLevelMenus"
-        :value="selectedKey"
-        mode="horizontal"
-        responsive
-        @update:value="routerPushByKeyWithMetaQuery"
+      :indent="18"
+      :options="secondLevelMenus"
+      :value="selectedKey"
+      mode="horizontal"
+      responsive
+      @update:value="routerPushByKeyWithMetaQuery"
     />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <div class="h-full pt-2">
       <FirstLevelMenu
-          :active-menu-key="activeFirstLevelMenuKey"
-          :dark-mode="themeStore.darkMode"
-          :menus="firstLevelMenus"
-          :sider-collapse="appStore.siderCollapse"
-          :theme-color="themeStore.themeColor"
-          @select="handleSelectMenu"
-          @toggle-sider-collapse="appStore.toggleSiderCollapse"
+        :active-menu-key="activeFirstLevelMenuKey"
+        :dark-mode="themeStore.darkMode"
+        :menus="firstLevelMenus"
+        :sider-collapse="appStore.siderCollapse"
+        :theme-color="themeStore.themeColor"
+        @select="handleSelectMenu"
+        @toggle-sider-collapse="appStore.toggleSiderCollapse"
       />
     </div>
   </Teleport>

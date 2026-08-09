@@ -499,6 +499,9 @@ declare namespace App {
                     pwdLogin: {
                         title: string;
                         rememberMe: string;
+                        captchaPlaceholder: string;
+                        refreshCaptcha: string;
+                        submit: string;
                         forgetPassword: string;
                         register: string;
                         otherAccountLogin: string;

@@ -189,44 +189,44 @@ init();
     <div ref="bsWrapper" class="h-full flex-1-hidden">
       <BetterScroll ref="bsScroll" :options="{ scrollX: true, scrollY: false, click: !isPCFlag }" @click="removeFocus">
         <div
-            ref="tabRef"
-            :class="[
+          ref="tabRef"
+          :class="[
             themeStore.tab.mode === 'chrome' || themeStore.tab.mode === 'slider' ? 'items-end' : 'items-center gap-12px'
           ]"
-            class="h-full flex pr-18px"
+          class="h-full flex pr-18px"
         >
           <PageTab
-              v-for="tab in tabStore.tabs"
-              :key="tab.id"
-              :[TAB_DATA_ID]="tab.id"
-              :active="tab.id === tabStore.activeTabId"
-              :active-color="themeStore.themeColor"
-              :closable="!tabStore.isTabRetain(tab.id)"
-              :dark-mode="themeStore.darkMode"
-              :mode="themeStore.tab.mode"
-              @close="handleCloseTab(tab)"
-              @contextmenu="handleContextMenu($event, tab.id)"
-              @mousedown="handleMousedown($event, tab)"
-              @pointerdown="switchTab($event, tab)"
+            v-for="tab in tabStore.tabs"
+            :key="tab.id"
+            :[TAB_DATA_ID]="tab.id"
+            :active="tab.id === tabStore.activeTabId"
+            :active-color="themeStore.themeColor"
+            :closable="!tabStore.isTabRetain(tab.id)"
+            :dark-mode="themeStore.darkMode"
+            :mode="themeStore.tab.mode"
+            @close="handleCloseTab(tab)"
+            @contextmenu="handleContextMenu($event, tab.id)"
+            @mousedown="handleMousedown($event, tab)"
+            @pointerdown="switchTab($event, tab)"
           >
             <template #prefix>
-              <SvgIcon :icon="tab.icon" :local-icon="tab.localIcon" class="inline-block align-text-bottom text-16px"/>
+              <SvgIcon :icon="tab.icon" :local-icon="tab.localIcon" class="inline-block align-text-bottom text-16px" />
             </template>
             <div class="max-w-240px ellipsis-text">{{ tab.label }}</div>
           </PageTab>
         </div>
       </BetterScroll>
     </div>
-    <ReloadButton :loading="!appStore.reloadFlag" @click="refresh"/>
-    <FullScreen :full="appStore.fullContent" @click="appStore.toggleFullContent"/>
+    <ReloadButton :loading="!appStore.reloadFlag" @click="refresh" />
+    <FullScreen :full="appStore.fullContent" @click="appStore.toggleFullContent" />
   </DarkModeContainer>
   <ContextMenu
-      :disabled-keys="getContextMenuDisabledKeys(dropdown.tabId)"
-      :tab-id="dropdown.tabId"
-      :visible="dropdown.visible"
-      :x="dropdown.x"
-      :y="dropdown.y"
-      @update:visible="handleDropdownVisible"
+    :disabled-keys="getContextMenuDisabledKeys(dropdown.tabId)"
+    :tab-id="dropdown.tabId"
+    :visible="dropdown.visible"
+    :x="dropdown.x"
+    :y="dropdown.y"
+    @update:visible="handleDropdownVisible"
   />
 </template>
 

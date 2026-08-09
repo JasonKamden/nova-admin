@@ -22,6 +22,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     const {loading: loginLoading, startLoading, endLoading} = useLoading();
 
     const token = ref('');
+    const resetting = ref(false);
 
     const userInfo: Api.Auth.CurrentUser = reactive({
         userId: 0,
@@ -50,21 +51,35 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
     /** Reset auth store */
     async function resetStore() {
+        if (resetting.value) {
+            return;
+        }
+
+        resetting.value = true;
         recordUserId();
+
+        const currentToken = token.value || getToken();
+
+        if (currentToken) {
+            await fetchLogout().catch(() => undefined);
+        }
 
         clearAuthStorage();
 
-        authStore.$reset();
-        contextStore.clear();
+        try {
+            authStore.$reset();
+            contextStore.clear();
 
-        if (!route.meta.constant) {
-            await toLogin();
+            if (!route.meta.constant) {
+                await toLogin();
+            }
+
+            tabStore.cacheTabs();
+            tabStore.clearTabs();
+            routeStore.resetStore();
+        } finally {
+            resetting.value = false;
         }
-
-        await fetchLogout().catch(() => undefined);
-        tabStore.cacheTabs();
-        tabStore.clearTabs();
-        routeStore.resetStore();
     }
 
     /** Record the user ID of the previous login session Used to compare with the current user ID on next login */
@@ -109,10 +124,10 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
      * @param password Password
      * @param [redirect=true] Whether to redirect after login. Default is `true`
      */
-    async function login(username: string, password: string, redirect = true) {
+    async function login(data: Api.Auth.LoginReq, redirect = true) {
         startLoading();
 
-        const {data: loginResp, error} = await fetchLogin(username, password);
+        const {data: loginResp, error} = await fetchLogin(data);
 
         if (!error) {
             const pass = await loginByToken(loginResp);
@@ -133,12 +148,16 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
                     content: $t('page.login.common.welcomeBack', {userName: userInfo.nickname || userInfo.username}),
                     duration: 4500
                 });
+
+                endLoading();
+                return true;
             }
         } else {
             resetStore();
         }
 
         endLoading();
+        return false;
     }
 
     async function loginByToken(loginResp: Api.Auth.LoginResp) {

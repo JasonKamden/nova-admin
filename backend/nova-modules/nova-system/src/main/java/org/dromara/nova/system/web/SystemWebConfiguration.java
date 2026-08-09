@@ -20,6 +20,6 @@ public class SystemWebConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(onlineActivityInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/auth/login");
+        registry.addInterceptor(onlineActivityInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/auth/login", "/api/auth/captcha");
     }
 }

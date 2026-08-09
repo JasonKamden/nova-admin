@@ -18,26 +18,26 @@ const gap = computed(() => (appStore.isMobile ? 0 : 16));
     <NAlert :title="$t('common.tip')" type="warning">
       {{ $t('page.home.branchDesc') }}
     </NAlert>
-    <HeaderBanner/>
-    <CardData/>
+    <HeaderBanner />
+    <CardData />
     <NGrid :x-gap="gap" :y-gap="16" item-responsive responsive="screen">
       <NGi span="24 s:24 m:14">
         <NCard :bordered="false" class="card-wrapper">
-          <LineChart/>
+          <LineChart />
         </NCard>
       </NGi>
       <NGi span="24 s:24 m:10">
         <NCard :bordered="false" class="card-wrapper">
-          <PieChart/>
+          <PieChart />
         </NCard>
       </NGi>
     </NGrid>
     <NGrid :x-gap="gap" :y-gap="16" item-responsive responsive="screen">
       <NGi span="24 s:24 m:14">
-        <ProjectNews/>
+        <ProjectNews />
       </NGi>
       <NGi span="24 s:24 m:10">
-        <CreativityBanner/>
+        <CreativityBanner />
       </NGi>
     </NGrid>
   </NSpace>

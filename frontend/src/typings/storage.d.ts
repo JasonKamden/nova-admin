@@ -41,5 +41,7 @@ declare namespace StorageType {
         };
         /** The last login user id */
         lastLoginUserId: string;
+        /** The remembered username on the login page */
+        rememberedUsername: string;
     }
 }

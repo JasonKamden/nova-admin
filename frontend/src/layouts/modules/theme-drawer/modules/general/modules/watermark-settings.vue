@@ -20,34 +20,34 @@ const isWatermarkTextVisible = computed(
   <NDivider>{{ $t('theme.general.watermark.title') }}</NDivider>
   <TransitionGroup class="flex-col-stretch gap-12px" name="setting-list" tag="div">
     <SettingItem key="1" :label="$t('theme.general.watermark.visible')">
-      <NSwitch v-model:value="themeStore.watermark.visible"/>
+      <NSwitch v-model:value="themeStore.watermark.visible" />
     </SettingItem>
     <SettingItem v-if="themeStore.watermark.visible" key="2" :label="$t('theme.general.watermark.enableUserName')">
-      <NSwitch :value="themeStore.watermark.enableUserName" @update:value="themeStore.setWatermarkEnableUserName"/>
+      <NSwitch :value="themeStore.watermark.enableUserName" @update:value="themeStore.setWatermarkEnableUserName" />
     </SettingItem>
     <SettingItem v-if="themeStore.watermark.visible" key="3" :label="$t('theme.general.watermark.enableTime')">
-      <NSwitch :value="themeStore.watermark.enableTime" @update:value="themeStore.setWatermarkEnableTime"/>
+      <NSwitch :value="themeStore.watermark.enableTime" @update:value="themeStore.setWatermarkEnableTime" />
     </SettingItem>
     <SettingItem
-        v-if="themeStore.watermark.visible && themeStore.watermark.enableTime"
-        key="4"
-        :label="$t('theme.general.watermark.timeFormat')"
+      v-if="themeStore.watermark.visible && themeStore.watermark.enableTime"
+      key="4"
+      :label="$t('theme.general.watermark.timeFormat')"
     >
       <NSelect
-          v-model:value="themeStore.watermark.timeFormat"
-          :options="watermarkTimeFormatOptions"
-          class="w-210px"
-          size="small"
+        v-model:value="themeStore.watermark.timeFormat"
+        :options="watermarkTimeFormatOptions"
+        class="w-210px"
+        size="small"
       />
     </SettingItem>
     <SettingItem v-if="isWatermarkTextVisible" key="5" :label="$t('theme.general.watermark.text')">
       <NInput
-          v-model:value="themeStore.watermark.text"
-          autosize
-          class="w-120px"
-          placeholder="SoybeanAdmin"
-          size="small"
-          type="text"
+        v-model:value="themeStore.watermark.text"
+        autosize
+        class="w-120px"
+        placeholder="SoybeanAdmin"
+        size="small"
+        type="text"
       />
     </SettingItem>
   </TransitionGroup>

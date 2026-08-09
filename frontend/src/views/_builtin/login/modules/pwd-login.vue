@@ -1,116 +1,148 @@
 <script lang="ts" setup>
-import {computed, reactive} from 'vue';
-import {loginModuleRecord} from '@/constants/app';
+import {computed, onMounted, reactive, ref} from 'vue';
 import {useAuthStore} from '@/store/modules/auth';
-import {useRouterPush} from '@/hooks/common/router';
 import {useFormRules, useNaiveForm} from '@/hooks/common/form';
+import {fetchCaptcha} from '@/service/api';
+import {localStg} from '@/utils/storage';
 import {$t} from '@/locales';
 
 defineOptions({
   name: 'PwdLogin'
 });
 
+const REMEMBERED_USERNAME_KEY = 'rememberedUsername';
+
 const authStore = useAuthStore();
-const {toggleLoginModule} = useRouterPush();
 const {formRef, validate} = useNaiveForm();
+const captchaLoading = ref(false);
+const captcha = reactive<Api.Auth.CaptchaResp>({
+  captchaId: '',
+  imageBase64: ''
+});
 
 interface FormModel {
   username: string;
   password: string;
+  captchaCode: string;
+  rememberMe: boolean;
 }
 
+const rememberedUsername = localStg.get(REMEMBERED_USERNAME_KEY) || '';
+
 const model: FormModel = reactive({
-  username: 'platform-admin',
-  password: 'Nova@123456'
+  username: rememberedUsername,
+  password: '',
+  captchaCode: '',
+  rememberMe: Boolean(rememberedUsername)
 });
 
 const rules = computed<Record<keyof FormModel, App.Global.FormRule[]>>(() => {
   // inside computed to make locale reactive, if not apply i18n, you can define it without computed
-  const {formRules} = useFormRules();
+  const {formRules, createRequiredRule} = useFormRules();
 
   return {
     username: formRules.userName,
-    password: formRules.pwd
+    password: formRules.pwd,
+    captchaCode: [createRequiredRule($t('form.code.required'))],
+    rememberMe: []
   };
 });
 
+async function refreshCaptcha() {
+  if (captchaLoading.value) {
+    return;
+  }
+
+  captchaLoading.value = true;
+
+  const {data, error} = await fetchCaptcha();
+
+  if (!error) {
+    captcha.captchaId = data.captchaId;
+    captcha.imageBase64 = data.imageBase64;
+    model.captchaCode = '';
+  } else {
+    captcha.captchaId = '';
+    captcha.imageBase64 = '';
+  }
+
+  captchaLoading.value = false;
+}
+
+function persistRememberedUsername() {
+  if (model.rememberMe) {
+    localStg.set(REMEMBERED_USERNAME_KEY, model.username.trim());
+    return;
+  }
+
+  localStg.remove(REMEMBERED_USERNAME_KEY);
+}
+
 async function handleSubmit() {
   await validate();
-  await authStore.login(model.username, model.password);
-}
+  persistRememberedUsername();
 
-type AccountKey = 'super' | 'admin' | 'user';
+  const success = await authStore.login({
+    username: model.username.trim(),
+    password: model.password,
+    captchaId: captcha.captchaId,
+    captchaCode: model.captchaCode.trim()
+  });
 
-interface Account {
-  key: AccountKey;
-  label: string;
-  username: string;
-  password: string;
-}
-
-const accounts = computed<Account[]>(() => [
-  {
-    key: 'super',
-    label: $t('page.login.pwdLogin.superAdmin'),
-    username: 'platform-admin',
-    password: 'Nova@123456'
-  },
-  {
-    key: 'admin',
-    label: $t('page.login.pwdLogin.admin'),
-    username: 'tenant-admin',
-    password: 'Nova@123456'
-  },
-  {
-    key: 'user',
-    label: $t('page.login.pwdLogin.user'),
-    username: 'tenant-admin',
-    password: 'Nova@123456'
+  if (!success) {
+    await refreshCaptcha();
   }
-]);
-
-async function handleAccountLogin(account: Account) {
-  await authStore.login(account.username, account.password);
 }
+
+onMounted(async () => {
+  await refreshCaptcha();
+});
 </script>
 
 <template>
   <NForm ref="formRef" :model="model" :rules="rules" :show-label="false" size="large" @keyup.enter="handleSubmit">
     <NFormItem path="username">
-      <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')"/>
+      <NInput v-model:value="model.username" :placeholder="$t('page.login.common.userNamePlaceholder')" />
     </NFormItem>
     <NFormItem path="password">
       <NInput
-          v-model:value="model.password"
-          :placeholder="$t('page.login.common.passwordPlaceholder')"
-          show-password-on="click"
-          type="password"
+        v-model:value="model.password"
+        :placeholder="$t('page.login.common.passwordPlaceholder')"
+        show-password-on="click"
+        type="password"
       />
     </NFormItem>
+    <NFormItem path="captchaCode">
+      <div class="flex w-full items-center gap-12px">
+        <NInput
+          v-model:value="model.captchaCode"
+          class="flex-1"
+          :placeholder="$t('page.login.pwdLogin.captchaPlaceholder')"
+        />
+        <button
+          class="h-40px w-132px cursor-pointer overflow-hidden rounded-8px border border-#e5e7eb bg-white p-0 transition hover:border-primary disabled:cursor-not-allowed dark:border-#334155 dark:bg-#111827"
+          type="button"
+          :disabled="captchaLoading"
+          @click="refreshCaptcha"
+        >
+          <span v-if="captchaLoading" class="text-12px text-text-secondary">{{ $t('common.refresh') }}</span>
+          <img
+            v-else-if="captcha.imageBase64"
+            :src="captcha.imageBase64"
+            alt="captcha"
+            class="block size-full object-cover"
+          />
+          <span v-else class="text-12px text-text-secondary">{{ $t('page.login.pwdLogin.refreshCaptcha') }}</span>
+        </button>
+      </div>
+    </NFormItem>
     <NSpace :size="24" vertical>
-      <div class="flex-y-center justify-between">
-        <NCheckbox>{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
-        <NButton quaternary @click="toggleLoginModule('reset-pwd')">
-          {{ $t('page.login.pwdLogin.forgetPassword') }}
-        </NButton>
+      <div class="flex-y-center">
+        <NCheckbox v-model:checked="model.rememberMe">{{ $t('page.login.pwdLogin.rememberMe') }}</NCheckbox>
       </div>
       <NButton :loading="authStore.loginLoading" block round size="large" type="primary" @click="handleSubmit">
-        {{ $t('common.confirm') }}
+        {{ $t('page.login.pwdLogin.submit') }}
       </NButton>
-      <div class="flex-y-center justify-between gap-12px">
-        <NButton block class="flex-1" @click="toggleLoginModule('code-login')">
-          {{ $t(loginModuleRecord['code-login']) }}
-        </NButton>
-        <NButton block class="flex-1" @click="toggleLoginModule('register')">
-          {{ $t(loginModuleRecord.register) }}
-        </NButton>
-      </div>
-      <NDivider class="text-14px text-#666 !m-0">{{ $t('page.login.pwdLogin.otherAccountLogin') }}</NDivider>
-      <div class="flex-center gap-12px">
-        <NButton v-for="item in accounts" :key="item.key" type="primary" @click="handleAccountLogin(item)">
-          {{ item.label }}
-        </NButton>
-      </div>
     </NSpace>
   </NForm>
 </template>
