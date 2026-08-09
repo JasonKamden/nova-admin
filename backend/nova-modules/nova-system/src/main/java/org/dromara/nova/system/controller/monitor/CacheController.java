@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.dromara.nova.common.core.model.R;
 import org.dromara.nova.system.dto.request.CacheBatchReqDto;
+import org.dromara.nova.system.dto.response.CacheEntryDetailRespDto;
+import org.dromara.nova.system.dto.response.CacheEntryRespDto;
 import org.dromara.nova.system.dto.response.CacheRespDto;
 import org.dromara.nova.system.service.CacheManagementService;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +52,33 @@ public class CacheController {
     @Operation(summary = "查询逻辑缓存详情", description = "查询逻辑缓存详情。接口按当前登录用户、PLATFORM/TENANT Context、权限和 DataScope 执行服务端校验。")
     public R<CacheRespDto> detail(@Parameter(description = "逻辑缓存编码", required = true) @PathVariable String cacheCode) {
         return R.ok(cacheManagementService.detail(cacheCode));
+    }
+
+    /**
+     * 查询逻辑缓存条目预览。
+     *
+     * @param cacheCode 逻辑缓存编码
+     * @return 统一响应对象；data 字段结构及字段含义由对应响应 DTO 的 @Schema / JavaDoc 定义。
+     */
+    @GetMapping("/{cacheCode}/entries")
+    @SaCheckPermission("monitor:cache:detail")
+    @Operation(summary = "查询逻辑缓存条目预览", description = "仅返回已注册逻辑缓存的条目预览，不暴露任意 Redis Key/Value。接口按当前登录用户、PLATFORM/TENANT Context、权限和 DataScope 执行服务端校验。")
+    public R<List<CacheEntryRespDto>> entries(@Parameter(description = "逻辑缓存编码", required = true) @PathVariable String cacheCode) {
+        return R.ok(cacheManagementService.listEntries(cacheCode));
+    }
+
+    /**
+     * 查询逻辑缓存条目详情。
+     *
+     * @param cacheCode 逻辑缓存编码
+     * @param entryKey  条目键
+     * @return 统一响应对象；data 字段结构及字段含义由对应响应 DTO 的 @Schema / JavaDoc 定义。
+     */
+    @GetMapping("/{cacheCode}/entries/detail")
+    @SaCheckPermission("monitor:cache:detail")
+    @Operation(summary = "查询逻辑缓存条目详情", description = "仅返回已注册逻辑缓存的条目详情，不暴露任意 Redis Key/Value。接口按当前登录用户、PLATFORM/TENANT Context、权限和 DataScope 执行服务端校验。")
+    public R<CacheEntryDetailRespDto> entryDetail(@Parameter(description = "逻辑缓存编码", required = true) @PathVariable String cacheCode, @Parameter(description = "条目键", required = true) @RequestParam String entryKey) {
+        return R.ok(cacheManagementService.entryDetail(cacheCode, entryKey));
     }
 
     /**

@@ -1,6 +1,5 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {fetchDeleteTenant, fetchTenantOptions, fetchTenantPage, fetchUpdateTenantStatus} from '@/service/api';
 import {statusOptions, statusRecord} from '@/constants/business';
@@ -9,6 +8,7 @@ import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
 import {useContextStore} from '@/store/modules/context';
+import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 import TenantOperateModal from './modules/tenant-operate-modal.vue';
@@ -118,7 +118,7 @@ const {
       key: 'createTime',
       title: $t('page.tenant.createTime'),
       minWidth: 180,
-      render: row => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.createTime)
     },
     {
       key: 'operate',

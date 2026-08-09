@@ -1,7 +1,7 @@
 <script lang="tsx" setup>
 import {computed, onMounted, ref} from 'vue';
-import {NButton, NSpace, NTag} from 'naive-ui';
-import {fetchCacheList, fetchClearCache, fetchRedisStatus, fetchRefreshCache} from '@/service/api';
+import {NButton, NCode, NDrawer, NDrawerContent, NSpace, NTag} from 'naive-ui';
+import {fetchCacheEntries, fetchCacheEntryDetail, fetchCacheList, fetchClearCache, fetchRedisStatus, fetchRefreshCache} from '@/service/api';
 import {useAuth} from '@/hooks/business/auth';
 import {useNaiveTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
@@ -16,8 +16,27 @@ const {hasAuth} = useAuth();
 const filters = ref({name: null as string | null, type: null as string | null, module: null as string | null});
 const redisStatus = ref('-');
 const actionCode = ref<string | null>(null);
+const entryDrawerVisible = ref(false);
+const entryLoading = ref(false);
+const entryKeyword = ref('');
+const activeCache = ref<Api.Monitor.CacheItem | null>(null);
+const cacheEntries = ref<Api.Monitor.CacheEntryItem[]>([]);
+const entryDetailLoading = ref(false);
+const entryDetail = ref<Api.Monitor.CacheEntryDetail | null>(null);
 const showClear = computed(() => hasAuth('monitor:cache:clear'));
 const showRefresh = computed(() => hasAuth('monitor:cache:refresh'));
+const showDetail = computed(() => hasAuth('monitor:cache:detail'));
+const filteredEntries = computed(() => {
+  const keyword = entryKeyword.value.trim().toLowerCase();
+
+  if (!keyword) {
+    return cacheEntries.value;
+  }
+
+  return cacheEntries.value.filter(item => {
+    return item.key.toLowerCase().includes(keyword) || item.valuePreview.toLowerCase().includes(keyword);
+  });
+});
 
 const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
   api: () => fetchCacheList(filters.value),
@@ -73,6 +92,12 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
                   loading: actionCode.value === `refresh:${row.code}`,
                   confirmText: $t('page.monitor.refreshConfirm', {name: row.name}),
                   onClick: () => handleRefresh(row.code)
+                },
+                {
+                  key: 'detail',
+                  label: $t('common.detail'),
+                  show: showDetail.value,
+                  onClick: () => openEntries(row)
                 }
               ]}
           />
@@ -105,6 +130,32 @@ async function handleRefresh(code: string) {
   if (!error) {
     window.$message?.success($t('common.updateSuccess'));
     await getData();
+  }
+}
+
+async function openEntries(row: Api.Monitor.CacheItem) {
+  activeCache.value = row;
+  entryDrawerVisible.value = true;
+  entryKeyword.value = '';
+  entryDetail.value = null;
+  entryLoading.value = true;
+  const {data: rows, error} = await fetchCacheEntries(row.code);
+  entryLoading.value = false;
+
+  if (!error) {
+    cacheEntries.value = rows;
+  }
+}
+
+async function handleViewEntry(entryKey: string) {
+  if (!activeCache.value) return;
+
+  entryDetailLoading.value = true;
+  const {data: detail, error} = await fetchCacheEntryDetail(activeCache.value.code, entryKey);
+  entryDetailLoading.value = false;
+
+  if (!error) {
+    entryDetail.value = detail;
   }
 }
 
@@ -168,5 +219,52 @@ onMounted(refreshAll);
         size="small"
       />
     </NCard>
+
+    <NDrawer v-model:show="entryDrawerVisible" :default-width="720" placement="right" resizable>
+      <NDrawerContent :title="`${activeCache?.name || '-'} / ${activeCache?.code || '-'}`" closable>
+        <div class="mb-12px flex flex-wrap gap-12px">
+          <NInput v-model:value="entryKeyword" :placeholder="$t('common.keywordSearch')" clearable />
+        </div>
+
+        <NSpin :show="entryLoading">
+          <div class="grid gap-16px lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+            <NCard :bordered="false" size="small">
+              <div class="mb-12px text-13px text-#666">{{ filteredEntries.length }} entries</div>
+              <NEmpty v-if="filteredEntries.length === 0" :description="$t('common.noData')" class="py-24px" />
+              <div v-else class="max-h-70vh flex-col-stretch gap-8px overflow-y-auto">
+                <button
+                  v-for="item in filteredEntries"
+                  :key="item.key"
+                  class="w-full rounded-12px border-none bg-#f8fafc px-12px py-10px text-left transition-colors hover:bg-#eef4ff"
+                  type="button"
+                  @click="handleViewEntry(item.key)"
+                >
+                  <div class="truncate text-14px font-500">{{ item.key }}</div>
+                  <div class="mt-4px text-12px text-text-secondary">{{ item.valueType }}</div>
+                  <div class="mt-6px line-clamp-3 text-12px text-#666">{{ item.valuePreview }}</div>
+                </button>
+              </div>
+            </NCard>
+
+            <NCard :bordered="false" size="small">
+              <NSpin :show="entryDetailLoading">
+                <NEmpty v-if="!entryDetail" :description="$t('common.detail')" class="py-24px" />
+                <div v-else class="flex-col-stretch gap-12px">
+                  <div class="rounded-12px bg-#f8fafc px-12px py-10px">
+                    <div class="text-12px text-text-secondary">Key</div>
+                    <div class="mt-4px break-all text-14px font-500">{{ entryDetail.key }}</div>
+                  </div>
+                  <div class="rounded-12px bg-#f8fafc px-12px py-10px">
+                    <div class="text-12px text-text-secondary">Type</div>
+                    <div class="mt-4px text-14px font-500">{{ entryDetail.valueType }}</div>
+                  </div>
+                  <NCode :code="entryDetail.valueJson" language="json" show-line-numbers word-wrap />
+                </div>
+              </NSpin>
+            </NCard>
+          </div>
+        </NSpin>
+      </NDrawerContent>
+    </NDrawer>
   </div>
 </template>

@@ -28,6 +28,10 @@ const themeStore = useThemeStore();
       </NSpace>
     </NRadioGroup>
   </SettingItem>
+
+  <SettingItem :label="$t('theme.general.searchPanelDefaultExpanded.title')">
+    <NSwitch v-model:value="themeStore.searchPanelDefaultExpanded" />
+  </SettingItem>
 </template>
 
 <style scoped>

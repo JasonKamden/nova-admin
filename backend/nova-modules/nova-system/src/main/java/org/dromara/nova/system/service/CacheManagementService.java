@@ -1,6 +1,8 @@
 package org.dromara.nova.system.service;
 
 import org.dromara.nova.system.dto.request.CacheBatchReqDto;
+import org.dromara.nova.system.dto.response.CacheEntryDetailRespDto;
+import org.dromara.nova.system.dto.response.CacheEntryRespDto;
 import org.dromara.nova.system.dto.response.CacheRespDto;
 
 import java.util.List;
@@ -18,6 +20,16 @@ public interface CacheManagementService {
      * 按业务主键查询详情并执行权限与 Tenant 校验。
      */
     CacheRespDto detail(String cacheCode);
+
+    /**
+     * 查询逻辑缓存条目预览。
+     */
+    List<CacheEntryRespDto> listEntries(String cacheCode);
+
+    /**
+     * 查询逻辑缓存条目详情。
+     */
+    CacheEntryDetailRespDto entryDetail(String cacheCode, String entryKey);
 
     /**
      * 清理指定逻辑业务缓存。

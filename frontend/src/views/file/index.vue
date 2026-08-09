@@ -1,12 +1,12 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NPopconfirm, NSpace} from 'naive-ui';
 import {statusOptions} from '@/constants/business';
 import {fetchBatchDeleteFiles, fetchDeleteFile, fetchFilePage, fetchUploadFile} from '@/service/api';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatDateTime} from '@/utils/date-time';
 import {localStg} from '@/utils/storage';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
@@ -76,7 +76,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'createTime',
       title: $t('page.file.createTime'),
       minWidth: 180,
-      render: row => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.createTime)
     },
     {
       key: 'operate',

@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {computed, onMounted, ref, watch} from 'vue';
-import dayjs from 'dayjs';
 import {messageTypeOptions, readStatusRecord} from '@/constants/business';
 import {$t} from '@/locales';
 import {fetchMessageCenterPage} from '@/service/api';
 import {useMessageStore} from '@/store/modules/message';
+import {formatDateTimeMinute} from '@/utils/date-time';
 
 defineOptions({
   name: 'MessageCenterPanel'
@@ -145,7 +145,7 @@ defineExpose({
             <div class="mt-6px line-clamp-2 text-13px text-#666">{{ item.summary || '-' }}</div>
           </div>
           <div class="text-right text-12px text-#8a94a6">
-            <div>{{ item.sendTime ? dayjs(item.sendTime).format('YYYY-MM-DD HH:mm') : '-' }}</div>
+            <div>{{ formatDateTimeMinute(item.sendTime) }}</div>
             <div class="mt-20px text-primary">{{ $t('page.messageCenter.openDetail') }}</div>
           </div>
         </div>

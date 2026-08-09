@@ -169,6 +169,10 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
         settings.value.businessFormMode = mode;
     }
 
+    function setSearchPanelDefaultExpanded(expanded: boolean) {
+        settings.value.searchPanelDefaultExpanded = expanded;
+    }
+
     /** Setup theme vars to global */
     function setupThemeVarsToGlobal() {
         const {themeTokens, darkThemeTokens} = createThemeToken(
@@ -228,10 +232,6 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
 
     /** Cache theme settings */
     function cacheThemeSettings() {
-        const isProd = import.meta.env.PROD;
-
-        if (!isProd) return;
-
         localStg.set('themeSettings', settings.value);
     }
 
@@ -272,6 +272,14 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
 
         // watch watermark settings to control timer
         watch(
+            () => settings.value,
+            () => {
+                cacheThemeSettings();
+            },
+            {deep: true}
+        );
+
+        watch(
             () => [settings.value.watermark.visible, settings.value.watermark.enableTime],
             () => {
                 updateWatermarkTimer();
@@ -300,6 +308,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
         updateThemeColors,
         setThemeLayout,
         setBusinessFormMode,
+        setSearchPanelDefaultExpanded,
         setWatermarkEnableUserName,
         setWatermarkEnableTime,
         setNaiveThemeOverrides

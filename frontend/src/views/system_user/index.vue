@@ -1,6 +1,5 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {downloadUserExport, fetchDeleteUser, fetchUpdateUserStatus} from '@/service/api';
 import {genderOptions, statusOptions, statusRecord} from '@/constants/business';
@@ -8,6 +7,7 @@ import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 import UserOperateModal from './modules/user-operate-modal.vue';
@@ -127,13 +127,13 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'lastLoginTime',
       title: $t('page.user.lastLoginTime'),
       minWidth: 180,
-      render: row => (row.lastLoginTime ? dayjs(row.lastLoginTime).format('YYYY-MM-DD HH:mm:ss') : '-')
+      render: row => formatDateTime(row.lastLoginTime)
     },
     {
       key: 'createTime',
       title: $t('page.user.createTime'),
       minWidth: 180,
-      render: row => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.createTime)
     },
     {
       key: 'operate',

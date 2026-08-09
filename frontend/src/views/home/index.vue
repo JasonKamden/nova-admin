@@ -9,6 +9,7 @@ import {useAuthStore} from '@/store/modules/auth';
 import {useContextStore} from '@/store/modules/context';
 import {useMessageStore} from '@/store/modules/message';
 import {useRouteStore} from '@/store/modules/route';
+import {formatDateTime} from '@/utils/date-time';
 import MessageDetailDrawer from '@/layouts/modules/global-header/components/message-detail-drawer.vue';
 
 defineOptions({
@@ -375,53 +376,70 @@ watch(
         </NGi>
       </NGrid>
 
-      <NCard
-        v-if="!isPlatform" :bordered="false" :title="$t('page.home.recentOperations')" class="mt-16px card-wrapper"
-        size="small"
+      <NGrid
+        v-if="!isPlatform"
+        :x-gap="gap"
+        :y-gap="16"
+        class="mt-16px"
+        item-responsive
+        responsive="screen"
       >
-        <NEmpty v-if="recentOperations.length === 0" :description="$t('common.noData')" class="py-24px" />
-        <NList v-else>
-          <NListItem v-for="(item, index) in recentOperations" :key="`${item.operator}-${item.time}-${index}`">
-            <div class="flex flex-col gap-6px md:flex-row md:items-center md:justify-between">
-              <div class="min-w-0 flex-1">
-                <div class="text-15px font-500">{{ item.description }}</div>
-                <div class="mt-4px text-13px text-#666">{{ $t('page.home.operator') }}: {{ item.operator }}</div>
-              </div>
-              <NTag round type="default">{{ item.time }}</NTag>
-            </div>
-          </NListItem>
-        </NList>
-      </NCard>
-
-      <NCard
-        v-if="!isPlatform" :bordered="false" :title="$t('page.home.announcements')" class="mt-16px card-wrapper"
-        size="small"
-      >
-        <template #header-extra>
-          <NButton text type="primary" @click="() => messageStore.refreshRecent()">
-            {{ $t('common.refresh') }}
-          </NButton>
-        </template>
-        <NEmpty v-if="announcements.length === 0" :description="$t('page.messageCenter.empty')" class="py-24px" />
-        <NList v-else>
-          <NListItem v-for="item in announcements" :key="item.messageId" @click="openMessageDetail(item.messageId)">
-            <div
-              class="flex cursor-pointer flex-col gap-8px rounded-10px px-4px py-6px transition-colors hover:bg-#f7f9fc md:flex-row md:items-center md:justify-between"
-            >
-              <div class="min-w-0 flex-1">
-                <div class="flex items-center gap-8px">
-                  <span v-if="item.readStatus === 0" class="inline-block size-8px rounded-full bg-warning"></span>
-                  <span class="truncate text-15px font-500">{{ item.title }}</span>
+        <NGi span="24 s:24 m:14">
+          <NCard :bordered="false" :title="$t('page.home.recentOperations')" class="card-wrapper" size="small">
+            <template #header-extra>
+              <NButton text type="primary" @click="navigateTo('/monitor/operation/log')">
+                {{ $t('common.viewAll') }}
+              </NButton>
+            </template>
+            <NEmpty v-if="recentOperations.length === 0" :description="$t('common.noData')" class="py-24px" />
+            <NList v-else>
+              <NListItem v-for="(item, index) in recentOperations.slice(0, 5)" :key="`${item.operator}-${item.time}-${index}`">
+                <div class="flex flex-col gap-6px md:flex-row md:items-center md:justify-between">
+                  <div class="min-w-0 flex-1">
+                    <div class="truncate text-15px font-500">{{ item.description }}</div>
+                    <div class="mt-4px text-13px text-#666">{{ $t('page.home.operator') }}: {{ item.operator }}</div>
+                  </div>
+                  <NTag round type="default">{{ formatDateTime(item.time) }}</NTag>
                 </div>
-                <div class="mt-4px line-clamp-2 text-13px text-#666">{{ item.summary || '-' }}</div>
-              </div>
-              <NTag round size="small" type="info">
-                {{ item.sendTime || item.receiveTime || '-' }}
-              </NTag>
-            </div>
-          </NListItem>
-        </NList>
-      </NCard>
+              </NListItem>
+            </NList>
+          </NCard>
+        </NGi>
+
+        <NGi span="24 s:24 m:10">
+          <NCard :bordered="false" :title="$t('page.home.announcements')" class="card-wrapper" size="small">
+            <template #header-extra>
+              <NSpace align="center" size="small">
+                <NButton text type="primary" @click="() => messageStore.refreshRecent()">
+                  {{ $t('common.refresh') }}
+                </NButton>
+                <NButton text type="primary" @click="navigateTo('/message/center')">
+                  {{ $t('common.viewAll') }}
+                </NButton>
+              </NSpace>
+            </template>
+            <NEmpty v-if="announcements.length === 0" :description="$t('page.messageCenter.empty')" class="py-24px" />
+            <NList v-else>
+              <NListItem v-for="item in announcements.slice(0, 5)" :key="item.messageId" @click="openMessageDetail(item.messageId)">
+                <div
+                  class="flex cursor-pointer flex-col gap-8px rounded-10px px-4px py-6px transition-colors hover:bg-#f7f9fc md:flex-row md:items-center md:justify-between"
+                >
+                  <div class="min-w-0 flex-1">
+                    <div class="flex items-center gap-8px">
+                      <span v-if="item.readStatus === 0" class="inline-block size-8px rounded-full bg-warning"></span>
+                      <span class="truncate text-15px font-500">{{ item.title }}</span>
+                    </div>
+                    <div class="mt-4px line-clamp-2 text-13px text-#666">{{ item.summary || '-' }}</div>
+                  </div>
+                  <NTag round size="small" type="info">
+                    {{ formatDateTime(item.sendTime || item.receiveTime) }}
+                  </NTag>
+                </div>
+              </NListItem>
+            </NList>
+          </NCard>
+        </NGi>
+      </NGrid>
     </NSpin>
 
     <MessageDetailDrawer v-model:visible="detailVisible" :message-id="activeMessageId" @updated="handleMessageUpdated" />

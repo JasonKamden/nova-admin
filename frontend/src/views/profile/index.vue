@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import {computed, onBeforeUnmount, reactive, ref} from 'vue';
-import dayjs from 'dayjs';
 import {genderOptions, statusRecord} from '@/constants/business';
 import {useFormRules, useNaiveForm} from '@/hooks/common/form';
 import {$t} from '@/locales';
 import {fetchProfile, fetchUpdateProfile, fetchUpdateProfileAvatar, fetchUpdateProfilePassword} from '@/service/api';
 import {getAuthorization} from '@/service/request/shared';
 import {useAuthStore} from '@/store/modules/auth';
+import {formatDateTime} from '@/utils/date-time';
 import {getServiceBaseURL} from '@/utils/service';
 
 defineOptions({
@@ -354,7 +354,7 @@ onBeforeUnmount(() => {
                 <span v-else>-</span>
               </NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.user.lastLoginTime')">
-                {{ profile?.lastLoginTime ? dayjs(profile.lastLoginTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
+                {{ formatDateTime(profile?.lastLoginTime) }}
               </NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.user.lastLoginIp')">
                 {{
@@ -362,7 +362,7 @@ onBeforeUnmount(() => {
                 }}
               </NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.user.createTime')">
-                {{ profile?.createTime ? dayjs(profile.createTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}
+                {{ formatDateTime(profile?.createTime) }}
               </NDescriptionsItem>
             </NDescriptions>
           </NCard>

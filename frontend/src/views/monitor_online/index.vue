@@ -1,12 +1,12 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NSpace} from 'naive-ui';
 import {fetchKickOnlineUser, fetchOnlineUserList} from '@/service/api';
 import {useAuth} from '@/hooks/business/auth';
 import {useNaiveTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 
@@ -40,13 +40,13 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
       key: 'loginTime',
       title: $t('page.monitor.loginTime'),
       minWidth: 180,
-      render: row => dayjs(row.loginTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.loginTime)
     },
     {
       key: 'lastActivityTime',
       title: $t('page.monitor.lastActivityTime'),
       minWidth: 180,
-      render: row => dayjs(row.lastActivityTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.lastActivityTime)
     },
     {
       key: 'operate',

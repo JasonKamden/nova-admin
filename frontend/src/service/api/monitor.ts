@@ -54,6 +54,19 @@ export function fetchClearCache(cacheCode: string) {
     });
 }
 
+export function fetchCacheEntries(cacheCode: string) {
+    return request<Api.Monitor.CacheEntryItem[]>({
+        url: `/api/system/caches/${cacheCode}/entries`
+    });
+}
+
+export function fetchCacheEntryDetail(cacheCode: string, entryKey: string) {
+    return request<Api.Monitor.CacheEntryDetail>({
+        url: `/api/system/caches/${cacheCode}/entries/detail`,
+        params: {entryKey}
+    });
+}
+
 export function fetchRefreshCache(cacheCode: string) {
     return request<void>({
         url: `/api/system/caches/${cacheCode}/refresh`,

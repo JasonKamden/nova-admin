@@ -42,6 +42,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
         closeTabByMiddleClick: false
     },
     businessFormMode: 'modal',
+    searchPanelDefaultExpanded: true,
     fixedHeaderAndTab: true,
     sider: {
         inverted: false,

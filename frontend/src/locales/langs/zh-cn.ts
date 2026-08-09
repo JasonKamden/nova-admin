@@ -216,6 +216,9 @@ const local: App.I18n.Schema = {
                 drawer: '侧边弹窗',
                 modal: '直接弹窗'
             },
+            searchPanelDefaultExpanded: {
+                title: '搜索面板默认展开'
+            },
             watermark: {
                 title: '水印设置',
                 visible: '显示全屏水印',
@@ -259,8 +262,8 @@ const local: App.I18n.Schema = {
         platform: '平台管理',
         system: '系统管理',
         'route-view': '业务页面',
-        platform_tenant: 'Tenant 管理',
-        system_config: '参数管理',
+        platform_tenant: '租户管理',
+        system_config: '参数配置',
         system_department: '部门管理',
         system_dictionary: '字典管理',
         system_message: '消息管理',

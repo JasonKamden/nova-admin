@@ -119,5 +119,17 @@ declare namespace Api {
             description: string | null;
             status: string | null;
         }
+
+        interface CacheEntryItem {
+            key: string;
+            valuePreview: string;
+            valueType: string;
+        }
+
+        interface CacheEntryDetail {
+            key: string;
+            valueType: string;
+            valueJson: string;
+        }
     }
 }

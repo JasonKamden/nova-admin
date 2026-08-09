@@ -220,6 +220,9 @@ const local: App.I18n.Schema = {
                 drawer: 'Drawer',
                 modal: 'Modal'
             },
+            searchPanelDefaultExpanded: {
+                title: 'Search Panel Expanded by Default'
+            },
             watermark: {
                 title: 'Watermark Settings',
                 visible: 'Watermark Full Screen Visible',
@@ -260,11 +263,11 @@ const local: App.I18n.Schema = {
         monitor_operation_log: 'Operation Logs',
         message: 'Message',
         message_center: 'Message Center',
-        platform: 'Platform',
+        platform: 'Platform Management',
         system: 'System',
         'route-view': 'Business Page',
         platform_tenant: 'Tenant Management',
-        system_config: 'Config Management',
+        system_config: 'Parameter Configuration',
         system_department: 'Department Management',
         system_dictionary: 'Dictionary Management',
         system_message: 'Message Management',

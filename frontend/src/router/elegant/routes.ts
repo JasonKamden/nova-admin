@@ -179,7 +179,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: 'layout.base',
     meta: {
       title: 'platform',
-      i18nKey: 'route.platform'
+      i18nKey: 'route.platform',
+      order: 2
     },
     children: [
       {
@@ -199,7 +200,8 @@ export const generatedRoutes: GeneratedRoute[] = [
     component: 'layout.base$view.profile',
     meta: {
       title: 'profile',
-      i18nKey: 'route.profile'
+      i18nKey: 'route.profile',
+      hideInMenu: true
     }
   },
   {

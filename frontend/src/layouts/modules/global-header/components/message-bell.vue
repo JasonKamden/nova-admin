@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {messageTypeOptions} from '@/constants/business';
 import {useRouterPush} from '@/hooks/common/router';
 import {$t} from '@/locales';
 import {useMessageStore} from '@/store/modules/message';
+import {formatMonthDayTime} from '@/utils/date-time';
 import MessageDetailDrawer from './message-detail-drawer.vue';
 
 defineOptions({
@@ -108,7 +108,7 @@ async function openMessageCenterPage() {
             </div>
             <div class="shrink-0 text-right text-11px text-#8a94a6">
               <div>{{ getMessageTypeLabel(item.messageType) }}</div>
-              <div class="mt-6px">{{ item.sendTime ? dayjs(item.sendTime).format('MM-DD HH:mm') : '-' }}</div>
+              <div class="mt-6px">{{ formatMonthDayTime(item.sendTime) }}</div>
             </div>
           </div>
         </div>

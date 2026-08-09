@@ -1,11 +1,11 @@
 <script lang="tsx" setup>
 import {ref, watch} from 'vue';
-import dayjs from 'dayjs';
 import {NTag} from 'naive-ui';
 import {fetchMessageRecipients} from '@/service/api';
 import {readStatusOptions, readStatusRecord} from '@/constants/business';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
+import {formatDateTime} from '@/utils/date-time';
 
 defineOptions({name: 'MessageRecipientsModal'});
 
@@ -55,13 +55,13 @@ const {columns, data, loading, getDataByPage, mobilePagination} = useNaivePagina
       key: 'receiveTime',
       title: $t('page.message.createTime'),
       minWidth: 180,
-      render: row => (row.receiveTime ? dayjs(row.receiveTime).format('YYYY-MM-DD HH:mm:ss') : '-')
+      render: row => formatDateTime(row.receiveTime)
     },
     {
       key: 'readTime',
       title: $t('page.message.sendTime'),
       minWidth: 180,
-      render: row => (row.readTime ? dayjs(row.readTime).format('YYYY-MM-DD HH:mm:ss') : '-')
+      render: row => formatDateTime(row.readTime)
     }
   ]
 });

@@ -43,7 +43,7 @@ INSERT INTO sys_menu(id, menu_type, parent_id, menu_name, route_name, route_path
                      deleted, version)
 VALUES (1, 'DIRECTORY', NULL, '系统管理', 'system', '/system', NULL, NULL, 'carbon:settings', 'route.system', 10, 1, 1,
         0, 1, NOW(), 1, NOW(), 0, 0),
-       (5, 'MENU', NULL, 'Tenant 管理', 'platform_tenant', '/platform/tenant', 'view.platform_tenant',
+       (5, 'MENU', NULL, '租户管理', 'platform_tenant', '/platform/tenant', 'view.platform_tenant',
         'platform:tenant:list',
         'carbon:tenant', 'route.platform_tenant', 5, 1, 1, 1, 1, NOW(), 1, NOW(), 0, 0),
        (6, 'BUTTON', 5, '新增Tenant', NULL, NULL, NULL, 'platform:tenant:add', NULL, NULL, 1, 1, 0, 0, 1, NOW(), 1,
@@ -100,7 +100,7 @@ VALUES (1, 'DIRECTORY', NULL, '系统管理', 'system', '/system', NULL, NULL, '
         NOW(), 0, 0),
        (53, 'BUTTON', 50, '删除字典', NULL, NULL, NULL, 'system:dictionary:delete', NULL, NULL, 3, 1, 0, 0, 1, NOW(), 1,
         NOW(), 0, 0),
-       (60, 'MENU', 1, '参数管理', 'system_config', '/system/config', 'view.system_config', 'system:config:list',
+       (60, 'MENU', 1, '参数配置', 'system_config', '/system/config', 'view.system_config', 'system:config:list',
         'carbon:settings-adjust', 'route.system_config', 60, 1, 1, 1, 1, NOW(), 1, NOW(), 0, 0),
        (61, 'BUTTON', 60, '新增参数', NULL, NULL, NULL, 'system:config:add', NULL, NULL, 1, 1, 0, 0, 1, NOW(), 1, NOW(),
         0, 0),

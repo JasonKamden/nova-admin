@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue';
-import dayjs from 'dayjs';
 import { fetchOperationLogDetail } from '@/service/api';
 import { $t } from '@/locales';
 import { useAppStore } from '@/store/modules/app';
+import { formatDateTime } from '@/utils/date-time';
 import LogCodeViewer from '@/components/business/log-code-viewer.vue';
 
 defineOptions({ name: 'OperationLogDetailModal' });
@@ -44,7 +44,7 @@ watch(
               <NDescriptionsItem :label="$t('page.monitor.requestIp')">{{ detail.basic.requestIp || '-' }}</NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.monitor.durationMs')">{{ detail.basic.durationMs ?? '-' }}</NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.monitor.operationTime')">
-                {{ dayjs(detail.basic.operationTime).format('YYYY-MM-DD HH:mm:ss') }}
+                {{ formatDateTime(detail.basic.operationTime) }}
               </NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.monitor.requestId')">{{ detail.basic.requestId || '-' }}</NDescriptionsItem>
               <NDescriptionsItem :label="$t('page.monitor.traceId')">{{ detail.basic.traceId || '-' }}</NDescriptionsItem>

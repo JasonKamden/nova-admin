@@ -1,5 +1,8 @@
 package org.dromara.nova.system.service.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.benmanes.caffeine.cache.Cache;
 import lombok.RequiredArgsConstructor;
 import org.dromara.nova.common.cache.model.CacheDefinition;
 import org.dromara.nova.common.cache.service.LogicalCacheRegistry;
@@ -8,12 +11,17 @@ import org.dromara.nova.common.core.enums.CommonResultCode;
 import org.dromara.nova.common.core.exception.BusinessException;
 import org.dromara.nova.common.log.annotation.OperationAudit;
 import org.dromara.nova.system.dto.request.CacheBatchReqDto;
+import org.dromara.nova.system.dto.response.CacheEntryDetailRespDto;
+import org.dromara.nova.system.dto.response.CacheEntryRespDto;
 import org.dromara.nova.system.dto.response.CacheRespDto;
 import org.dromara.nova.system.service.CacheManagementService;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 逻辑业务缓存管理，不提供 Redis 任意 Key/Value 操作。
@@ -24,6 +32,7 @@ public class CacheManagementServiceImpl implements CacheManagementService {
     private final LogicalCacheRegistry logicalCacheRegistry;
     private final CacheManager cacheManager;
     private final RedisUtils redisUtils;
+    private final ObjectMapper objectMapper;
 
     /**
      * 查询当前权限范围内的业务数据列表。
@@ -47,6 +56,33 @@ public class CacheManagementServiceImpl implements CacheManagementService {
     @Override
     public CacheRespDto detail(String code) {
         return resp(require(code));
+    }
+
+    @Override
+    public List<CacheEntryRespDto> listEntries(String code) {
+        CacheDefinition definition = require(code);
+        Map<Object, Object> entries = getEntries(definition);
+        return entries.entrySet().stream()
+                .sorted(Comparator.comparing(entry -> String.valueOf(entry.getKey())))
+                .limit(200)
+                .map(entry -> new CacheEntryRespDto(
+                        String.valueOf(entry.getKey()),
+                        truncate(toJson(entry.getValue()), 240),
+                        valueType(entry.getValue())
+                ))
+                .toList();
+    }
+
+    @Override
+    public CacheEntryDetailRespDto entryDetail(String code, String entryKey) {
+        CacheDefinition definition = require(code);
+        Map<Object, Object> entries = getEntries(definition);
+        Object value = entries.entrySet().stream()
+                .filter(entry -> String.valueOf(entry.getKey()).equals(entryKey))
+                .map(Map.Entry::getValue)
+                .findFirst()
+                .orElseThrow(() -> new BusinessException(CommonResultCode.NOT_FOUND, "缓存条目不存在"));
+        return new CacheEntryDetailRespDto(entryKey, valueType(value), toJson(value));
     }
 
     /**
@@ -112,6 +148,39 @@ public class CacheManagementServiceImpl implements CacheManagementService {
         CacheDefinition d = logicalCacheRegistry.get(code);
         if (d == null) throw new BusinessException(CommonResultCode.NOT_FOUND, "逻辑缓存不存在");
         return d;
+    }
+
+    private Map<Object, Object> getEntries(CacheDefinition definition) {
+        if (!"CAFFEINE".equalsIgnoreCase(definition.type())) {
+            throw new BusinessException(CommonResultCode.FORBIDDEN, "当前缓存类型暂不支持数据查看");
+        }
+
+        var springCache = cacheManager.getCache(cacheName(definition.code()));
+        if (!(springCache instanceof CaffeineCache caffeineCache)) {
+            throw new BusinessException(CommonResultCode.NOT_FOUND, "未找到缓存区域");
+        }
+
+        Cache<Object, Object> nativeCache = caffeineCache.getNativeCache();
+        return nativeCache.asMap();
+    }
+
+    private String toJson(Object value) {
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (JsonProcessingException e) {
+            return String.valueOf(value);
+        }
+    }
+
+    private String valueType(Object value) {
+        return value == null ? "null" : value.getClass().getSimpleName();
+    }
+
+    private String truncate(String text, int maxLength) {
+        if (text.length() <= maxLength) {
+            return text;
+        }
+        return text.substring(0, maxLength) + "...";
     }
 
     /**

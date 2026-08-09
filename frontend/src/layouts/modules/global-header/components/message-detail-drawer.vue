@@ -1,10 +1,10 @@
 <script lang="ts" setup>
 import {computed, ref, watch} from 'vue';
-import dayjs from 'dayjs';
 import {messageTypeOptions} from '@/constants/business';
 import {$t} from '@/locales';
 import {fetchFileDetail} from '@/service/api';
 import {useMessageStore} from '@/store/modules/message';
+import {formatDateTime} from '@/utils/date-time';
 import RichHtmlContent from '@/components/business/rich-html-content.vue';
 import {openFileByMode} from '@/utils/file';
 
@@ -98,7 +98,7 @@ watch(
                 <div class="text-18px font-600">{{ detail?.title || '-' }}</div>
                 <div class="mt-8px flex flex-wrap items-center gap-8px text-12px text-#666">
                   <NTag size="small" type="info">{{ messageTypeLabel }}</NTag>
-                  <span>{{ detail?.sendTime ? dayjs(detail.sendTime).format('YYYY-MM-DD HH:mm:ss') : '-' }}</span>
+                  <span>{{ formatDateTime(detail?.sendTime) }}</span>
                 </div>
               </div>
             </div>

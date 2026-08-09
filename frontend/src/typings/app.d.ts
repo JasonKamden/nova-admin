@@ -80,6 +80,7 @@ declare namespace App {
                 closeTabByMiddleClick: boolean;
             };
             businessFormMode: BusinessFormMode;
+            searchPanelDefaultExpanded: boolean;
             /** Fixed header and tab */
             fixedHeaderAndTab: boolean;
             /** Sider */
@@ -478,6 +479,9 @@ declare namespace App {
                         title: string;
                         drawer: string;
                         modal: string;
+                    };
+                    searchPanelDefaultExpanded: {
+                        title: string;
                     };
                     watermark: {
                         title: string;

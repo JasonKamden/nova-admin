@@ -10,6 +10,7 @@ import {createStaticRoutes, getAuthVueRoutes} from '@/router/routes';
 import {ROOT_ROUTE} from '@/router/routes/builtin';
 import {getRouteName, getRoutePath} from '@/router/elegant/transform';
 import {useAuthStore} from '../auth';
+import {useContextStore} from '../context';
 import {useTabStore} from '../tab';
 import {adaptBackendMenusToRoutes} from './adapter';
 import {
@@ -26,6 +27,7 @@ import {
 
 export const useRouteStore = defineStore(SetupStoreId.Route, () => {
     const authStore = useAuthStore();
+    const contextStore = useContextStore();
     const tabStore = useTabStore();
     const {bool: isInitConstantRoute, setBool: setIsInitConstantRoute} = useBoolean();
     const {bool: isInitAuthRoute, setBool: setIsInitAuthRoute} = useBoolean();
@@ -102,6 +104,77 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
         }
 
         return null;
+    }
+
+    function mapRoutesDeep(
+        routes: ElegantConstRoute[],
+        mapper: (route: ElegantConstRoute) => ElegantConstRoute | null
+    ): ElegantConstRoute[] {
+        return routes
+            .map(route => {
+                const mapped = mapper(route);
+
+                if (!mapped) {
+                    return null;
+                }
+
+                if (mapped.children?.length) {
+                    mapped.children = mapRoutesDeep(mapped.children, mapper);
+                }
+
+                return mapped;
+            })
+            .filter(Boolean) as ElegantConstRoute[];
+    }
+
+    function normalizeTopLevelOrder(routes: ElegantConstRoute[]) {
+        const topLevelOrder = contextStore.isPlatform
+            ? new Map<string, number>([
+                  ['home', 1],
+                  ['platform', 2]
+              ])
+            : new Map<string, number>([
+                  ['home', 1],
+                  ['system', 2],
+                  ['file', 3],
+                  ['monitor', 4]
+              ]);
+
+        return mapRoutesDeep(routes, route => {
+            const normalizedRoute = {
+                ...route,
+                meta: route.meta ? {...route.meta} : undefined
+            };
+
+            const topLevelValue = topLevelOrder.get(route.name);
+
+            if (topLevelValue !== undefined) {
+                normalizedRoute.meta = {
+                    title: normalizedRoute.meta?.title || route.name,
+                    ...normalizedRoute.meta,
+                    order: topLevelValue
+                };
+            }
+
+            return normalizedRoute;
+        });
+    }
+
+    function filterRoutesByContext(routes: ElegantConstRoute[]) {
+        const filteredRoutes = mapRoutesDeep(routes, route => {
+            if (contextStore.isPlatform) {
+                const platformAllowed = new Set(['home', 'platform', 'profile', 'message']);
+                return platformAllowed.has(route.name) ? route : null;
+            }
+
+            if (route.name === 'platform' || route.name.startsWith('platform_')) {
+                return null;
+            }
+
+            return route;
+        });
+
+        return normalizeTopLevelOrder(filteredRoutes);
     }
 
     const removeRouteFns: (() => void)[] = [];
@@ -234,9 +307,9 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
         if (!error) {
             const routes = adaptBackendMenusToRoutes(data);
             const {authRoutes: staticAuthRoutes} = createStaticRoutes();
-            const builtinRouteNames = [import.meta.env.VITE_ROUTE_HOME, 'profile', 'message'];
+            const builtinRouteNames = [import.meta.env.VITE_ROUTE_HOME, 'profile', 'message', 'platform'];
             const builtinRoutes = staticAuthRoutes.filter(route => builtinRouteNames.includes(route.name));
-            const mergedRoutes = [...builtinRoutes, ...routes];
+            const mergedRoutes = filterRoutesByContext([...builtinRoutes, ...routes]);
             const dynamicRouteHome = getFirstRouteName(mergedRoutes);
 
             if (dynamicRouteHome) {

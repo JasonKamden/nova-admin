@@ -1,6 +1,5 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {configTypeOptions, statusOptions, statusRecord} from '@/constants/business';
 import {fetchConfigPage, fetchDeleteConfig} from '@/service/api';
@@ -8,6 +7,7 @@ import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 import ConfigOperateModal from './modules/config-operate-modal.vue';
@@ -86,7 +86,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'updateTime',
       title: $t('page.config.updateTime'),
       minWidth: 180,
-      render: row => dayjs(row.updateTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.updateTime)
     },
     {
       key: 'operate',

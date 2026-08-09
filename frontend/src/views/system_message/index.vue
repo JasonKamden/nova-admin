@@ -1,6 +1,5 @@
 <script lang="tsx" setup>
 import {computed, ref} from 'vue';
-import dayjs from 'dayjs';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {
   fetchDeleteMessage,
@@ -19,6 +18,7 @@ import {useAuth} from '@/hooks/business/auth';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 import MessageOperateModal from './modules/message-operate-modal.vue';
@@ -102,13 +102,13 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       key: 'createTime',
       title: $t('page.message.createTime'),
       minWidth: 180,
-      render: row => dayjs(row.createTime).format('YYYY-MM-DD HH:mm:ss')
+      render: row => formatDateTime(row.createTime)
     },
     {
       key: 'sendTime',
       title: $t('page.message.sendTime'),
       minWidth: 180,
-      render: row => (row.sendTime ? dayjs(row.sendTime).format('YYYY-MM-DD HH:mm:ss') : '-')
+      render: row => formatDateTime(row.sendTime)
     },
     {
       key: 'operate',
