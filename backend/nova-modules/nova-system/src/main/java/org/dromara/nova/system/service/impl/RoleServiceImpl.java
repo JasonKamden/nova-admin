@@ -243,7 +243,7 @@ public class RoleServiceImpl implements RoleService {
         if (!DataScopeType.CUSTOM.name().equals(r.getDataScope())) return;
         Set<Long> unique = new LinkedHashSet<>(ids == null ? List.of() : ids);
         if (!unique.isEmpty() && departmentMapper.selectCountByQuery(QueryWrapper.create().where(DEPARTMENT_ENTITY.TENANT_ID.eq(r.getTenantId())).and(DEPARTMENT_ENTITY.ID.in(unique)).and(DEPARTMENT_ENTITY.DELETED.eq(false))) != unique.size())
-            throw new BusinessException(CommonResultCode.BAD_REQUEST, "CUSTOM DataScope 包含无效 Department");
+            throw new BusinessException(CommonResultCode.BAD_REQUEST, "CUSTOM DataScope 包含无效部门");
         for (Long departmentId : unique) {
             RoleDepartmentEntity link = new RoleDepartmentEntity();
             link.setTenantId(r.getTenantId());

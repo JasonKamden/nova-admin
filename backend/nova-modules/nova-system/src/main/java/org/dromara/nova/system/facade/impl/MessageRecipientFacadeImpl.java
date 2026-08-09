@@ -67,7 +67,7 @@ public class MessageRecipientFacadeImpl implements MessageRecipientFacade {
         }
         DataScopeRule scope = dataScopeService.current();
         if (!scope.allTenant() && !scope.departmentIds().containsAll(target))
-            throw new BusinessException(CommonResultCode.FORBIDDEN, "包含超出 DataScope 的 Department");
+            throw new BusinessException(CommonResultCode.FORBIDDEN, "包含超出 DataScope 的部门");
         if (target.isEmpty()) return List.of();
         return assemble(userTenantMapper.selectListByQuery(QueryWrapper.create().where(USER_TENANT_ENTITY.TENANT_ID.eq(tenantId)).and(USER_TENANT_ENTITY.DEPARTMENT_ID.in(target)).and(USER_TENANT_ENTITY.STATUS.eq(1))));
     }
