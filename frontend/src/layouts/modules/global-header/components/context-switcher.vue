@@ -5,6 +5,7 @@ import {useAuthStore} from '@/store/modules/auth';
 import {useRouteStore} from '@/store/modules/route';
 import {useTabStore} from '@/store/modules/tab';
 import {useAppStore} from '@/store/modules/app';
+import {useMessageStore} from '@/store/modules/message';
 
 defineOptions({
   name: 'ContextSwitcher'
@@ -15,6 +16,7 @@ const contextStore = useContextStore();
 const routeStore = useRouteStore();
 const tabStore = useTabStore();
 const appStore = useAppStore();
+const messageStore = useMessageStore();
 const switching = ref(false);
 
 const disabled = computed(() => !authStore.isLogin || (!contextStore.options.platform && contextStore.options.tenants.length <= 1));
@@ -52,6 +54,7 @@ async function handleSelect(key: string) {
   }
 
   switching.value = true;
+  messageStore.clear();
 
   const switched =
       key === 'platform'

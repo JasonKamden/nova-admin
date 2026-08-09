@@ -48,11 +48,11 @@ async function handleSubmit() {
 <template>
   <NForm ref="formRef" :model="model" :rules="rules" :show-label="false" size="large" @keyup.enter="handleSubmit">
     <NFormItem path="phone">
-      <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')" />
+      <NInput v-model:value="model.phone" :placeholder="$t('page.login.common.phonePlaceholder')"/>
     </NFormItem>
     <NFormItem path="code">
       <div class="w-full flex-y-center gap-16px">
-        <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')" />
+        <NInput v-model:value="model.code" :placeholder="$t('page.login.common.codePlaceholder')"/>
         <NButton :disabled="isCounting" :loading="loading" size="large" @click="getCaptcha(model.phone)">
           {{ label }}
         </NButton>
@@ -60,18 +60,18 @@ async function handleSubmit() {
     </NFormItem>
     <NFormItem path="password">
       <NInput
-        v-model:value="model.password"
-        :placeholder="$t('page.login.common.passwordPlaceholder')"
-        show-password-on="click"
-        type="password"
+          v-model:value="model.password"
+          :placeholder="$t('page.login.common.passwordPlaceholder')"
+          show-password-on="click"
+          type="password"
       />
     </NFormItem>
     <NFormItem path="confirmPassword">
       <NInput
-        v-model:value="model.confirmPassword"
-        :placeholder="$t('page.login.common.confirmPasswordPlaceholder')"
-        show-password-on="click"
-        type="password"
+          v-model:value="model.confirmPassword"
+          :placeholder="$t('page.login.common.confirmPasswordPlaceholder')"
+          show-password-on="click"
+          type="password"
       />
     </NFormItem>
     <NSpace :size="18" class="w-full" vertical>

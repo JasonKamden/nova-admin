@@ -234,7 +234,7 @@ export const useRouteStore = defineStore(SetupStoreId.Route, () => {
         if (!error) {
             const routes = adaptBackendMenusToRoutes(data);
             const {authRoutes: staticAuthRoutes} = createStaticRoutes();
-            const builtinRouteNames = [import.meta.env.VITE_ROUTE_HOME, 'profile'];
+            const builtinRouteNames = [import.meta.env.VITE_ROUTE_HOME, 'profile', 'message'];
             const builtinRoutes = staticAuthRoutes.filter(route => builtinRouteNames.includes(route.name));
             const mergedRoutes = [...builtinRoutes, ...routes];
             const dynamicRouteHome = getFirstRouteName(mergedRoutes);

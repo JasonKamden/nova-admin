@@ -29,7 +29,7 @@ import static org.dromara.nova.system.entity.table.DepartmentEntityTableDef.DEPA
 import static org.dromara.nova.system.entity.table.UserTenantEntityTableDef.USER_TENANT_ENTITY;
 
 /**
- * Tenant Department 树维护。
+ * Tenant部门树维护。
  */
 @Service
 @RequiredArgsConstructor
@@ -122,7 +122,7 @@ public class DepartmentServiceImpl implements DepartmentService {
      */
     @Override
     @CacheEvict(cacheNames = "departmentTree", allEntries = true)
-    @OperationAudit(module = "DEPARTMENT", type = "STATUS", description = "修改 Department 状态")
+    @OperationAudit(module = "DEPARTMENT", type = "STATUS", description = "修改部门状态")
     public void updateStatus(Long id, StatusUpdateReqDto req) {
         DepartmentEntity e = require(id);
         e.setStatus(req.status());
@@ -172,7 +172,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private void validateParent(Long tenantId, Long selfId, Long parentId) {
         if (parentId == null) return;
         DepartmentEntity p = departmentMapper.selectOneByQuery(QueryWrapper.create().where(DEPARTMENT_ENTITY.ID.eq(parentId)).and(DEPARTMENT_ENTITY.TENANT_ID.eq(tenantId)).and(DEPARTMENT_ENTITY.DELETED.eq(false)));
-        if (p == null) throw new BusinessException(CommonResultCode.BAD_REQUEST, "父 Department 不存在");
+        if (p == null) throw new BusinessException(CommonResultCode.BAD_REQUEST, "父部门不存在");
         Long cursor = parentId;
         Set<Long> seen = new HashSet<>();
         while (cursor != null && seen.add(cursor)) {
@@ -184,9 +184,9 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     /**
-     * 将 Department 实体集合构建为层级树响应。
+     * 将部门实体集合构建为层级树响应。
      *
-     * @param entities Department 实体集合
+     * @param entities 部门实体集合
      * @return 符合当前 Tenant、权限和 DataScope 约束的数据列表。
      */
     private List<DepartmentRespDto> buildTree(List<DepartmentEntity> entities) {
@@ -205,7 +205,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     /**
      * 将实体转换为响应 DTO。
      *
-     * @param e Department 实体
+     * @param e 部门实体
      * @return 业务响应 DTO。
      */
     private DepartmentRespDto toResp(DepartmentEntity e) {

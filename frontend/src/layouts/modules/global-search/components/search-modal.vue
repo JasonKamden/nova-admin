@@ -91,31 +91,31 @@ registerShortcut();
 
 <template>
   <NModal
-    v-model:show="visible"
-    :class="[isMobile ? 'size-full top-0px rounded-0' : 'w-630px top-50px']"
-    :closable="false"
-    :segmented="{ footer: 'soft' }"
-    auto-focus
-    class="fixed left-0 right-0"
-    footer-style="padding: 0; margin: 0"
-    preset="card"
-    @after-leave="handleClose"
+      v-model:show="visible"
+      :class="[isMobile ? 'size-full top-0px rounded-0' : 'w-630px top-50px']"
+      :closable="false"
+      :segmented="{ footer: 'soft' }"
+      auto-focus
+      class="fixed left-0 right-0"
+      footer-style="padding: 0; margin: 0"
+      preset="card"
+      @after-leave="handleClose"
   >
     <NInputGroup>
       <NInput v-model:value="keyword" :placeholder="$t('common.keywordSearch')" clearable @input="handleSearch">
         <template #prefix>
-          <icon-uil-search class="text-15px text-#c2c2c2" />
+          <icon-uil-search class="text-15px text-#c2c2c2"/>
         </template>
       </NInput>
       <NButton v-if="isMobile" ghost type="primary" @click="handleClose">{{ $t('common.cancel') }}</NButton>
     </NInputGroup>
 
     <div class="mt-20px">
-      <NEmpty v-if="resultOptions.length === 0" :description="$t('common.noData')" />
-      <SearchResult v-else v-model:path="activePath" :options="resultOptions" @enter="handleEnter" />
+      <NEmpty v-if="resultOptions.length === 0" :description="$t('common.noData')"/>
+      <SearchResult v-else v-model:path="activePath" :options="resultOptions" @enter="handleEnter"/>
     </div>
     <template #footer>
-      <SearchFooter v-if="!isMobile" />
+      <SearchFooter v-if="!isMobile"/>
     </template>
   </NModal>
 </template>

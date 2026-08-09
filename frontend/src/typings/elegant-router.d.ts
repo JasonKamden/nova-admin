@@ -4,278 +4,282 @@
 // Read more: https://github.com/soybeanjs/elegant-router
 
 declare module "@elegant-router/types" {
-  type ElegantConstRoute = import('@elegant-router/vue').ElegantConstRoute;
+    type ElegantConstRoute = import('@elegant-router/vue').ElegantConstRoute;
 
-  /**
-   * route layout
-   */
-  export type RouteLayout = "base" | "blank";
+    /**
+     * route layout
+     */
+    export type RouteLayout = "base" | "blank";
 
-  /**
-   * route map
-   */
-  export type RouteMap = {
-    "root": "/";
-    "not-found": "/:pathMatch(.*)*";
-    "403": "/403";
-    "404": "/404";
-    "500": "/500";
-    "file": "/file";
-    "home": "/home";
-    "iframe-page": "/iframe-page/:url";
-    "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
-    "monitor": "/monitor";
-    "monitor_cache": "/monitor/cache";
-    "monitor_login": "/monitor/login";
-    "monitor_login_log": "/monitor/login/log";
-    "monitor_online": "/monitor/online";
-    "monitor_operation": "/monitor/operation";
-    "monitor_operation_log": "/monitor/operation/log";
-    "platform": "/platform";
-    "platform_tenant": "/platform/tenant";
-    "profile": "/profile";
-    "route-view": "/route-view";
-    "system": "/system";
-    "system_config": "/system/config";
-    "system_department": "/system/department";
-    "system_dictionary": "/system/dictionary";
-    "system_menu": "/system/menu";
-    "system_message": "/system/message";
-    "system_role": "/system/role";
-    "system_user": "/system/user";
-  };
+    /**
+     * route map
+     */
+    export type RouteMap = {
+        "root": "/";
+        "not-found": "/:pathMatch(.*)*";
+        "403": "/403";
+        "404": "/404";
+        "500": "/500";
+        "file": "/file";
+        "home": "/home";
+        "iframe-page": "/iframe-page/:url";
+        "login": "/login/:module(pwd-login|code-login|register|reset-pwd|bind-wechat)?";
+        "message": "/message";
+        "message_center": "/message/center";
+        "monitor": "/monitor";
+        "monitor_cache": "/monitor/cache";
+        "monitor_login": "/monitor/login";
+        "monitor_login_log": "/monitor/login/log";
+        "monitor_online": "/monitor/online";
+        "monitor_operation": "/monitor/operation";
+        "monitor_operation_log": "/monitor/operation/log";
+        "platform": "/platform";
+        "platform_tenant": "/platform/tenant";
+        "profile": "/profile";
+        "route-view": "/route-view";
+        "system": "/system";
+        "system_config": "/system/config";
+        "system_department": "/system/department";
+        "system_dictionary": "/system/dictionary";
+        "system_menu": "/system/menu";
+        "system_message": "/system/message";
+        "system_role": "/system/role";
+        "system_user": "/system/user";
+    };
 
-  /**
-   * route key
-   */
-  export type RouteKey = keyof RouteMap;
+    /**
+     * route key
+     */
+    export type RouteKey = keyof RouteMap;
 
-  /**
-   * route path
-   */
-  export type RoutePath = RouteMap[RouteKey];
+    /**
+     * route path
+     */
+    export type RoutePath = RouteMap[RouteKey];
 
-  /**
-   * custom route key
-   */
-  export type CustomRouteKey = Extract<
-    RouteKey,
-    | "root"
-    | "not-found"
-  >;
+    /**
+     * custom route key
+     */
+    export type CustomRouteKey = Extract<
+        RouteKey,
+        | "root"
+        | "not-found"
+    >;
 
-  /**
-   * the generated route key
-   */
-  export type GeneratedRouteKey = Exclude<RouteKey, CustomRouteKey>;
+    /**
+     * the generated route key
+     */
+    export type GeneratedRouteKey = Exclude<RouteKey, CustomRouteKey>;
 
-  /**
-   * the first level route key, which contain the layout of the route
-   */
-  export type FirstLevelRouteKey = Extract<
-    RouteKey,
-    | "403"
-    | "404"
-    | "500"
-    | "file"
-    | "home"
-    | "iframe-page"
-    | "login"
-    | "monitor"
-    | "platform"
-    | "profile"
-    | "route-view"
-    | "system"
-  >;
+    /**
+     * the first level route key, which contain the layout of the route
+     */
+    export type FirstLevelRouteKey = Extract<
+        RouteKey,
+        | "403"
+        | "404"
+        | "500"
+        | "file"
+        | "home"
+        | "iframe-page"
+        | "login"
+        | "message"
+        | "monitor"
+        | "platform"
+        | "profile"
+        | "route-view"
+        | "system"
+    >;
 
-  /**
-   * the custom first level route key
-   */
-  export type CustomFirstLevelRouteKey = Extract<
-    CustomRouteKey,
-    | "root"
-    | "not-found"
-  >;
+    /**
+     * the custom first level route key
+     */
+    export type CustomFirstLevelRouteKey = Extract<
+        CustomRouteKey,
+        | "root"
+        | "not-found"
+    >;
 
-  /**
-   * the last level route key, which has the page file
-   */
-  export type LastLevelRouteKey = Extract<
-    RouteKey,
-    | "403"
-    | "404"
-    | "500"
-    | "iframe-page"
-    | "login"
-    | "route-view"
-    | "file"
-    | "home"
-    | "monitor_cache"
-    | "monitor_login_log"
-    | "monitor_online"
-    | "monitor_operation_log"
-    | "platform_tenant"
-    | "profile"
-    | "system_config"
-    | "system_department"
-    | "system_dictionary"
-    | "system_menu"
-    | "system_message"
-    | "system_role"
-    | "system_user"
-  >;
+    /**
+     * the last level route key, which has the page file
+     */
+    export type LastLevelRouteKey = Extract<
+        RouteKey,
+        | "403"
+        | "404"
+        | "500"
+        | "iframe-page"
+        | "login"
+        | "route-view"
+        | "file"
+        | "home"
+        | "message_center"
+        | "monitor_cache"
+        | "monitor_login_log"
+        | "monitor_online"
+        | "monitor_operation_log"
+        | "platform_tenant"
+        | "profile"
+        | "system_config"
+        | "system_department"
+        | "system_dictionary"
+        | "system_menu"
+        | "system_message"
+        | "system_role"
+        | "system_user"
+    >;
 
-  /**
-   * the custom last level route key
-   */
-  export type CustomLastLevelRouteKey = Extract<
-    CustomRouteKey,
-    | "root"
-    | "not-found"
-  >;
+    /**
+     * the custom last level route key
+     */
+    export type CustomLastLevelRouteKey = Extract<
+        CustomRouteKey,
+        | "root"
+        | "not-found"
+    >;
 
-  /**
-   * the single level route key
-   */
-  export type SingleLevelRouteKey = FirstLevelRouteKey & LastLevelRouteKey;
+    /**
+     * the single level route key
+     */
+    export type SingleLevelRouteKey = FirstLevelRouteKey & LastLevelRouteKey;
 
-  /**
-   * the custom single level route key
-   */
-  export type CustomSingleLevelRouteKey = CustomFirstLevelRouteKey & CustomLastLevelRouteKey;
+    /**
+     * the custom single level route key
+     */
+    export type CustomSingleLevelRouteKey = CustomFirstLevelRouteKey & CustomLastLevelRouteKey;
 
-  /**
-   * the first level route key, but not the single level
-  */
-  export type FirstLevelRouteNotSingleKey = Exclude<FirstLevelRouteKey, SingleLevelRouteKey>;
+    /**
+     * the first level route key, but not the single level
+     */
+    export type FirstLevelRouteNotSingleKey = Exclude<FirstLevelRouteKey, SingleLevelRouteKey>;
 
-  /**
-   * the custom first level route key, but not the single level
-   */
-  export type CustomFirstLevelRouteNotSingleKey = Exclude<CustomFirstLevelRouteKey, CustomSingleLevelRouteKey>;
+    /**
+     * the custom first level route key, but not the single level
+     */
+    export type CustomFirstLevelRouteNotSingleKey = Exclude<CustomFirstLevelRouteKey, CustomSingleLevelRouteKey>;
 
-  /**
-   * the center level route key
-   */
-  export type CenterLevelRouteKey = Exclude<GeneratedRouteKey, FirstLevelRouteKey | LastLevelRouteKey>;
+    /**
+     * the center level route key
+     */
+    export type CenterLevelRouteKey = Exclude<GeneratedRouteKey, FirstLevelRouteKey | LastLevelRouteKey>;
 
-  /**
-   * the custom center level route key
-   */
-  export type CustomCenterLevelRouteKey = Exclude<CustomRouteKey, CustomFirstLevelRouteKey | CustomLastLevelRouteKey>;
+    /**
+     * the custom center level route key
+     */
+    export type CustomCenterLevelRouteKey = Exclude<CustomRouteKey, CustomFirstLevelRouteKey | CustomLastLevelRouteKey>;
 
-  /**
-   * the center level route key
-   */
-  type GetChildRouteKey<K extends RouteKey, T extends RouteKey = RouteKey> = T extends `${K}_${infer R}`
-    ? R extends `${string}_${string}`
-      ? never
-      : T
-    : never;
+    /**
+     * the center level route key
+     */
+    type GetChildRouteKey<K extends RouteKey, T extends RouteKey = RouteKey> = T extends `${K}_${infer R}`
+        ? R extends `${string}_${string}`
+            ? never
+            : T
+        : never;
 
-  /**
-   * the single level route
-   */
-  type SingleLevelRoute<K extends SingleLevelRouteKey = SingleLevelRouteKey> = K extends string
-    ? Omit<ElegantConstRoute, 'children'> & {
+    /**
+     * the single level route
+     */
+    type SingleLevelRoute<K extends SingleLevelRouteKey = SingleLevelRouteKey> = K extends string
+        ? Omit<ElegantConstRoute, 'children'> & {
         name: K;
         path: RouteMap[K];
         component: `layout.${RouteLayout}$view.${K}`;
-      }
-    : never;
+    }
+        : never;
 
-  /**
-   * the last level route
-   */
-  type LastLevelRoute<K extends GeneratedRouteKey> = K extends LastLevelRouteKey
-    ? Omit<ElegantConstRoute, 'children'> & {
+    /**
+     * the last level route
+     */
+    type LastLevelRoute<K extends GeneratedRouteKey> = K extends LastLevelRouteKey
+        ? Omit<ElegantConstRoute, 'children'> & {
         name: K;
         path: RouteMap[K];
         component: `view.${K}`;
-      }
-    : never;
-  
-  /**
-   * the center level route
-   */
-  type CenterLevelRoute<K extends GeneratedRouteKey> = K extends CenterLevelRouteKey
-    ? Omit<ElegantConstRoute, 'component'> & {
+    }
+        : never;
+
+    /**
+     * the center level route
+     */
+    type CenterLevelRoute<K extends GeneratedRouteKey> = K extends CenterLevelRouteKey
+        ? Omit<ElegantConstRoute, 'component'> & {
         name: K;
         path: RouteMap[K];
         children: (CenterLevelRoute<GetChildRouteKey<K>> | LastLevelRoute<GetChildRouteKey<K>>)[];
-      }
-    : never;
+    }
+        : never;
 
-  /**
-   * the multi level route
-   */
-  type MultiLevelRoute<K extends FirstLevelRouteNotSingleKey = FirstLevelRouteNotSingleKey> = K extends string
-    ? ElegantConstRoute & {
+    /**
+     * the multi level route
+     */
+    type MultiLevelRoute<K extends FirstLevelRouteNotSingleKey = FirstLevelRouteNotSingleKey> = K extends string
+        ? ElegantConstRoute & {
         name: K;
         path: RouteMap[K];
         component: `layout.${RouteLayout}`;
         children: (CenterLevelRoute<GetChildRouteKey<K>> | LastLevelRoute<GetChildRouteKey<K>>)[];
-      }
-    : never;
-  
-  /**
-   * the custom first level route
-   */
-  type CustomSingleLevelRoute<K extends CustomFirstLevelRouteKey = CustomFirstLevelRouteKey> = K extends string
-    ? Omit<ElegantConstRoute, 'children'> & {
+    }
+        : never;
+
+    /**
+     * the custom first level route
+     */
+    type CustomSingleLevelRoute<K extends CustomFirstLevelRouteKey = CustomFirstLevelRouteKey> = K extends string
+        ? Omit<ElegantConstRoute, 'children'> & {
         name: K;
         path: RouteMap[K];
         component?: `layout.${RouteLayout}$view.${LastLevelRouteKey}`;
-      }
-    : never;
+    }
+        : never;
 
-  /**
-   * the custom last level route
-   */
-  type CustomLastLevelRoute<K extends CustomRouteKey> = K extends CustomLastLevelRouteKey
-    ? Omit<ElegantConstRoute, 'children'> & {
+    /**
+     * the custom last level route
+     */
+    type CustomLastLevelRoute<K extends CustomRouteKey> = K extends CustomLastLevelRouteKey
+        ? Omit<ElegantConstRoute, 'children'> & {
         name: K;
         path: RouteMap[K];
         component?: `view.${LastLevelRouteKey}`;
-      }
-    : never;
+    }
+        : never;
 
-  /**
-   * the custom center level route
-   */
-  type CustomCenterLevelRoute<K extends CustomRouteKey> = K extends CustomCenterLevelRouteKey
-    ? Omit<ElegantConstRoute, 'component'> & {
+    /**
+     * the custom center level route
+     */
+    type CustomCenterLevelRoute<K extends CustomRouteKey> = K extends CustomCenterLevelRouteKey
+        ? Omit<ElegantConstRoute, 'component'> & {
         name: K;
         path: RouteMap[K];
         children: (CustomCenterLevelRoute<GetChildRouteKey<K>> | CustomLastLevelRoute<GetChildRouteKey<K>>)[];
-      }
-    : never;
+    }
+        : never;
 
-  /**
-   * the custom multi level route
-   */
-  type CustomMultiLevelRoute<K extends CustomFirstLevelRouteNotSingleKey = CustomFirstLevelRouteNotSingleKey> =
-    K extends string
-      ? ElegantConstRoute & {
-          name: K;
-          path: RouteMap[K];
-          component: `layout.${RouteLayout}`;
-          children: (CustomCenterLevelRoute<GetChildRouteKey<K>> | CustomLastLevelRoute<GetChildRouteKey<K>>)[];
+    /**
+     * the custom multi level route
+     */
+    type CustomMultiLevelRoute<K extends CustomFirstLevelRouteNotSingleKey = CustomFirstLevelRouteNotSingleKey> =
+        K extends string
+            ? ElegantConstRoute & {
+            name: K;
+            path: RouteMap[K];
+            component: `layout.${RouteLayout}`;
+            children: (CustomCenterLevelRoute<GetChildRouteKey<K>> | CustomLastLevelRoute<GetChildRouteKey<K>>)[];
         }
-      : never;
+            : never;
 
-  /**
-   * the custom route
-   */
-  type CustomRoute = CustomSingleLevelRoute | CustomMultiLevelRoute;
+    /**
+     * the custom route
+     */
+    type CustomRoute = CustomSingleLevelRoute | CustomMultiLevelRoute;
 
-  /**
-   * the generated route
-   */
-  type GeneratedRoute = SingleLevelRoute | MultiLevelRoute;
+    /**
+     * the generated route
+     */
+    type GeneratedRoute = SingleLevelRoute | MultiLevelRoute;
 
-  /**
-   * the elegant route
-   */
-  type ElegantRoute = GeneratedRoute | CustomRoute;
+    /**
+     * the elegant route
+     */
+    type ElegantRoute = GeneratedRoute | CustomRoute;
 }

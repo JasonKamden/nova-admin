@@ -36,7 +36,8 @@
 - Done: backend `java -jar` instance is running locally on `http://127.0.0.1:8080` for frontend real-login regression.
 - Done: frontend dev server continues to target local `8080` in test mode and real browser login is verified.
 - Done: login page now keeps only password login and removes demo login/register/other-account entry points.
-- Done: login now integrates backend captcha with mount-time loading, click refresh, and automatic refresh after login failure.
+- Done: login now integrates backend captcha with mount-time loading, click refresh, and automatic refresh after login
+  failure.
 - Done: request layer no longer sends the `apifoxToken` demo header.
 - Done: header `ContextSwitcher` completed real backend switch regression against `/api/context/platform` and
   `/api/context/tenant/{tenantId}`.

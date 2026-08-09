@@ -8,6 +8,7 @@ import {localStg} from '@/utils/storage';
 import {SetupStoreId} from '@/enum';
 import {$t} from '@/locales';
 import {useContextStore} from '../context';
+import {useMessageStore} from '../message';
 import {useRouteStore} from '../route';
 import {useTabStore} from '../tab';
 import {clearAuthStorage, getToken} from './shared';
@@ -16,6 +17,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
     const route = useRoute();
     const authStore = useAuthStore();
     const contextStore = useContextStore();
+    const messageStore = useMessageStore();
     const routeStore = useRouteStore();
     const tabStore = useTabStore();
     const {toLogin, redirectFromLogin} = useRouterPush(false);
@@ -68,6 +70,7 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
 
         try {
             authStore.$reset();
+            messageStore.clear();
             contextStore.clear();
 
             if (!route.meta.constant) {
@@ -194,6 +197,8 @@ export const useAuthStore = defineStore(SetupStoreId.Auth, () => {
             if (!permissionsResp.error) {
                 userInfo.permissions = permissionsResp.data;
             }
+
+            await messageStore.initialize(true);
 
             return true;
         }

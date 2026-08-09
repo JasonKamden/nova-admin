@@ -11,7 +11,7 @@ import org.dromara.nova.common.mybatis.entity.BaseEntity;
 import org.dromara.nova.system.dto.response.DepartmentRespDto;
 
 /**
- * Tenant 内 Department 树节点实体；所有业务查询必须受当前 Tenant Context 约束。
+ * Tenant 内部门树节点实体；所有业务查询必须受当前 Tenant Context 约束。
  */
 
 @AutoMapper(target = DepartmentRespDto.class, reverseConvertGenerate = false)
@@ -35,17 +35,17 @@ public class DepartmentEntity extends BaseEntity {
     @Column("parent_id")
     private Long parentId;
     /**
-     * Department 编码，Tenant 内唯一。
+     * 部门编码，Tenant 内唯一。
      */
     @Column("department_code")
     private String departmentCode;
     /**
-     * Department 名称。
+     * 部门名称。
      */
     @Column("department_name")
     private String departmentName;
     /**
-     * Department 负责人用户 ID。
+     * 部门负责人用户 ID。
      */
     @Column("leader_user_id")
     private Long leaderUserId;

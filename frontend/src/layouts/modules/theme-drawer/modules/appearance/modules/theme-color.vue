@@ -41,27 +41,27 @@ const swatches: string[] = [
         <IconTooltip>
           <p>
             <span class="pr-12px">{{ $t('theme.appearance.recommendColorDesc') }}</span>
-            <br />
+            <br/>
             <NButton
-              class="text-gray"
-              href="https://uicolors.app/create"
-              rel="noopener noreferrer"
-              tag="a"
-              target="_blank"
-              text
+                class="text-gray"
+                href="https://uicolors.app/create"
+                rel="noopener noreferrer"
+                tag="a"
+                target="_blank"
+                text
             >
               https://uicolors.app/create
             </NButton>
           </p>
         </IconTooltip>
       </template>
-      <NSwitch v-model:value="themeStore.recommendColor" />
+      <NSwitch v-model:value="themeStore.recommendColor"/>
     </SettingItem>
 
     <SettingItem
-      v-for="(_, key) in themeStore.themeColors"
-      :key="key"
-      :label="$t(`theme.appearance.themeColor.${key}`)"
+        v-for="(_, key) in themeStore.themeColors"
+        :key="key"
+        :label="$t(`theme.appearance.themeColor.${key}`)"
     >
       <template v-if="key === 'info'" #suffix>
         <NCheckbox v-model:checked="themeStore.isInfoFollowPrimary">
@@ -70,11 +70,11 @@ const swatches: string[] = [
       </template>
       <div class="w-90px">
         <NColorPicker
-          :disabled="key === 'info' && themeStore.isInfoFollowPrimary"
-          :show-alpha="false"
-          :swatches="swatches"
-          :value="themeStore.themeColors[key]"
-          @update:value="handleUpdateColor($event, key)"
+            :disabled="key === 'info' && themeStore.isInfoFollowPrimary"
+            :show-alpha="false"
+            :swatches="swatches"
+            :value="themeStore.themeColors[key]"
+            @update:value="handleUpdateColor($event, key)"
         />
       </div>
     </SettingItem>

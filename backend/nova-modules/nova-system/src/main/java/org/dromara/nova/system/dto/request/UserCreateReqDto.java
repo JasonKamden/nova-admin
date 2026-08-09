@@ -18,7 +18,7 @@ import java.util.List;
  * @param phone           联系电话或手机号
  * @param email           邮箱地址
  * @param bio             个人简介
- * @param departmentId    Department ID
+ * @param departmentId    部门ID
  * @param initialPassword 新增用户初始密码，仅写入时使用，不回显
  * @param roleIds         角色 ID 集合，全量替换提交
  */

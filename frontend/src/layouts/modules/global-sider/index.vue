@@ -25,9 +25,9 @@ const menuWrapperClass = computed(() => (showLogo.value ? 'flex-1-hidden' : 'h-f
 <template>
   <DarkModeContainer :inverted="darkMenu" class="size-full flex-col-stretch shadow-sider">
     <GlobalLogo
-      v-if="showLogo"
-      :show-title="!appStore.siderCollapse"
-      :style="{ height: themeStore.header.height + 'px' }"
+        v-if="showLogo"
+        :show-title="!appStore.siderCollapse"
+        :style="{ height: themeStore.header.height + 'px' }"
     />
     <div :id="GLOBAL_SIDER_MENU_ID" :class="menuWrapperClass"></div>
   </DarkModeContainer>

@@ -71,9 +71,9 @@ public final class LoginUserUtils {
     }
 
     /**
-     * 返回当前登录用户在当前 Tenant 的 Department ID。
+     * 返回当前登录用户在当前 Tenant 的部门ID。
      *
-     * @return 当前 Department ID
+     * @return 当前部门ID
      */
     public static Long getDepartmentId() {
         return getLoginUser().departmentId();

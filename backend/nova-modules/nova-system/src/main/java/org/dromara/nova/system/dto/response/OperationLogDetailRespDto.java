@@ -28,7 +28,7 @@ public record OperationLogDetailRespDto(@Schema(description = "操作日志基�
      * @param username             登录账号
      * @param contextType          当前运行上下文类型：PLATFORM 或 TENANT
      * @param tenantId             Tenant ID；Tenant 业务写入以服务端可信 Context 为准
-     * @param departmentId         Department ID
+     * @param departmentId         部门ID
      * @param requestIp            请求客户端 IP
      * @param userAgent            客户端 User-Agent
      * @param durationMs           执行耗时，单位毫秒

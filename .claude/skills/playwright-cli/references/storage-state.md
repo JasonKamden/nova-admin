@@ -48,8 +48,14 @@ The saved file contains:
     {
       "origin": "https://example.com",
       "localStorage": [
-        { "name": "theme", "value": "dark" },
-        { "name": "user_id", "value": "12345" }
+        {
+          "name": "theme",
+          "value": "dark"
+        },
+        {
+          "name": "user_id",
+          "value": "12345"
+        }
       ]
     }
   ]

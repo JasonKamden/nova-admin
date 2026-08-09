@@ -34,7 +34,7 @@ export function fetchKickOnlineUser(sessionId: string) {
     });
 }
 
-export function fetchCacheList(params: {name?: string | null; type?: string | null; module?: string | null}) {
+export function fetchCacheList(params: { name?: string | null; type?: string | null; module?: string | null }) {
     return request<Api.Monitor.CacheItem[]>({
         url: '/api/system/caches',
         params

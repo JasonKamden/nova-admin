@@ -232,7 +232,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     /**
-     * 全量替换角色 CUSTOM DataScope 的 Department 授权。
+     * 全量替换角色 CUSTOM DataScope 的部门授权。
      *
      * @param roleEntity 角色实体
      * @param ids        业务主键 ID 集合

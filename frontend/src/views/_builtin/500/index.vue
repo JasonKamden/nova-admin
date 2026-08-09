@@ -1,7 +1,7 @@
 <script lang="ts" setup></script>
 
 <template>
-  <ExceptionBase type="500" />
+  <ExceptionBase type="500"/>
 </template>
 
 <style scoped></style>

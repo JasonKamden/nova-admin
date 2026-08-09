@@ -38,7 +38,7 @@ public class MessageUserEntity {
     @Column("user_id")
     private Long userId;
     /**
-     * Department ID。
+     * 部门ID。
      */
     @Column("department_id")
     private Long departmentId;
@@ -53,7 +53,7 @@ public class MessageUserEntity {
     @Column("nickname")
     private String nickname;
     /**
-     * Department 名称。
+     * 部门名称。
      */
     @Column("department_name")
     private String departmentName;

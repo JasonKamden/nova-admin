@@ -2,6 +2,8 @@
 declare namespace App {
     /** Theme namespace */
     namespace Theme {
+        type BusinessFormMode = 'drawer' | 'modal';
+
         type ColorPaletteNumber = import('@sa/color').ColorPaletteNumber;
 
         /** NaiveUI theme overrides that can be specified in preset */
@@ -77,6 +79,7 @@ declare namespace App {
                 /** Whether to close tab by middle click */
                 closeTabByMiddleClick: boolean;
             };
+            businessFormMode: BusinessFormMode;
             /** Fixed header and tab */
             fixedHeaderAndTab: boolean;
             /** Sider */
@@ -332,6 +335,8 @@ declare namespace App {
                 columnSetting: string;
                 config: string;
                 confirm: string;
+                export: string;
+                import: string;
                 detail: string;
                 delete: string;
                 deleteSuccess: string;
@@ -350,6 +355,7 @@ declare namespace App {
                 lookForward: string;
                 modify: string;
                 modifySuccess: string;
+                more: string;
                 noData: string;
                 operate: string;
                 pleaseCheckValue: string;
@@ -362,6 +368,8 @@ declare namespace App {
                 update: string;
                 updateSuccess: string;
                 userCenter: string;
+                viewAll: string;
+                readAll: string;
                 yesOrNo: {
                     yes: string;
                     no: string;
@@ -460,6 +468,11 @@ declare namespace App {
                 };
                 general: {
                     title: string;
+                    businessFormMode: {
+                        title: string;
+                        drawer: string;
+                        modal: string;
+                    };
                     watermark: {
                         title: string;
                         visible: string;
@@ -585,7 +598,12 @@ declare namespace App {
                 profile: {
                     basicTitle: string;
                     securityTitle: string;
+                    accountTitle: string;
+                    identityTitle: string;
                     currentContext: string;
+                    currentTenant: string;
+                    currentDepartment: string;
+                    userId: string;
                     platformAdmin: string;
                     tenantUser: string;
                     uploadAvatar: string;
@@ -601,6 +619,18 @@ declare namespace App {
                         newPassword: string;
                         passwordRule: string;
                     };
+                };
+                messageCenter: {
+                    title: string;
+                    subtitle: string;
+                    all: string;
+                    unread: string;
+                    read: string;
+                    empty: string;
+                    openDetail: string;
+                    refreshList: string;
+                    readAllTip: string;
+                    latest: string;
                 };
                 tenant: {
                     keyword: string;

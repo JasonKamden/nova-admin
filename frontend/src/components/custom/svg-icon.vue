@@ -43,11 +43,11 @@ const renderLocalIcon = computed(() => props.localIcon || !props.icon);
 <template>
   <template v-if="renderLocalIcon">
     <svg aria-hidden="true" height="1em" v-bind="bindAttrs" width="1em">
-      <use :xlink:href="symbolId" fill="currentColor" />
+      <use :xlink:href="symbolId" fill="currentColor"/>
     </svg>
   </template>
   <template v-else>
-    <Icon v-if="icon" :icon="icon" v-bind="bindAttrs" />
+    <Icon v-if="icon" :icon="icon" v-bind="bindAttrs"/>
   </template>
 </template>
 

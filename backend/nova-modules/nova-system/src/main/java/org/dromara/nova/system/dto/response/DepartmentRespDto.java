@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Department Tree 节点。
+ * 部门Tree 节点。
  */
 @Data
 @Schema(description = "Department 树节点响应")

@@ -49,6 +49,7 @@ declare namespace Api {
             remark: string | null;
         }
 
-        interface DataUpdateReq extends DataCreateReq {}
+        interface DataUpdateReq extends DataCreateReq {
+        }
     }
 }

@@ -15,11 +15,11 @@ const icon = computed(() => (props.pin ? 'mdi-pin-off' : 'mdi-pin'));
 
 <template>
   <ButtonIcon
-    :tooltip-content="pin ? $t('icon.unpin') : $t('icon.pin')"
-    :z-index="100"
-    tooltip-placement="bottom-start"
+      :tooltip-content="pin ? $t('icon.unpin') : $t('icon.pin')"
+      :z-index="100"
+      tooltip-placement="bottom-start"
   >
-    <SvgIcon :icon="icon" />
+    <SvgIcon :icon="icon"/>
   </ButtonIcon>
 </template>
 

@@ -17,11 +17,11 @@ public interface MessageRecipientFacade {
     /**
      * 消息接收人快照。
      *
-     * @param userId         用户 ID
-     * @param departmentId   Department ID
-     * @param username       登录账号
-     * @param nickname       用户昵称或姓名
-     * @param departmentName Department 名称
+     * @param userId             用户 ID
+     * @param departmentId       部门ID
+     * @param username           登录账号
+     * @param nickname           用户昵称或姓名
+     * @param departmentName部门名称
      */
     record RecipientUser(Long userId, Long departmentId, String username, String nickname, String departmentName) {
     }

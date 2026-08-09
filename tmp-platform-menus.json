@@ -64,7 +64,7 @@
           "id": 20,
           "menuType": "MENU",
           "parentId": 1,
-          "menuName": "Department 管理",
+          "menuName": "部门管理",
           "routeName": "system_department",
           "routePath": "/system/department",
           "componentPath": "view.system_department",

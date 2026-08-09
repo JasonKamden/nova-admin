@@ -75,16 +75,16 @@ function handleChangeMode(mode: UnionKey.ThemeLayoutMode) {
 <template>
   <div class="grid grid-cols-2 gap-x-16px gap-y-12px md:grid-cols-3">
     <div
-      v-for="(item, key) in layoutConfig"
-      :key="key"
-      class="flex-col-center cursor-pointer"
-      @click="handleChangeMode(key)"
+        v-for="(item, key) in layoutConfig"
+        :key="key"
+        class="flex-col-center cursor-pointer"
+        @click="handleChangeMode(key)"
     >
       <IconTooltip :placement="item.placement">
         <template #trigger>
           <div
-            :class="{ '!ring-primary': mode === key }"
-            class="h-64px w-96px gap-6px rd-4px p-6px shadow ring-2 ring-transparent transition-all hover:ring-primary"
+              :class="{ '!ring-primary': mode === key }"
+              class="h-64px w-96px gap-6px rd-4px p-6px shadow ring-2 ring-transparent transition-all hover:ring-primary"
           >
             <div :class="[key.includes('vertical') ? 'flex' : 'flex-col']" class="h-full w-full gap-1">
               <slot :name="key"></slot>

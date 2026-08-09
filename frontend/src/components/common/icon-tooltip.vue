@@ -31,7 +31,7 @@ if (!hasCustomTrigger.value && !props.icon && !props.localIcon) {
     <template #trigger>
       <slot name="trigger">
         <div class="cursor-pointer">
-          <SvgIcon :icon="icon" :local-icon="localIcon" />
+          <SvgIcon :icon="icon" :local-icon="localIcon"/>
         </div>
       </slot>
     </template>

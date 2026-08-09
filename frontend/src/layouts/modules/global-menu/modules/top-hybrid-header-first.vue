@@ -61,26 +61,26 @@ watch(
 <template>
   <Teleport :to="`#${GLOBAL_HEADER_MENU_ID}`">
     <NMenu
-      :indent="18"
-      :options="firstLevelMenus"
-      :value="activeFirstLevelMenuKey"
-      mode="horizontal"
-      responsive
-      @update:value="handleSelectMenu"
+        :indent="18"
+        :options="firstLevelMenus"
+        :value="activeFirstLevelMenuKey"
+        mode="horizontal"
+        responsive
+        @update:value="handleSelectMenu"
     />
   </Teleport>
   <Teleport :to="`#${GLOBAL_SIDER_MENU_ID}`">
     <SimpleScrollbar>
       <NMenu
-        v-model:expanded-keys="expandedKeys"
-        :collapsed="appStore.siderCollapse"
-        :collapsed-icon-size="22"
-        :collapsed-width="themeStore.sider.collapsedWidth"
-        :indent="18"
-        :options="secondLevelMenus"
-        :value="selectedKey"
-        mode="vertical"
-        @update:value="routerPushByKeyWithMetaQuery"
+          v-model:expanded-keys="expandedKeys"
+          :collapsed="appStore.siderCollapse"
+          :collapsed-icon-size="22"
+          :collapsed-width="themeStore.sider.collapsedWidth"
+          :indent="18"
+          :options="secondLevelMenus"
+          :value="selectedKey"
+          mode="vertical"
+          @update:value="routerPushByKeyWithMetaQuery"
       />
     </SimpleScrollbar>
   </Teleport>

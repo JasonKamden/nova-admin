@@ -29,9 +29,9 @@ const newses = computed<NewsItem[]>(() => [
     <NList>
       <NListItem v-for="item in newses" :key="item.id">
         <template #prefix>
-          <SoybeanAvatar class="size-48px!" />
+          <SoybeanAvatar class="size-48px!"/>
         </template>
-        <NThing :description="item.time" :title="item.content" />
+        <NThing :description="item.time" :title="item.content"/>
       </NListItem>
     </NList>
   </NCard>

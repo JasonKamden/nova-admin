@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  * @param contextType      当前运行上下文类型：PLATFORM 或 TENANT
  * @param tenantId         Tenant ID；Tenant 业务写入以服务端可信 Context 为准
  * @param tenantName       Tenant 名称
- * @param departmentId     Department ID
- * @param departmentName   Department 名称
+ * @param departmentId     部门ID
+ * @param departmentName   部门名称
  * @param ip               客户端 IP 地址
  * @param userAgent        客户端 User-Agent
  * @param loginTime        登录时间

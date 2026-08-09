@@ -1375,7 +1375,11 @@ PUT /api/system/users/{userId}/roles
 
 ```json
 {
-  "roleIds": [1, 2, 3]
+  "roleIds": [
+    1,
+    2,
+    3
+  ]
 }
 ```
 
@@ -1404,7 +1408,11 @@ PUT /api/system/roles/{roleId}/menus
 
 ```json
 {
-  "menuIds": [1, 2, 3]
+  "menuIds": [
+    1,
+    2,
+    3
+  ]
 }
 ```
 

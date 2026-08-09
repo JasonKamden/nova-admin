@@ -14,7 +14,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -54,7 +53,7 @@ public class LoginCaptchaServiceImpl implements LoginCaptchaService {
     /**
      * 校验并一次性消费验证码。
      *
-     * @param captchaId 验证码唯一标识
+     * @param captchaId   验证码唯一标识
      * @param captchaCode 用户输入验证码
      */
     @Override

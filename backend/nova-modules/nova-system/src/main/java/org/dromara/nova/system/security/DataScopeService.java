@@ -72,7 +72,7 @@ public class DataScopeService {
     }
 
     /**
-     * 递归解析指定 Department 的全部下级 Department ID。
+     * 递归解析指定部门的全部下级部门ID。
      *
      * @param tenantId Tenant ID；Tenant 业务写入以服务端可信 Context 为准
      * @param parentId 父 Department/菜单节点 ID；根节点可为空

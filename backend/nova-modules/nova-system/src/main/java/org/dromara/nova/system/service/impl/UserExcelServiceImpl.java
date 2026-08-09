@@ -137,7 +137,7 @@ public class UserExcelServiceImpl implements UserExcelService {
     }
 
     /**
-     * 根据 Department 编码解析当前 Tenant Department。
+     * 根据部门编码解析当前 Tenant Department。
      *
      * @param code 编码
      * @return 业务计算结果。
@@ -150,9 +150,9 @@ public class UserExcelServiceImpl implements UserExcelService {
     }
 
     /**
-     * 将 Department 树展开为列表。
+     * 将部门树展开为列表。
      *
-     * @param roots Department 根节点集合
+     * @param roots部门根节点集合
      * @return 符合当前 Tenant、权限和 DataScope 约束的数据列表。
      */
     private List<org.dromara.nova.system.dto.response.DepartmentRespDto> flatten(List<org.dromara.nova.system.dto.response.DepartmentRespDto> roots) {

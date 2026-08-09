@@ -3,7 +3,7 @@ package org.dromara.nova.system.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Department 树查询。
+ * 部门树查询。
  *
  * @param keyword 模糊搜索关键字
  * @param status  状态：通常 1 启用、0 停用，具体以业务枚举为准

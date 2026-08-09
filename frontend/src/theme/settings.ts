@@ -41,6 +41,7 @@ export const themeSettings: App.Theme.ThemeSetting = {
         mode: 'chrome',
         closeTabByMiddleClick: false
     },
+    businessFormMode: 'modal',
     fixedHeaderAndTab: true,
     sider: {
         inverted: false,

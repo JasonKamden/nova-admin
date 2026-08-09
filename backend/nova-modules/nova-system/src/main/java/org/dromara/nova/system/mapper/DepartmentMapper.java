@@ -4,7 +4,7 @@ import com.mybatisflex.core.BaseMapper;
 import org.dromara.nova.system.entity.DepartmentEntity;
 
 /**
- * Department MyBatis-Flex Mapper。
+ * 部门MyBatis-Flex Mapper。
  */
 public interface DepartmentMapper extends BaseMapper<DepartmentEntity> {
 }

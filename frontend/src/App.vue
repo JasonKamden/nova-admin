@@ -42,15 +42,15 @@ const watermarkProps = computed<WatermarkProps>(() => {
 
 <template>
   <NConfigProvider
-    :date-locale="naiveDateLocale"
-    :locale="naiveLocale"
-    :theme="naiveDarkTheme"
-    :theme-overrides="themeStore.naiveTheme"
-    class="h-full"
+      :date-locale="naiveDateLocale"
+      :locale="naiveLocale"
+      :theme="naiveDarkTheme"
+      :theme-overrides="themeStore.naiveTheme"
+      class="h-full"
   >
     <AppProvider>
-      <RouterView class="bg-layout" />
-      <NWatermark v-if="themeStore.watermark.visible" v-bind="watermarkProps" />
+      <RouterView class="bg-layout"/>
+      <NWatermark v-if="themeStore.watermark.visible" v-bind="watermarkProps"/>
     </AppProvider>
   </NConfigProvider>
 </template>

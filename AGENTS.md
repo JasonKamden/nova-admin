@@ -12,7 +12,7 @@
 - 只维护 `backend/`、`sql/`、`docs/`、`deploy/`。
 - 不创建 Organization、Post、Liquibase、Mapper XML。
 - PLATFORM 是 Context，不是 Tenant，禁止 `tenantId=0/-1`。
-- Department 使用完整命名，禁止正式领域名 `Dept/dept`。
+- 部门使用完整命名，禁止正式领域名 `Dept/dept`。
 - `nova-boot -> nova-modules -> nova-common`，common 不承载业务。
 - 模块间不得直接调用对方 Controller/Mapper；跨模块能力使用明确 Service/Facade 契约。
 

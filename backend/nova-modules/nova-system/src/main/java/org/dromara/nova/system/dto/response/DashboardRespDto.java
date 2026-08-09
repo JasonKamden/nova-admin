@@ -8,18 +8,18 @@ import java.util.List;
  * Tenant 工作台系统统计；公告由 message-center 接口独立获取，避免模块反向依赖。
  *
  * @param currentSpace     当前空间名称
- * @param department       当前 Department 名称
  * @param userCount        用户数量
- * @param departmentCount  Department 数量
+ * @param departmentCount  部门数量
  * @param roleCount        角色数量
  * @param onlineUserCount  当前在线用户数量
  * @param loginTrend       最近登录趋势数据
  * @param userStatus       用户状态分布数据
  * @param recentOperations 最近操作列表
+ * @param department       当前部门名称
  */
 @Schema(description = "Tenant 工作台聚合响应")
 public record DashboardRespDto(@Schema(description = "当前空间名称") String currentSpace,
-                               @Schema(description = "当前 Department 名称") String department,
+                               @Schema(description = "当前部门名称") String department,
                                @Schema(description = "用户数量") long userCount,
                                @Schema(description = "Department 数量") long departmentCount,
                                @Schema(description = "角色数量") long roleCount,

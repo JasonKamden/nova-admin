@@ -9,7 +9,7 @@ import org.dromara.nova.system.dto.response.DepartmentRespDto;
 import java.util.List;
 
 /**
- * 当前 Tenant Department 树维护业务契约。
+ * 当前 Tenant部门树维护业务契约。
  */
 public interface DepartmentService {
     /**

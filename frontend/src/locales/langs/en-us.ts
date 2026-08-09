@@ -20,6 +20,8 @@ const local: App.I18n.Schema = {
         columnSetting: 'Column Setting',
         config: 'Config',
         confirm: 'Confirm',
+        export: 'Export',
+        import: 'Import',
         detail: 'Detail',
         delete: 'Delete',
         deleteSuccess: 'Delete Success',
@@ -38,6 +40,7 @@ const local: App.I18n.Schema = {
         lookForward: 'Coming soon',
         modify: 'Modify',
         modifySuccess: 'Modify Success',
+        more: 'More',
         noData: 'No Data',
         operate: 'Operate',
         pleaseCheckValue: 'Please check whether the value is valid',
@@ -50,6 +53,8 @@ const local: App.I18n.Schema = {
         update: 'Update',
         updateSuccess: 'Update Success',
         userCenter: 'User Center',
+        viewAll: 'View All',
+        readAll: 'Read All',
         yesOrNo: {
             yes: 'Yes',
             no: 'No'
@@ -204,6 +209,11 @@ const local: App.I18n.Schema = {
         },
         general: {
             title: 'General Settings',
+            businessFormMode: {
+                title: 'Business Form Mode',
+                drawer: 'Drawer',
+                modal: 'Modal'
+            },
             watermark: {
                 title: 'Watermark Settings',
                 visible: 'Watermark Full Screen Visible',
@@ -242,6 +252,8 @@ const local: App.I18n.Schema = {
         monitor_online: 'Online Users',
         monitor_operation: 'Operation Monitor',
         monitor_operation_log: 'Operation Logs',
+        message: 'Message',
+        message_center: 'Message Center',
         platform: 'Platform',
         system: 'System',
         'route-view': 'Business Page',
@@ -357,7 +369,12 @@ const local: App.I18n.Schema = {
         profile: {
             basicTitle: 'Basic Profile',
             securityTitle: 'Security',
+            accountTitle: 'Account Information',
+            identityTitle: 'Identity Overview',
             currentContext: 'Current Context',
+            currentTenant: 'Current Tenant',
+            currentDepartment: 'Current Department',
+            userId: 'User ID',
             platformAdmin: 'Platform Admin',
             tenantUser: 'Tenant User',
             uploadAvatar: 'Upload Avatar',
@@ -373,6 +390,18 @@ const local: App.I18n.Schema = {
                 newPassword: 'Please enter new password',
                 passwordRule: 'Password length must be between 8 and 64 characters'
             }
+        },
+        messageCenter: {
+            title: 'Message Center',
+            subtitle: 'Messages received by the current user in the current context',
+            all: 'All',
+            unread: 'Unread',
+            read: 'Read',
+            empty: 'No messages',
+            openDetail: 'View Detail',
+            refreshList: 'Refresh Messages',
+            readAllTip: 'Mark all messages in the current context as read',
+            latest: 'Latest 10'
         },
         tenant: {
             keyword: 'Keyword',

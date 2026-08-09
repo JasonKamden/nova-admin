@@ -7,6 +7,7 @@ export * from './dictionary';
 export * from './file';
 export * from './menu';
 export * from './message';
+export * from './message-center';
 export * from './monitor';
 export * from './profile';
 export * from './role';

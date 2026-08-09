@@ -8,12 +8,12 @@ import {$t} from '@/locales';
 defineOptions({name: 'DictionaryTypeModal'});
 
 interface Props {
-    mode: 'add' | 'edit';
-    typeItem: Api.Dictionary.TypeItem | null;
+  mode: 'add' | 'edit';
+  typeItem: Api.Dictionary.TypeItem | null;
 }
 
 const props = defineProps<Props>();
-const emit = defineEmits<{submitted: []}>();
+const emit = defineEmits<{ submitted: [] }>();
 const visible = defineModel<boolean>('visible', {default: false});
 const {formRef, validate, restoreValidation} = useNaiveForm();
 const {createRequiredRule} = useFormRules();
@@ -22,76 +22,79 @@ const isAdd = computed(() => props.mode === 'add');
 const title = computed(() => $t(isAdd.value ? 'page.dictionary.addTypeTitle' : 'page.dictionary.editTypeTitle'));
 const state = reactive({submitting: false});
 const model = reactive({
-    dictName: '',
-    dictCode: '',
-    status: 1,
-    remark: ''
+  dictName: '',
+  dictCode: '',
+  status: 1,
+  remark: ''
 });
 
 const rules = {
-    dictName: createRequiredRule($t('page.dictionary.form.dictName')),
-    dictCode: createRequiredRule($t('page.dictionary.form.dictCode'))
+  dictName: createRequiredRule($t('page.dictionary.form.dictName')),
+  dictCode: createRequiredRule($t('page.dictionary.form.dictCode'))
 };
 
 function closeModal() {
-    visible.value = false;
+  visible.value = false;
 }
 
 async function handleSubmit() {
-    await validate();
-    state.submitting = true;
-    const payload = {
-        dictName: model.dictName.trim(),
-        status: model.status,
-        remark: model.remark.trim() || null
-    };
-    const response = isAdd.value
-        ? await fetchCreateDictionaryType({dictCode: model.dictCode.trim(), ...payload})
-        : await fetchUpdateDictionaryType(props.typeItem!.id, payload);
-    state.submitting = false;
-    if (!response.error) {
-        window.$message?.success($t(isAdd.value ? 'common.addSuccess' : 'common.updateSuccess'));
-        closeModal();
-        emit('submitted');
-    }
+  await validate();
+  state.submitting = true;
+  const payload = {
+    dictName: model.dictName.trim(),
+    status: model.status,
+    remark: model.remark.trim() || null
+  };
+  const response = isAdd.value
+      ? await fetchCreateDictionaryType({dictCode: model.dictCode.trim(), ...payload})
+      : await fetchUpdateDictionaryType(props.typeItem!.id, payload);
+  state.submitting = false;
+  if (!response.error) {
+    window.$message?.success($t(isAdd.value ? 'common.addSuccess' : 'common.updateSuccess'));
+    closeModal();
+    emit('submitted');
+  }
 }
 
 watch(
     () => visible.value,
     show => {
-        if (!show) return;
-        restoreValidation();
-        model.dictName = props.typeItem?.dictName || '';
-        model.dictCode = props.typeItem?.dictCode || '';
-        model.status = props.typeItem?.status ?? 1;
-        model.remark = props.typeItem?.remark || '';
+      if (!show) return;
+      restoreValidation();
+      model.dictName = props.typeItem?.dictName || '';
+      model.dictCode = props.typeItem?.dictCode || '';
+      model.status = props.typeItem?.status ?? 1;
+      model.remark = props.typeItem?.remark || '';
     }
 );
 </script>
 
 <template>
-  <NModal v-model:show="visible" preset="card" class="w-620px" :mask-closable="false">
-    <template #header><div class="text-16px font-600">{{ title }}</div></template>
-    <NForm ref="formRef" :model="model" :rules="rules" :label-width="100" label-placement="left">
+  <NModal v-model:show="visible" :mask-closable="false" class="w-620px" preset="card">
+    <template #header>
+      <div class="text-16px font-600">{{ title }}</div>
+    </template>
+    <NForm ref="formRef" :label-width="100" :model="model" :rules="rules" label-placement="left">
       <NGrid :cols="24" :x-gap="16">
         <NFormItemGi :label="$t('page.dictionary.typeName')" path="dictName" span="12">
-          <NInput v-model:value="model.dictName" />
+          <NInput v-model:value="model.dictName"/>
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.typeCode')" path="dictCode" span="12">
-          <NInput v-model:value="model.dictCode" :disabled="!isAdd" />
+          <NInput v-model:value="model.dictCode" :disabled="!isAdd"/>
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.status')" path="status" span="12">
-          <NSelect v-model:value="model.status" :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))" />
+          <NSelect v-model:value="model.status"
+                   :options="statusOptions.map(item => ({label: $t(item.label), value: item.value}))"/>
         </NFormItemGi>
         <NFormItemGi :label="$t('page.dictionary.remark')" path="remark" span="24">
-          <NInput v-model:value="model.remark" type="textarea" :rows="3" />
+          <NInput v-model:value="model.remark" :rows="3" type="textarea"/>
         </NFormItemGi>
       </NGrid>
     </NForm>
     <template #action>
       <NSpace justify="end">
         <NButton @click="closeModal">{{ $t('common.cancel') }}</NButton>
-        <NButton type="primary" :loading="state.submitting" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
+        <NButton :loading="state.submitting" type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
       </NSpace>
     </template>
   </NModal>

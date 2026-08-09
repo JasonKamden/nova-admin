@@ -13,11 +13,11 @@ public enum DataScopeType {
      */
     TENANT,
     /**
-     * 当前用户所在 Department 数据。
+     * 当前用户所在部门数据。
      */
     DEPARTMENT,
     /**
-     * 当前 Department 及全部下级 Department 数据。
+     * 当前部门及全部下级部门数据。
      */
     DEPARTMENT_AND_CHILDREN,
     /**
@@ -25,7 +25,7 @@ public enum DataScopeType {
      */
     SELF,
     /**
-     * 自定义 Department 范围，通过角色与 Department 关系维护。
+     * 自定义部门范围，通过角色与部门关系维护。
      */
     CUSTOM
 }

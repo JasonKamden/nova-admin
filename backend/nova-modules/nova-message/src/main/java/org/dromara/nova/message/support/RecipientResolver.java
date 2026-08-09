@@ -24,7 +24,7 @@ public class RecipientResolver {
     public List<MessageRecipientFacade.RecipientUser> resolve(MessageRecipientReqDto r) {
         return switch (r.recipientType()) {
             case ALL -> messageRecipientFacade.all();
-            case DEPARTMENT ->
+            case部门 ->
                     messageRecipientFacade.departments(r.departmentIds(), Boolean.TRUE.equals(r.includeChildren()));
             case ROLE -> messageRecipientFacade.roles(r.roleIds());
             case USER -> messageRecipientFacade.users(r.userIds());

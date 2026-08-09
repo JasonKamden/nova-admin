@@ -9,7 +9,7 @@ public enum RecipientType {
      */
     ALL,
     /**
-     * 按 Department 发送，可配合 includeChildren 包含下级 Department。
+     * 按部门发送，可配合 includeChildren 包含下级 Department。
      */
     DEPARTMENT,
     /**

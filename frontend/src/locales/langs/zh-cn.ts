@@ -20,6 +20,8 @@ const local: App.I18n.Schema = {
         columnSetting: '列设置',
         config: '配置',
         confirm: '确认',
+        export: '导出',
+        import: '导入',
         detail: '详情',
         delete: '删除',
         deleteSuccess: '删除成功',
@@ -38,6 +40,7 @@ const local: App.I18n.Schema = {
         lookForward: '敬请期待',
         modify: '修改',
         modifySuccess: '修改成功',
+        more: '更多',
         noData: '无数据',
         operate: '操作',
         pleaseCheckValue: '请检查输入的值是否合法',
@@ -50,6 +53,8 @@ const local: App.I18n.Schema = {
         update: '更新',
         updateSuccess: '更新成功',
         userCenter: '个人中心',
+        viewAll: '查看全部',
+        readAll: '全部已读',
         yesOrNo: {
             yes: '是',
             no: '否'
@@ -200,6 +205,11 @@ const local: App.I18n.Schema = {
         },
         general: {
             title: '通用设置',
+            businessFormMode: {
+                title: '业务表单打开方式',
+                drawer: '侧边弹窗',
+                modal: '直接弹窗'
+            },
             watermark: {
                 title: '水印设置',
                 visible: '显示全屏水印',
@@ -238,6 +248,8 @@ const local: App.I18n.Schema = {
         monitor_online: '在线用户',
         monitor_operation: '操作监控',
         monitor_operation_log: '操作日志',
+        message: '消息',
+        message_center: '消息中心',
         platform: '平台管理',
         system: '系统管理',
         'route-view': '业务页面',
@@ -353,7 +365,12 @@ const local: App.I18n.Schema = {
         profile: {
             basicTitle: '基本资料',
             securityTitle: '账号安全',
+            accountTitle: '账号信息',
+            identityTitle: '身份概览',
             currentContext: '当前 Context',
+            currentTenant: '当前 Tenant',
+            currentDepartment: '当前 Department',
+            userId: '用户 ID',
             platformAdmin: '平台管理员',
             tenantUser: 'Tenant 用户',
             uploadAvatar: '上传头像',
@@ -369,6 +386,18 @@ const local: App.I18n.Schema = {
                 newPassword: '请输入新密码',
                 passwordRule: '密码长度需为 8-64 位'
             }
+        },
+        messageCenter: {
+            title: '消息中心',
+            subtitle: '处理当前用户在当前 Context 下收到的消息',
+            all: '全部',
+            unread: '未读',
+            read: '已读',
+            empty: '暂无消息',
+            openDetail: '查看详情',
+            refreshList: '刷新消息',
+            readAllTip: '将当前 Context 下消息全部标记为已读',
+            latest: '最近 10 条'
         },
         tenant: {
             keyword: '关键词',
@@ -400,24 +429,24 @@ const local: App.I18n.Schema = {
         },
         department: {
             keyword: '关键词',
-            departmentCode: 'Department 编码',
-            departmentName: 'Department 名称',
-            parentDepartment: '上级 Department',
+            departmentCode: '部门编码',
+            departmentName: '部门名称',
+            parentDepartment: '上级部门',
             leaderUser: '负责人',
             phone: '联系电话',
             email: '邮箱',
             sort: '排序',
             status: '状态',
-            addRoot: '新增根 Department',
+            addRoot: '新增根部门',
             addChild: '新增子级',
-            addTitle: '新增 Department',
-            editTitle: '编辑 Department',
-            detailTitle: 'Department 详情',
-            statusConfirm: '确认{action} Department“{name}”吗？',
-            deleteConfirm: '确认删除 Department“{name}”吗？',
+            addTitle: '新增部门',
+            editTitle: '编辑部门',
+            detailTitle: '部门详情',
+            statusConfirm: '确认{action}部门“{name}”吗？',
+            deleteConfirm: '确认删除部门“{name}”吗？',
             form: {
-                departmentCode: '请输入 Department 编码',
-                departmentName: '请输入 Department 名称'
+                departmentCode: '请输入部门编码',
+                departmentName: '请输入部门名称'
             }
         },
         user: {

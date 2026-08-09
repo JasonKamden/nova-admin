@@ -6,9 +6,9 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * 登录请求。
  *
- * @param username 登录账号
- * @param password 登录密码，仅用于认证请求，不会回显
- * @param captchaId 图形验证码唯一标识
+ * @param username    登录账号
+ * @param password    登录密码，仅用于认证请求，不会回显
+ * @param captchaId   图形验证码唯一标识
  * @param captchaCode 图形验证码输入值，仅用于认证请求，不会回显
  */
 @Schema(description = "账号密码登录请求")

@@ -22,8 +22,8 @@ import java.util.List;
  * @param contextType    当前运行上下文类型：PLATFORM 或 TENANT
  * @param tenantId       Tenant ID；Tenant 业务写入以服务端可信 Context 为准
  * @param tenantName     Tenant 名称
- * @param departmentId   Department ID
- * @param departmentName Department 名称
+ * @param departmentId   部门ID
+ * @param departmentName 部门名称
  * @param roles          当前用户角色集合
  * @param createTime     创建时间
  * @param lastLoginTime  最近一次登录时间

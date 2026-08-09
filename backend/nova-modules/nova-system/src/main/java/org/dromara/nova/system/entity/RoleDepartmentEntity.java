@@ -9,7 +9,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 角色 CUSTOM DataScope 与 Department 的授权关系实体。
+ * 角色 CUSTOM DataScope 与部门的授权关系实体。
  */
 
 @Table("sys_role_department")
@@ -31,7 +31,7 @@ public class RoleDepartmentEntity {
     @Column("role_id")
     private Long roleId;
     /**
-     * Department ID。
+     * 部门ID。
      */
     @Column("department_id")
     private Long departmentId;

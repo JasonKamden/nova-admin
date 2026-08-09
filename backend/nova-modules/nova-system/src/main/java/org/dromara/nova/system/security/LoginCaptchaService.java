@@ -14,7 +14,7 @@ public interface LoginCaptchaService {
     /**
      * 校验并一次性消费验证码。
      *
-     * @param captchaId 验证码唯一标识
+     * @param captchaId   验证码唯一标识
      * @param captchaCode 用户输入验证码
      */
     void validate(String captchaId, String captchaCode);

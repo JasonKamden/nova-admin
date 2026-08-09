@@ -13,11 +13,20 @@ const themeStore = useThemeStore();
 <template>
   <NDivider>{{ $t('theme.general.title') }}</NDivider>
   <SettingItem :label="$t('theme.general.multilingual.visible')">
-    <NSwitch v-model:value="themeStore.header.multilingual.visible" />
+    <NSwitch v-model:value="themeStore.header.multilingual.visible"/>
   </SettingItem>
 
   <SettingItem :label="$t('theme.general.globalSearch.visible')">
-    <NSwitch v-model:value="themeStore.header.globalSearch.visible" />
+    <NSwitch v-model:value="themeStore.header.globalSearch.visible"/>
+  </SettingItem>
+
+  <SettingItem :label="$t('theme.general.businessFormMode.title')">
+    <NRadioGroup v-model:value="themeStore.businessFormMode" size="small">
+      <NSpace>
+        <NRadio value="drawer">{{ $t('theme.general.businessFormMode.drawer') }}</NRadio>
+        <NRadio value="modal">{{ $t('theme.general.businessFormMode.modal') }}</NRadio>
+      </NSpace>
+    </NRadioGroup>
   </SettingItem>
 </template>
 

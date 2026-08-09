@@ -9,8 +9,8 @@ defineOptions({
 
 <template>
   <div class="flex-col-stretch gap-16px">
-    <GlobalSettings />
-    <WatermarkSettings />
+    <GlobalSettings/>
+    <WatermarkSettings/>
   </div>
 </template>
 

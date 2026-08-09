@@ -347,10 +347,10 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 校验 Department 是否属于当前 Tenant。
+     * 校验部门是否属于当前 Tenant。
      *
-     * @param tenantId     Tenant ID；Tenant 业务写入以服务端可信 Context 为准
-     * @param departmentId Department ID
+     * @param tenantId         Tenant ID；Tenant 业务写入以服务端可信 Context 为准
+     * @param departmentId部门ID
      */
     private void validateDepartment(Long tenantId, Long departmentId) {
         if (departmentId == null) return;

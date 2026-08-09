@@ -59,7 +59,7 @@ public class OperationLogEntity {
     @Column("tenant_id")
     private Long tenantId;
     /**
-     * Department ID。
+     * 部门ID。
      */
     @Column("department_id")
     private Long departmentId;

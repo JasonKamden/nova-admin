@@ -17,7 +17,7 @@ import java.util.List;
  * @param sort                排序值，数值越小越靠前
  * @param status              状态：通常 1 启用、0 停用，具体以业务枚举为准
  * @param remark              备注
- * @param customDepartmentIds CUSTOM 数据范围授权的 Department ID 集合
+ * @param customDepartmentIds CUSTOM 数据范围授权的部门ID 集合
  */
 @AutoMapper(target = RoleEntity.class, reverseConvertGenerate = false)
 @Schema(description = "修改角色请求参数")
@@ -26,5 +26,5 @@ public record RoleUpdateReqDto(@Schema(description = "角色名称") @NotBlank S
                                @Schema(description = "排序值，数值越小越靠前") Integer sort,
                                @Schema(description = "状态：通常 1 启用、0 停用，具体以业务枚举为准") @NotNull Integer status,
                                @Schema(description = "备注") String remark,
-                               @Schema(description = "CUSTOM 数据范围授权的 Department ID 集合") List<Long> customDepartmentIds) {
+                               @Schema(description = "CUSTOM 数据范围授权的部门ID 集合") List<Long> customDepartmentIds) {
 }

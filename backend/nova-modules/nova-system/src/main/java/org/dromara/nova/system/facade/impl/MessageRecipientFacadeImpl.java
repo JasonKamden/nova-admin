@@ -51,10 +51,10 @@ public class MessageRecipientFacadeImpl implements MessageRecipientFacade {
     }
 
     /**
-     * 根据 Department 范围解析有效消息接收用户。
+     * 根据部门范围解析有效消息接收用户。
      *
      * @param ids             业务主键 ID 集合
-     * @param includeChildren 选择 Department 时是否包含下级 Department
+     * @param includeChildren 选择部门时是否包含下级 Department
      * @return 符合当前 Tenant、权限和 DataScope 约束的数据列表。
      */
     @Override
@@ -146,7 +146,7 @@ public class MessageRecipientFacadeImpl implements MessageRecipientFacade {
     }
 
     /**
-     * 校验 Department 是否属于当前 Tenant。
+     * 校验部门是否属于当前 Tenant。
      *
      * @param tenantId Tenant ID；Tenant 业务写入以服务端可信 Context 为准
      * @param id       主键 ID

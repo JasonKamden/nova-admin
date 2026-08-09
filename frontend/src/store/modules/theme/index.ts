@@ -165,6 +165,10 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
         settings.value.layout.mode = mode;
     }
 
+    function setBusinessFormMode(mode: App.Theme.BusinessFormMode) {
+        settings.value.businessFormMode = mode;
+    }
+
     /** Setup theme vars to global */
     function setupThemeVarsToGlobal() {
         const {themeTokens, darkThemeTokens} = createThemeToken(
@@ -295,6 +299,7 @@ export const useThemeStore = defineStore(SetupStoreId.Theme, () => {
         toggleThemeScheme,
         updateThemeColors,
         setThemeLayout,
+        setBusinessFormMode,
         setWatermarkEnableUserName,
         setWatermarkEnableTime,
         setNaiveThemeOverrides

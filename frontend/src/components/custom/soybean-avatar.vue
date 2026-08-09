@@ -6,7 +6,7 @@ defineOptions({
 
 <template>
   <div class="size-72px overflow-hidden rd-1/2">
-    <img class="size-full" src="@/assets/imgs/soybean.jpg" />
+    <img class="size-full" src="@/assets/imgs/soybean.jpg"/>
   </div>
 </template>
 

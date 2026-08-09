@@ -85,6 +85,42 @@ declare namespace Api {
             fileIds: number[];
         }
 
-        interface UpdateReq extends CreateReq {}
+        interface UpdateReq extends CreateReq {
+        }
+    }
+
+    namespace MessageCenter {
+        type ReadStatus = 0 | 1;
+
+        interface Item {
+            messageId: number;
+            title: string;
+            messageType: Api.Message.MessageType;
+            summary: string;
+            readStatus: ReadStatus;
+            receiveTime: string | null;
+            readTime: string | null;
+            sendTime: string | null;
+        }
+
+        interface Detail {
+            messageId: number;
+            title: string;
+            messageType: Api.Message.MessageType;
+            contentHtml: string;
+            sendTime: string | null;
+            fileIds: number[];
+        }
+
+        interface PageParams extends Api.Common.PageParams {
+            readStatus: ReadStatus | null;
+        }
+
+        type SseEventType =
+            | 'CONNECTED'
+            | 'MESSAGE_CREATED'
+            | 'MESSAGE_WITHDRAWN'
+            | 'UNREAD_COUNT_CHANGED'
+            | 'HEARTBEAT';
     }
 }

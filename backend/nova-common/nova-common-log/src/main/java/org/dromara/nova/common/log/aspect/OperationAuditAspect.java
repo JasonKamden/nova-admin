@@ -206,7 +206,7 @@ public class OperationAuditAspect {
     }
 
     /**
-     * 获取当前操作人的用户、Context、Tenant 和 Department 审计快照。
+     * 获取当前操作人的用户、Context、Tenant 和部门审计快照。
      *
      * @return 操作人快照
      */
@@ -236,7 +236,7 @@ public class OperationAuditAspect {
      * @param username     登录账号
      * @param contextType  运行上下文类型：PLATFORM 或 TENANT
      * @param tenantId     Tenant ID；Tenant 业务写入以服务端可信 Context 为准
-     * @param departmentId Department ID
+     * @param departmentId 部门ID
      */
     private record Actor(Long userId, String username, String contextType, Long tenantId, Long departmentId) {
     }
