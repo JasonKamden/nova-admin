@@ -15,12 +15,14 @@ function hasViewComponent(componentPath: string | null) {
 function normalizeComponentPath(menu: Api.Route.BackendMenu) {
     const isTopLevelMenu = menu.parentId == null;
     const fallbackView = isTopLevelMenu ? 'layout.base$view.route-view' : 'view.route-view';
+    const pathSegments = menu.routePath?.split('/').filter(Boolean) || [];
+    const isSingleLevelTopMenu = isTopLevelMenu && pathSegments.length <= 1;
 
     if (!menu.componentPath || !hasViewComponent(menu.componentPath)) {
         return fallbackView;
     }
 
-    if (isTopLevelMenu) {
+    if (isSingleLevelTopMenu) {
         return menu.componentPath.replace(/^view\./, 'layout.base$view.');
     }
 

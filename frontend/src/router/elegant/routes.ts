@@ -40,6 +40,15 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'file',
+    path: '/file',
+    component: 'layout.base$view.file',
+    meta: {
+      title: 'file',
+      i18nKey: 'route.file'
+    }
+  },
+  {
     name: 'home',
     path: '/home',
     component: 'layout.base$view.home',
@@ -76,6 +85,102 @@ export const generatedRoutes: GeneratedRoute[] = [
     }
   },
   {
+    name: 'monitor',
+    path: '/monitor',
+    component: 'layout.base',
+    meta: {
+      title: 'monitor',
+      i18nKey: 'route.monitor'
+    },
+    children: [
+      {
+        name: 'monitor_cache',
+        path: '/monitor/cache',
+        component: 'view.monitor_cache',
+        meta: {
+          title: 'monitor_cache',
+          i18nKey: 'route.monitor_cache'
+        }
+      },
+      {
+        name: 'monitor_login',
+        path: '/monitor/login',
+        meta: {
+          title: 'monitor_login',
+          i18nKey: 'route.monitor_login'
+        },
+        children: [
+          {
+            name: 'monitor_login_log',
+            path: '/monitor/login/log',
+            component: 'view.monitor_login_log',
+            meta: {
+              title: 'monitor_login_log',
+              i18nKey: 'route.monitor_login_log'
+            }
+          }
+        ]
+      },
+      {
+        name: 'monitor_online',
+        path: '/monitor/online',
+        component: 'view.monitor_online',
+        meta: {
+          title: 'monitor_online',
+          i18nKey: 'route.monitor_online'
+        }
+      },
+      {
+        name: 'monitor_operation',
+        path: '/monitor/operation',
+        meta: {
+          title: 'monitor_operation',
+          i18nKey: 'route.monitor_operation'
+        },
+        children: [
+          {
+            name: 'monitor_operation_log',
+            path: '/monitor/operation/log',
+            component: 'view.monitor_operation_log',
+            meta: {
+              title: 'monitor_operation_log',
+              i18nKey: 'route.monitor_operation_log'
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name: 'platform',
+    path: '/platform',
+    component: 'layout.base',
+    meta: {
+      title: 'platform',
+      i18nKey: 'route.platform'
+    },
+    children: [
+      {
+        name: 'platform_tenant',
+        path: '/platform/tenant',
+        component: 'view.platform_tenant',
+        meta: {
+          title: 'platform_tenant',
+          i18nKey: 'route.platform_tenant'
+        }
+      }
+    ]
+  },
+  {
+    name: 'profile',
+    path: '/profile',
+    component: 'layout.base$view.profile',
+    meta: {
+      title: 'profile',
+      i18nKey: 'route.profile'
+    }
+  },
+  {
     name: 'route-view',
     path: '/route-view',
     component: 'layout.base$view.route-view',
@@ -83,5 +188,79 @@ export const generatedRoutes: GeneratedRoute[] = [
       title: 'route-view',
       i18nKey: 'route.route-view'
     }
+  },
+  {
+    name: 'system',
+    path: '/system',
+    component: 'layout.base',
+    meta: {
+      title: 'system',
+      i18nKey: 'route.system'
+    },
+    children: [
+      {
+        name: 'system_config',
+        path: '/system/config',
+        component: 'view.system_config',
+        meta: {
+          title: 'system_config',
+          i18nKey: 'route.system_config'
+        }
+      },
+      {
+        name: 'system_department',
+        path: '/system/department',
+        component: 'view.system_department',
+        meta: {
+          title: 'system_department',
+          i18nKey: 'route.system_department'
+        }
+      },
+      {
+        name: 'system_dictionary',
+        path: '/system/dictionary',
+        component: 'view.system_dictionary',
+        meta: {
+          title: 'system_dictionary',
+          i18nKey: 'route.system_dictionary'
+        }
+      },
+      {
+        name: 'system_menu',
+        path: '/system/menu',
+        component: 'view.system_menu',
+        meta: {
+          title: 'system_menu',
+          i18nKey: 'route.system_menu'
+        }
+      },
+      {
+        name: 'system_message',
+        path: '/system/message',
+        component: 'view.system_message',
+        meta: {
+          title: 'system_message',
+          i18nKey: 'route.system_message'
+        }
+      },
+      {
+        name: 'system_role',
+        path: '/system/role',
+        component: 'view.system_role',
+        meta: {
+          title: 'system_role',
+          i18nKey: 'route.system_role'
+        }
+      },
+      {
+        name: 'system_user',
+        path: '/system/user',
+        component: 'view.system_user',
+        meta: {
+          title: 'system_user',
+          i18nKey: 'route.system_user'
+        }
+      }
+    ]
   }
 ];

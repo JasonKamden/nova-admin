@@ -18,7 +18,7 @@ function loginOrRegister() {
   toLogin();
 }
 
-type DropdownKey = 'logout';
+type DropdownKey = 'profile' | 'logout';
 
 type DropdownOption =
     | {
@@ -32,7 +32,16 @@ type DropdownOption =
 };
 
 const options = computed(() => {
-  const opts: DropdownOption[] = [
+    const opts: DropdownOption[] = [
+    {
+      label: $t('common.userCenter'),
+      key: 'profile',
+      icon: SvgIconVNode({icon: 'ph:user-circle-gear', fontSize: 18})
+    },
+    {
+      type: 'divider',
+      key: 'divider'
+    },
     {
       label: $t('common.logout'),
       key: 'logout',
@@ -58,8 +67,9 @@ function logout() {
 function handleDropdown(key: DropdownKey) {
   if (key === 'logout') {
     logout();
+  } else if (key === 'profile') {
+    routerPushByKey('profile');
   } else {
-    // If your other options are jumps from other routes, they will be directly supported here
     routerPushByKey(key);
   }
 }

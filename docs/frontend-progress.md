@@ -58,6 +58,57 @@
 
 ### Remaining notes
 
-- Phase 2+ business pages still render the explicit placeholder page; this round only covered login/auth/context regression.
-- Backend menu i18n keys like `route.system_user` still appear in the UI because localized route labels are not finished yet.
+- Done: `platform_tenant` now lands on a real page instead of the placeholder, with backend-driven search, create,
+  detail, update, enable/disable, delete, and tenant option lookup wired to `/api/platform/tenants*`.
+- Done: `system_department` now lands on a real page instead of the placeholder, with backend-driven tree query,
+  create root/child, detail, update, enable/disable, delete, parent selector, and leader selector wired to
+  `/api/system/departments*` and `/api/system/users`.
+- Done: `system_user` now lands on a real page instead of the placeholder, with backend-driven page query, detail,
+  create, update, enable/disable, reset password, role assignment, and delete wired to `/api/system/users*`.
+- Done: `system_role` now lands on a real page instead of the placeholder, with backend-driven page query, detail,
+  create, update, enable/disable, menu authorization, and delete wired to `/api/system/roles*` and
+  `/api/system/menus`.
+- Done: `system_menu` now lands on a real read-only tree page instead of the placeholder, matching current Tenant-side
+  backend capability exposed by `/api/system/menus`.
+- Done: `system_menu` now upgrades to a context-aware real page: it stays read-only in `TENANT` context, and exposes
+  real `PLATFORM` create/detail/update/enable-disable/delete flows through `/api/platform/menus*`.
+- Done: `system_dictionary` now lands on a real page instead of the placeholder, with backend-driven left type/right
+  data management wired to `/api/system/dictionaries/types*` and `/api/system/dictionaries/data*`.
+- Done: `system_config` now lands on a real page instead of the placeholder, with backend-driven page query, create,
+  update, detail, and delete wired to `/api/system/configs`.
+- Done: `system_message` now lands on a real page instead of the placeholder, with backend-driven draft create/update,
+  preview recipient count, send, withdraw, detail, and recipient read-status query wired to `/api/system/messages*`.
+- Done: dynamic route adapter now preserves multi-segment top-level backend routes such as `/platform/tenant` and
+  `/system/department` instead of incorrectly rewriting them to `layout.base$view.*`.
+- Done: `home` now uses Nova real dashboard aggregation instead of Soybean mock content, with `/api/dashboard` for
+  `TENANT` context and `/api/platform/dashboard` for `PLATFORM` context.
+- Done: dynamic route mode now keeps the built-in `home` route available, so `/home` no longer falls into `not-found`
+  after backend menu initialization.
+- Tenant browser regression is complete for page open plus real data render, and API regression is complete for
+  create/detail/update/status/options/delete with cleanup.
+- Department browser regression is complete for real page login, real page render, and real list data render; API
+  regression is complete for create/detail/update/status/tree/delete with cleanup.
+- User browser regression is complete for real page login, real page render, and real list data render; API regression
+  is complete for create/detail/update/status/password/roles/delete with cleanup.
+- Role browser regression is complete for real page login, real page render, and real list data render; API regression
+  is complete for create/detail/update/status/menu grant/delete with cleanup.
+- Menu browser regression is complete for real page login and real menu tree render in `TENANT` context; platform menu
+  API regression is complete for create/detail/update/status/delete with cleanup, and `PLATFORM` browser regression is
+  complete for action visibility plus real CRUD entry render at `/system/menu`.
+- Home dashboard browser regression is complete in both `TENANT` and `PLATFORM` contexts, with real aggregate data
+  rendered instead of Soybean demo cards and charts.
+- Done: `profile` now lands on a real built-in page instead of falling into `not-found`, with backend-driven
+  `/api/profile` query, basic-profile update, password change, avatar upload, and Header user-center entry wired in.
+- Done: dynamic route mode now preserves the built-in `profile` route alongside `home`, so Header user-center
+  navigation works even though `profile` is not part of backend `sys_menu`.
+- Done: profile basic-info update now synchronizes Header user info immediately from the profile response instead of
+  waiting for `/api/auth/me` to refresh stale login-context snapshot data.
+- Dictionary browser regression is complete for real page login and real type/data page render; API regression is
+  complete for type create/update/delete and data create/update/delete with cleanup.
+- Config browser regression is complete for real page login and real table render; API regression is complete for
+  create/update/delete with cleanup.
+- Message browser regression is complete for real page login and real table render; API regression is complete for
+  draft create/detail/update/delete plus preview/send/recipient query/withdraw with cleanup.
+- Backend menu i18n keys like `route.system_user`, `route.system_role`, and later modules still appear in the UI
+  because localized route labels are not finished yet.
 - Footer still contains inherited `Soybean` copyright text and is outside the P0 login/auth acceptance scope.

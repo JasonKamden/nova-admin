@@ -13,6 +13,7 @@
 
 - `pnpm typecheck`: PASS
 - `pnpm lint`: PASS
+- `pnpm build`: PASS
 
 ### Backend Connectivity
 
@@ -40,6 +41,8 @@
 - Switching to tenant `1001 / 默认 Tenant` succeeds through `/api/context/tenant/1001`: PASS
 - Switching back to platform succeeds through `/api/context/platform`: PASS
 - Page refresh after login keeps the active authenticated session: PASS
+- `GET /api/dashboard` real Tenant dashboard aggregation: PASS
+- `GET /api/platform/dashboard` real Platform dashboard aggregation: PASS
 
 ### Logout Regression
 
@@ -48,6 +51,56 @@
 
 ### Remaining Gaps
 
-- Phase 2+ business pages still use the explicit placeholder view and were not part of this round's acceptance.
-- Some backend route i18n keys are still displayed literally, for example `route.system_user`.
+- `platform_tenant` real page regression:
+  `GET /api/platform/tenants`, `GET /api/platform/tenants/{id}`, `POST /api/platform/tenants`,
+  `PUT /api/platform/tenants/{id}`, `PUT /api/platform/tenants/{id}/status`,
+  `DELETE /api/platform/tenants/{id}`, `GET /api/platform/tenants/options`: PASS
+- `platform_tenant` real browser page open and data render at `/platform/tenant`: PASS
+- `system_department` real page regression:
+  `GET /api/system/departments`, `GET /api/system/departments/tree`, `GET /api/system/departments/{id}`,
+  `POST /api/system/departments`, `PUT /api/system/departments/{id}`,
+  `PUT /api/system/departments/{id}/status`, `DELETE /api/system/departments/{id}`: PASS
+- `system_department` real browser login, page open, and row render at `/system/department`: PASS
+- `system_user` real page regression:
+  `GET /api/system/users/{id}`, `POST /api/system/users`, `PUT /api/system/users/{id}`,
+  `PUT /api/system/users/{id}/status`, `PUT /api/system/users/{id}/password`,
+  `GET /api/system/users/{id}/roles`, `PUT /api/system/users/{id}/roles`, `DELETE /api/system/users/{id}`: PASS
+- `system_user` real browser login, page open, and row render at `/system/user`: PASS
+- `system_role` real page regression:
+  `GET /api/system/roles`, `GET /api/system/roles/{id}`, `POST /api/system/roles`,
+  `PUT /api/system/roles/{id}`, `PUT /api/system/roles/{id}/status`,
+  `GET /api/system/roles/{id}/menus`, `PUT /api/system/roles/{id}/menus`, `DELETE /api/system/roles/{id}`: PASS
+- `system_role` real browser login, page open, and row render at `/system/role`: PASS
+- `system_menu` Tenant-side real page regression: `GET /api/system/menus`: PASS
+- `system_menu` Platform-side real page regression:
+  `GET /api/platform/menus`, `GET /api/platform/menus/{id}`, `POST /api/platform/menus`,
+  `PUT /api/platform/menus/{id}`, `PUT /api/platform/menus/{id}/status`,
+  `DELETE /api/platform/menus/{id}`: PASS
+- `system_menu` real browser tree render at `/system/menu` in `TENANT` context: PASS
+- `system_menu` real browser CRUD action render at `/system/menu` in `PLATFORM` context: PASS
+- `home` real browser dashboard render at `/home` in `TENANT` context: PASS
+- `home` real browser dashboard render at `/home` in `PLATFORM` context: PASS
+- `profile` built-in route render at `/profile`: PASS
+- Header avatar dropdown `个人中心 -> /profile` navigation: PASS
+- `profile` real browser data render in `PLATFORM` context: PASS
+- `profile` basic-info update regression:
+  nickname change reflects on page and Header immediately, and restored to `平台管理员`: PASS
+- `system_dictionary` real page regression:
+  `GET /api/system/dictionaries/types`, `POST /api/system/dictionaries/types`,
+  `PUT /api/system/dictionaries/types/{id}`, `DELETE /api/system/dictionaries/types/{id}`,
+  `GET /api/system/dictionaries/types/{id}/data`, `POST /api/system/dictionaries/types/{id}/data`,
+  `PUT /api/system/dictionaries/data/{id}`, `DELETE /api/system/dictionaries/data/{id}`: PASS
+- `system_dictionary` real browser login and page render at `/system/dictionary`: PASS
+- `system_config` real page regression:
+  `GET /api/system/configs`, `POST /api/system/configs`, `PUT /api/system/configs/{id}`,
+  `DELETE /api/system/configs/{id}`: PASS
+- `system_config` real browser login and page render at `/system/config`: PASS
+- `system_message` real page regression:
+  `GET /api/system/messages`, `GET /api/system/messages/{id}`, `POST /api/system/messages`,
+  `PUT /api/system/messages/{id}`, `DELETE /api/system/messages/{id}`,
+  `POST /api/system/messages/{id}/recipient-preview`, `POST /api/system/messages/{id}/send`,
+  `GET /api/system/messages/{id}/recipients`, `POST /api/system/messages/{id}/withdraw`: PASS
+- `system_message` real browser login and page render at `/system/message`: PASS
+- Some backend route i18n keys are still displayed literally, for example `route.system_user`, `route.system_role`,
+  `route.system_dictionary`, `route.system_config`, `route.system_message`, `route.monitor`, and `route.file`.
 - Layout footer still carries inherited `Soybean` branding text.
