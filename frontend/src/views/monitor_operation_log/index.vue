@@ -1,5 +1,5 @@
 <script lang="tsx" setup>
-import {ref} from 'vue';
+import {computed, ref} from 'vue';
 import {NButton, NSpace, NTag} from 'naive-ui';
 import {fetchOperationLogPage} from '@/service/api';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
@@ -15,6 +15,11 @@ defineOptions({name: 'MonitorOperationLog'});
 const appStore = useAppStore();
 const detailVisible = ref(false);
 const activeId = ref<number | null>(null);
+const requestMethodOptions = ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].map(item => ({label: item, value: item}));
+const statusOptions = computed(() => [
+  {label: 'SUCCESS', value: 'SUCCESS'},
+  {label: 'FAILED', value: 'FAILED'}
+]);
 
 const searchParams = ref<Api.Monitor.OperationLogPageParams>({
   pageNum: 1,
@@ -39,7 +44,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
   columns: () => [
     {key: 'module', title: $t('page.monitor.module'), minWidth: 120},
     {key: 'operationType', title: $t('page.monitor.operationType'), minWidth: 120},
-    {key: 'operationDescription', title: 'Description', minWidth: 180, render: row => row.operationDescription || '-'},
+    {key: 'operationDescription', title: $t('page.monitor.description'), minWidth: 220, ellipsis: {tooltip: true}, render: row => row.operationDescription || '-'},
     {key: 'username', title: $t('page.monitor.operator'), minWidth: 140, render: row => row.username || '-'},
     {
       key: 'requestMethod',
@@ -48,7 +53,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
       align: 'center',
       render: row => row.requestMethod || '-'
     },
-    {key: 'requestUri', title: $t('page.monitor.requestUri'), minWidth: 180, render: row => row.requestUri || '-'},
+    {key: 'requestUri', title: $t('page.monitor.requestUri'), minWidth: 220, ellipsis: {tooltip: true}, render: row => row.requestUri || '-'},
     {key: 'requestIp', title: $t('page.monitor.requestIp'), minWidth: 140, render: row => row.requestIp || '-'},
     {
       key: 'status',
@@ -110,6 +115,11 @@ function resetSearch() {
   };
   getDataByPage(1);
 }
+
+function handleTimeRange(value: [number, number] | null) {
+  searchParams.value.startTime = value ? new Date(value[0]).toISOString() : null;
+  searchParams.value.endTime = value ? new Date(value[1]).toISOString() : null;
+}
 </script>
 
 <template>
@@ -122,27 +132,39 @@ function resetSearch() {
         <NInput v-model:value="searchParams.operator" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.requestMethod')" class="pr-24px" span="24 s:12 m:6">
-        <NInput v-model:value="searchParams.requestMethod" clearable />
+        <NSelect v-model:value="searchParams.requestMethod" :options="requestMethodOptions" clearable />
+      </NFormItemGi>
+      <NFormItemGi :label="$t('page.monitor.status')" class="pr-24px" span="24 s:12 m:6">
+        <NSelect v-model:value="searchParams.status" :options="statusOptions" clearable />
       </NFormItemGi>
       <NFormItemGi :label="$t('page.monitor.requestIp')" class="pr-24px" span="24 s:12 m:6">
         <NInput v-model:value="searchParams.requestIp" clearable />
       </NFormItemGi>
-      <NFormItemGi class="pr-24px" span="24">
-        <NSpace class="w-full" justify="end">
-          <NButton @click="resetSearch">
-            <template #icon>
-              <icon-ic-round-refresh class="text-icon" />
-            </template>
-            {{ $t('common.reset') }}
-          </NButton>
-          <NButton ghost type="primary" @click="getDataByPage(1)">
-            <template #icon>
-              <icon-ic-round-search class="text-icon" />
-            </template>
-            {{ $t('common.search') }}
-          </NButton>
-        </NSpace>
+      <NFormItemGi :label="$t('page.monitor.operationTime')" class="pr-24px" span="24 s:12 m:12">
+        <NDatePicker
+          clearable
+          type="datetimerange"
+          @update:value="handleTimeRange"
+        />
       </NFormItemGi>
+      <template #actions>
+        <NFormItemGi class="pr-24px" span="24">
+          <NSpace class="w-full" justify="end">
+            <NButton @click="resetSearch">
+              <template #icon>
+                <icon-ic-round-refresh class="text-icon" />
+              </template>
+              {{ $t('common.reset') }}
+            </NButton>
+            <NButton ghost type="primary" @click="getDataByPage(1)">
+              <template #icon>
+                <icon-ic-round-search class="text-icon" />
+              </template>
+              {{ $t('common.search') }}
+            </NButton>
+          </NSpace>
+        </NFormItemGi>
+      </template>
     </SearchPanel>
     <NCard
       :bordered="false" :title="$t('route.monitor_operation_log')" class="card-wrapper sm:flex-1-hidden"

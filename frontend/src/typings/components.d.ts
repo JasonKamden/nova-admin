@@ -13,6 +13,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+    AuthenticatedAvatar: typeof import('./../components/business/authenticated-avatar.vue')['default']
     BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
     BusinessFormContainer: typeof import('./../components/advanced/business-form-container.vue')['default']
     ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']
@@ -130,6 +131,7 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const AppProvider: typeof import('./../components/common/app-provider.vue')['default']
+  const AuthenticatedAvatar: typeof import('./../components/business/authenticated-avatar.vue')['default']
   const BetterScroll: typeof import('./../components/custom/better-scroll.vue')['default']
   const BusinessFormContainer: typeof import('./../components/advanced/business-form-container.vue')['default']
   const ButtonIcon: typeof import('./../components/custom/button-icon.vue')['default']

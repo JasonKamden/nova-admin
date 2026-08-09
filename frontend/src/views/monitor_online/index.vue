@@ -6,7 +6,9 @@ import {useAuth} from '@/hooks/business/auth';
 import {useNaiveTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatContextType} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
+import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 import TableRowActions from '@/components/advanced/table-row-actions.vue';
 
@@ -16,6 +18,8 @@ const appStore = useAppStore();
 const {hasAuth} = useAuth();
 const filterModel = ref({keyword: null as string | null});
 const kickingId = ref<string | null>(null);
+const detailVisible = ref(false);
+const activeRow = ref<Api.Monitor.OnlineUserItem | null>(null);
 const showKick = computed(() => hasAuth('monitor:online:kick'));
 
 const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
@@ -26,7 +30,7 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
   },
   columns: () => [
     {key: 'username', title: $t('page.monitor.username'), minWidth: 140},
-    {key: 'contextType', title: 'Context', width: 100, align: 'center'},
+    {key: 'contextType', title: $t('page.profile.currentContext'), width: 120, align: 'center', render: row => formatContextType(row.contextType)},
     {key: 'tenantName', title: $t('page.monitor.tenantName'), minWidth: 160, render: row => row.tenantName || '-'},
     {
       key: 'departmentName',
@@ -35,7 +39,12 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
       render: row => row.departmentName || '-'
     },
     {key: 'ip', title: $t('page.monitor.ip'), minWidth: 140, render: row => row.ip || '-'},
-    {key: 'userAgent', title: $t('page.monitor.userAgent'), minWidth: 240, render: row => row.userAgent || '-'},
+    {
+      key: 'userAgent',
+      title: 'Client',
+      minWidth: 220,
+      render: row => parseUserAgent(row.userAgent)
+    },
     {
       key: 'loginTime',
       title: $t('page.monitor.loginTime'),
@@ -51,14 +60,23 @@ const {columns, columnChecks, data, loading, getData, scrollX} = useNaiveTable({
     {
       key: 'operate',
       title: $t('common.operate'),
-      width: 140,
+      width: 180,
       align: 'center',
       render: row => (
           <TableRowActions
               actions={[
                 {
+                  key: 'detail',
+                  label: $t('common.detail'),
+                  type: 'info',
+                  onClick: () => {
+                    activeRow.value = row;
+                    detailVisible.value = true;
+                  }
+                },
+                {
                   key: 'kick',
-                  label: $t('common.delete'),
+                  label: 'Force Logout',
                   type: 'error',
                   show: showKick.value,
                   loading: kickingId.value === row.sessionId,
@@ -78,6 +96,18 @@ function resetSearch() {
   getData();
 }
 
+function parseUserAgent(userAgent: string | null) {
+  if (!userAgent) {
+    return '-';
+  }
+
+  const browser = userAgent.match(/(Chrome|Firefox|Safari|Edge|Opera)\/?([\d.]+)?/i)?.[1] || 'Browser';
+  const os =
+    userAgent.match(/(Windows NT|Mac OS X|Android|iPhone OS|Linux)/i)?.[1]?.replace('NT', '').trim() || 'OS';
+
+  return `${browser} / ${os}`;
+}
+
 async function handleKick(sessionId: string, _username: string) {
   kickingId.value = sessionId;
   const {error} = await fetchKickOnlineUser(sessionId);
@@ -95,22 +125,24 @@ async function handleKick(sessionId: string, _username: string) {
       <NFormItemGi :label="$t('page.monitor.keyword')" class="pr-24px" span="24 s:12 m:6">
         <NInput v-model:value="filterModel.keyword" :placeholder="$t('common.keywordSearch')" clearable />
       </NFormItemGi>
-      <NFormItemGi class="pr-24px" span="24 m:18">
-        <NSpace class="w-full" justify="end">
-          <NButton @click="resetSearch">
-            <template #icon>
-              <icon-ic-round-refresh class="text-icon" />
-            </template>
-            {{ $t('common.reset') }}
-          </NButton>
-          <NButton ghost type="primary" @click="getData">
-            <template #icon>
-              <icon-ic-round-search class="text-icon" />
-            </template>
-            {{ $t('common.search') }}
-          </NButton>
-        </NSpace>
-      </NFormItemGi>
+      <template #actions>
+        <NFormItemGi class="pr-24px" span="24 m:18">
+          <NSpace class="w-full" justify="end">
+            <NButton @click="resetSearch">
+              <template #icon>
+                <icon-ic-round-refresh class="text-icon" />
+              </template>
+              {{ $t('common.reset') }}
+            </NButton>
+            <NButton ghost type="primary" @click="getData">
+              <template #icon>
+                <icon-ic-round-search class="text-icon" />
+              </template>
+              {{ $t('common.search') }}
+            </NButton>
+          </NSpace>
+        </NFormItemGi>
+      </template>
     </SearchPanel>
     <NCard :bordered="false" :title="$t('route.monitor_online')" class="card-wrapper sm:flex-1-hidden" size="small">
       <template #header-extra>
@@ -129,5 +161,26 @@ async function handleKick(sessionId: string, _username: string) {
         size="small"
       />
     </NCard>
+
+    <BusinessFormContainer v-model:visible="detailVisible" :title="$t('common.detail')" :width="720">
+      <NDescriptions v-if="activeRow" :column="2" bordered label-placement="left" size="small">
+        <NDescriptionsItem :label="$t('page.user.username')">{{ activeRow.username }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.profile.currentContext')">
+          {{ formatContextType(activeRow.contextType) }}
+        </NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.tenantName')">{{ activeRow.tenantName || '-' }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.departmentName')">{{ activeRow.departmentName || '-' }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.ip')">{{ activeRow.ip || '-' }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.loginTime')">{{ formatDateTime(activeRow.loginTime) }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.lastActivityTime')">{{ formatDateTime(activeRow.lastActivityTime) }}</NDescriptionsItem>
+        <NDescriptionsItem label="Client">{{ parseUserAgent(activeRow.userAgent) }}</NDescriptionsItem>
+        <NDescriptionsItem :label="$t('page.monitor.userAgent')" :span="2">{{ activeRow.userAgent || '-' }}</NDescriptionsItem>
+      </NDescriptions>
+      <template #action>
+        <NSpace justify="end">
+          <NButton @click="detailVisible = false">{{ $t('common.close') }}</NButton>
+        </NSpace>
+      </template>
+    </BusinessFormContainer>
   </div>
 </template>

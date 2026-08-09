@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import {computed, h, reactive, ref, watch} from 'vue';
 import type {TreeOption} from 'naive-ui';
-import {NButton, NEllipsis, NTag, NTooltip} from 'naive-ui';
+import {NButton, NEllipsis} from 'naive-ui';
 import {fetchMenuTree, fetchRoleMenuIds, fetchUpdateRoleMenus} from '@/service/api';
 import {$t} from '@/locales';
+import BusinessFormContainer from '@/components/advanced/business-form-container.vue';
 
 defineOptions({
   name: 'RoleMenuModal'
@@ -39,8 +40,7 @@ function toTreeOptions(nodes: Api.Menu.Item[]): TreeOption[] {
   return nodes.map(node => ({
     key: node.id,
     label: node.menuName,
-    permissionCode: node.permissionCode,
-    children: toTreeOptions(node.children || [])
+    children: node.children?.length ? toTreeOptions(node.children) : undefined
   }));
 }
 
@@ -88,8 +88,6 @@ function handleCollapseAll() {
 }
 
 function renderLabel({option}: { option: TreeOption }) {
-  const permissionCode = option.permissionCode as string | null | undefined;
-
   return h('div', {class: 'flex min-w-0 items-center gap-8px'}, [
     h(
       NEllipsis,
@@ -97,17 +95,7 @@ function renderLabel({option}: { option: TreeOption }) {
       {
         default: () => String(option.label ?? '')
       }
-    ),
-    permissionCode
-      ? h(
-          NTooltip,
-          null,
-          {
-            trigger: () => h(NTag, {size: 'small', type: 'info', bordered: false}, {default: () => 'Perm'}),
-            default: () => permissionCode
-          }
-        )
-      : null
+    )
   ]);
 }
 
@@ -135,47 +123,44 @@ watch(
 </script>
 
 <template>
-  <NDrawer v-model:show="visible" :default-width="620" :mask-closable="false" placement="right" resizable>
-    <NDrawerContent :title="`${$t('page.role.menuTitle')} - ${roleName}`" closable>
-      <NSpin :show="state.loading">
-        <div class="mb-16px flex-col-stretch gap-12px">
-          <div class="flex flex-wrap gap-12px">
-            <NInput v-model:value="keyword" :placeholder="$t('common.keywordSearch')" clearable />
-            <NButton type="primary" @click="loadData">{{ $t('common.search') }}</NButton>
-          </div>
-
-          <div class="flex flex-wrap gap-8px">
-            <NButton quaternary size="small" @click="handleSelectAll">{{ $t('common.selectAll') }}</NButton>
-            <NButton quaternary size="small" @click="handleClearSelection">{{ $t('common.clearSelection') }}</NButton>
-            <NButton quaternary size="small" @click="handleExpandAll">{{ $t('common.expand') }}</NButton>
-            <NButton quaternary size="small" @click="handleCollapseAll">{{ $t('common.collapse') }}</NButton>
-          </div>
+  <BusinessFormContainer v-model:visible="visible" :title="`${$t('page.role.menuTitle')} - ${roleName}`" :width="620">
+    <NSpin :show="state.loading">
+      <div class="mb-16px flex-col-stretch gap-12px">
+        <div class="flex flex-wrap gap-12px">
+          <NInput v-model:value="keyword" :placeholder="$t('common.keywordSearch')" clearable />
+          <NButton type="primary" @click="loadData">{{ $t('common.search') }}</NButton>
         </div>
 
-        <div class="overflow-hidden rounded-12px border border-#e5e7eb p-12px">
-          <NTree
-            v-model:checked-keys="checkedKeys"
-            v-model:expanded-keys="expandedKeys"
-            :data="treeOptions"
-            block-line
-            cascade
-            check-on-click
-            checkable
-            expand-on-click
-            key-field="key"
-            label-field="label"
-            :render-label="renderLabel"
-            class="max-h-70vh overflow-y-auto"
-          />
+        <div class="flex flex-wrap gap-8px">
+          <NButton quaternary size="small" @click="handleSelectAll">{{ $t('common.selectAll') }}</NButton>
+          <NButton quaternary size="small" @click="handleClearSelection">{{ $t('common.clearSelection') }}</NButton>
+          <NButton quaternary size="small" @click="handleExpandAll">{{ $t('common.expand') }}</NButton>
+          <NButton quaternary size="small" @click="handleCollapseAll">{{ $t('common.collapse') }}</NButton>
         </div>
-      </NSpin>
+      </div>
 
-      <template #footer>
-        <NSpace justify="end">
-          <NButton @click="closeModal">{{ $t('common.cancel') }}</NButton>
-          <NButton :loading="state.submitting" type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
-        </NSpace>
-      </template>
-    </NDrawerContent>
-  </NDrawer>
+      <div class="overflow-hidden rounded-12px border border-#e5e7eb p-12px">
+        <NTree
+          v-model:checked-keys="checkedKeys"
+          v-model:expanded-keys="expandedKeys"
+          :data="treeOptions"
+          block-line
+          cascade
+          check-on-click
+          checkable
+          expand-on-click
+          key-field="key"
+          label-field="label"
+          :render-label="renderLabel"
+          class="max-h-70vh overflow-y-auto"
+        />
+      </div>
+    </NSpin>
+    <template #action>
+      <NSpace justify="end">
+        <NButton @click="closeModal">{{ $t('common.cancel') }}</NButton>
+        <NButton :loading="state.submitting" type="primary" @click="handleSubmit">{{ $t('common.confirm') }}</NButton>
+      </NSpace>
+    </template>
+  </BusinessFormContainer>
 </template>

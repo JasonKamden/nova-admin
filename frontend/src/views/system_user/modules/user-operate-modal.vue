@@ -3,7 +3,6 @@ import {computed, reactive, ref, watch} from 'vue';
 import {
   fetchCreateUser,
   fetchDepartmentSelector,
-  fetchRoleOptions,
   fetchUpdateUser,
   fetchUserDetail
 } from '@/service/api';
@@ -61,12 +60,10 @@ interface FormModel {
   bio: string;
   departmentId: number | null;
   initialPassword: string;
-  roleIds: number[];
 }
 
 const model = reactive<FormModel>(createDefaultModel());
 const departmentOptions = ref<Api.Department.TreeOption[]>([]);
-const roleOptions = ref<Array<{ label: string; value: number }>>([]);
 const detailRoleNames = ref<string[]>([]);
 
 const rules: Partial<Record<keyof FormModel, App.Global.FormRule | App.Global.FormRule[]>> = {
@@ -86,8 +83,7 @@ function createDefaultModel(): FormModel {
     email: '',
     bio: '',
     departmentId: null,
-    initialPassword: '',
-    roleIds: []
+    initialPassword: ''
   };
 }
 
@@ -100,16 +96,6 @@ async function loadDepartments() {
   const {data, error} = await fetchDepartmentSelector();
   if (!error) {
     departmentOptions.value = toDepartmentTreeOptions(data);
-  }
-}
-
-async function loadRoles() {
-  const {data, error} = await fetchRoleOptions(null);
-  if (!error) {
-    roleOptions.value = data.map(item => ({
-      label: `${item.roleName} (${item.roleCode})`,
-      value: item.id
-    }));
   }
 }
 
@@ -131,8 +117,7 @@ async function loadDetail() {
       email: data.email || '',
       bio: data.bio || '',
       departmentId: data.departmentId,
-      initialPassword: '',
-      roleIds: data.roles?.map(item => item.id) || []
+      initialPassword: ''
     });
     detailRoleNames.value = data.roles?.map(item => item.roleName) || [];
   }
@@ -164,7 +149,7 @@ async function handleSubmit() {
       ? await fetchCreateUser({
         username: model.username.trim(),
         initialPassword: model.initialPassword,
-        roleIds: model.roleIds,
+        roleIds: [],
         ...payload
       })
       : await fetchUpdateUser(props.userId!, payload);
@@ -187,7 +172,7 @@ watch(
 
       resetModel();
       restoreValidation();
-      await Promise.all([loadDepartments(), loadRoles(), loadDetail()]);
+      await Promise.all([loadDepartments(), loadDetail()]);
     }
 );
 </script>
@@ -229,10 +214,7 @@ watch(
               value-field="value"
             />
           </NFormItemGi>
-          <NFormItemGi v-if="isAdd" :label="$t('page.user.role')" path="roleIds" span="12">
-            <NSelect v-model:value="model.roleIds" :options="roleOptions" clearable filterable multiple />
-          </NFormItemGi>
-          <NFormItemGi v-else-if="readonly" :label="$t('page.user.role')" span="12">
+          <NFormItemGi v-if="readonly" :label="$t('page.user.role')" span="12">
             <NInput :value="detailRoleNames.join(' / ')" readonly />
           </NFormItemGi>
           <NFormItemGi :label="$t('page.user.bio')" path="bio" span="24">

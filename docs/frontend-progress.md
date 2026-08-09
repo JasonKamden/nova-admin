@@ -121,3 +121,26 @@
 - Done: route labels used in this stage (`file`, `monitor`, `system_dictionary`, `system_config`,
   `system_message`, `message_center`) now render through i18n instead of exposing raw route keys.
 - Done: footer and remaining inherited branding in this scope now use `Nova`.
+
+### Frontend Final UX Polish
+
+- Done: added reusable authenticated avatar rendering for protected image URLs and switched both Header avatar and
+  Profile avatar to the same implementation.
+- Done: `profile` is reorganized into a compact left summary plus right tabbed content (`基本资料 / 账号安全 / 账号信息`),
+  and avatar upload is now triggered directly from the avatar itself instead of a standalone upload button.
+- Done: Header `ContextSwitcher` dropdown now shows clean tenant names only and no longer exposes tenant code in the
+  dropdown content.
+- Done: `system_role` menu grant now follows global `BusinessFormContainer` modal/drawer semantics, keeps first-level
+  expansion, preserves toolbar actions, and removes the extra `Perm` tag noise from menu labels.
+- Done: `system_user` add/edit form no longer mixes role assignment into the main user form; role binding remains on
+  the dedicated role-assignment flow.
+- Done: department tree conversion now emits `children: undefined` for leaf nodes instead of empty arrays, so
+  `NTree`/`NTreeSelect` no longer render pseudo-expand affordances on leaves.
+- Done: `SearchPanel` now owns a formal `actions` slot, and the touched pages in this round were migrated to the same
+  search/reset action layout.
+- Done: `monitor_online` now shows a parsed client summary column, adds a real detail drawer, and renames the kick
+  action to `Force Logout`.
+- Done: `monitor_operation_log` search now includes request-method select, status select, operation time range, and
+  wider ellipsis-friendly description/request columns.
+- Done: terminology cleanup in this round removes several remaining `Tenant 用户 / Department / Context` mixed labels
+  from visible zh-CN page copy in the touched areas.

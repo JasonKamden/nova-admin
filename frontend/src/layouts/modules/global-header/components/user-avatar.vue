@@ -5,6 +5,7 @@ import {useAuthStore} from '@/store/modules/auth';
 import {useRouterPush} from '@/hooks/common/router';
 import {useSvgIcon} from '@/hooks/common/icon';
 import {$t} from '@/locales';
+import AuthenticatedAvatar from '@/components/business/authenticated-avatar.vue';
 
 defineOptions({
   name: 'UserAvatar'
@@ -81,8 +82,15 @@ function handleDropdown(key: DropdownKey) {
   </NButton>
   <NDropdown v-else :options="options" placement="bottom" trigger="click" @select="handleDropdown">
     <div>
-      <ButtonIcon>
-        <SvgIcon class="text-icon-large" icon="ph:user-circle" />
+      <ButtonIcon class="gap-10px">
+        <div class="size-32px overflow-hidden rounded-full">
+          <AuthenticatedAvatar :src="authStore.userInfo.avatar">
+            <template #default="{ src }">
+              <img v-if="src" :src="src" class="size-full object-cover" />
+              <SvgIcon v-else class="text-32px text-icon-large" icon="ph:user-circle" />
+            </template>
+          </AuthenticatedAvatar>
+        </div>
         <span class="text-16px font-medium">{{ authStore.userInfo.nickname || authStore.userInfo.username }}</span>
       </ButtonIcon>
     </div>

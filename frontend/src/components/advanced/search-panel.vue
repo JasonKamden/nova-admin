@@ -42,6 +42,7 @@ watch(
         <NForm :label-width="labelWidth" :model="model" :rules="rules" label-placement="left">
           <NGrid item-responsive responsive="screen">
             <slot />
+            <slot name="actions" />
           </NGrid>
         </NForm>
       </NCollapseItem>

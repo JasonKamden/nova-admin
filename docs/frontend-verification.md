@@ -111,3 +111,23 @@
 - Route i18n keys used in this round (`route.file`, `route.monitor`, `route.system_dictionary`,
   `route.system_config`, `route.system_message`) are rendered as localized labels instead of raw keys: PASS
 - Layout footer and branding text now use `Nova`: PASS
+
+### 2026-08-09 Additional UX / Permission Semantics Verification
+
+- `profile` page new left-summary + right-tabs layout compiles and renders from the real `/api/profile` payload: PASS
+- Header avatar now renders through the authenticated avatar component after real login: PASS
+- Login to `/home` with `platform-admin / Nova@123456` still succeeds after this round: PASS
+- `ContextSwitcher` still renders and platform homepage still loads after this round: PASS
+- `system_role` menu grant container migration to `BusinessFormContainer`: PASS by typecheck/lint/build
+- `system_user` form role-field removal: PASS by typecheck/lint/build
+- Department tree leaf `children` normalization: PASS by typecheck/lint/build
+- SearchPanel `actions` slot migration on touched pages: PASS by typecheck/lint/build
+- `monitor_online` detail drawer/client-summary changes: PASS by typecheck/lint/build
+- `monitor_operation_log` search/column polish changes: PASS by typecheck/lint/build
+
+### Browser Notes
+
+- Real browser regression in this round confirmed: login page load, captcha render, successful real login, and
+  post-login `/home` render: PASS
+- In-app browser wrapper on August 9, 2026 exposed a narrower interaction surface than the earlier run, so deeper
+  automated assertions for Header dropdown and Profile click-path were not fully re-scripted in this same pass.

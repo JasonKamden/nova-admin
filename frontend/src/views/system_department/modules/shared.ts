@@ -7,7 +7,7 @@ export function toDepartmentTreeOptions(
         key: item.id,
         value: item.id,
         disabled: disabledIds.has(item.id),
-        children: toDepartmentTreeOptions(item.children || [], disabledIds)
+        children: item.children?.length ? toDepartmentTreeOptions(item.children, disabledIds) : undefined
     }));
 }
 

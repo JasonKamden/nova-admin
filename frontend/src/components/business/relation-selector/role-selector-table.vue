@@ -144,12 +144,14 @@ function handleCheckedRowKeys(keys: DataTableRowKey[]) {
           clearable
         />
       </NFormItemGi>
-      <NFormItemGi class="pr-24px" span="24 m:6">
-        <NSpace class="w-full" justify="end">
-          <NButton :disabled="disabled" @click="handleReset">{{ $t('common.reset') }}</NButton>
-          <NButton :disabled="disabled" ghost type="primary" @click="handleSearch">{{ $t('common.search') }}</NButton>
-        </NSpace>
-      </NFormItemGi>
+      <template #actions>
+        <NFormItemGi class="pr-24px" span="24 m:6">
+          <NSpace class="w-full" justify="end">
+            <NButton :disabled="disabled" @click="handleReset">{{ $t('common.reset') }}</NButton>
+            <NButton :disabled="disabled" ghost type="primary" @click="handleSearch">{{ $t('common.search') }}</NButton>
+          </NSpace>
+        </NFormItemGi>
+      </template>
     </SearchPanel>
 
     <div class="flex items-center justify-between gap-12px">

@@ -39,11 +39,7 @@ const options = computed<DropdownOption[]>(() => {
 
     items.push({
       key: `tenant:${tenant.tenantId}`,
-      label: () =>
-        h('div', {class: 'flex items-center justify-between gap-12px'}, [
-          h(NText, {depth: active ? 1 : 3, strong: active}, () => tenant.tenantName),
-          h('span', {class: 'text-12px text-text-secondary'}, tenant.tenantCode)
-        ])
+      label: () => h(NText, {depth: active ? 1 : 3, strong: active}, () => tenant.tenantName)
     });
   });
 

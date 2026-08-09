@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import {computed, onBeforeUnmount, reactive, ref} from 'vue';
+import {computed, reactive, ref} from 'vue';
 import {genderOptions, statusRecord} from '@/constants/business';
 import {useFormRules, useNaiveForm} from '@/hooks/common/form';
 import {$t} from '@/locales';
 import {fetchProfile, fetchUpdateProfile, fetchUpdateProfileAvatar, fetchUpdateProfilePassword} from '@/service/api';
-import {getAuthorization} from '@/service/request/shared';
 import {useAuthStore} from '@/store/modules/auth';
+import {formatContextType} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
-import {getServiceBaseURL} from '@/utils/service';
+import AuthenticatedAvatar from '@/components/business/authenticated-avatar.vue';
 
 defineOptions({
   name: 'ProfilePage'
@@ -22,16 +22,13 @@ const {
   restoreValidation: restorePasswordValidation
 } = useNaiveForm();
 
-const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y';
-const {baseURL} = getServiceBaseURL(import.meta.env, isHttpProxy);
-
 const loading = ref(false);
 const submittingBasic = ref(false);
 const submittingPassword = ref(false);
 const uploadingAvatar = ref(false);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const profile = ref<Api.Profile.Item | null>(null);
-const avatarObjectUrl = ref<string | null>(null);
+const activeTab = ref<'basic' | 'security' | 'account'>('basic');
 
 const basicModel = reactive<Api.Profile.UpdateReq>({
   nickname: '',
@@ -84,13 +81,13 @@ const statusLabel = computed(() => {
 
   return $t(statusRecord[status as keyof typeof statusRecord]?.label || 'common.noData');
 });
-const contextLabel = computed(() => (profile.value?.contextType === 'PLATFORM' ? 'PLATFORM' : 'TENANT'));
+const contextLabel = computed(() => formatContextType(profile.value?.contextType));
 const contextSummary = computed(() => {
   if (profile.value?.contextType === 'PLATFORM') {
-    return 'PLATFORM';
+    return 'Platform';
   }
 
-  return profile.value?.tenantName || 'TENANT';
+  return profile.value?.tenantName || 'Tenant';
 });
 const genderLabel = computed(() => {
   const gender = genderOptions.find(item => item.value === (profile.value?.gender || ''));
@@ -113,34 +110,6 @@ function fillBasicModel(data: Api.Profile.Item) {
   restoreBasicValidation();
 }
 
-async function refreshAvatarPreview() {
-  if (avatarObjectUrl.value) {
-    URL.revokeObjectURL(avatarObjectUrl.value);
-    avatarObjectUrl.value = null;
-  }
-
-  if (!profile.value?.avatar) {
-    return;
-  }
-
-  try {
-    const response = await fetch(`${baseURL}${profile.value.avatar}`, {
-      headers: {
-        Authorization: getAuthorization() || ''
-      }
-    });
-
-    if (!response.ok) {
-      return;
-    }
-
-    const blob = await response.blob();
-    avatarObjectUrl.value = URL.createObjectURL(blob);
-  } catch {
-    avatarObjectUrl.value = null;
-  }
-}
-
 async function loadProfile() {
   loading.value = true;
 
@@ -151,7 +120,6 @@ async function loadProfile() {
   if (!error) {
     profile.value = data;
     fillBasicModel(data);
-    await refreshAvatarPreview();
   }
 }
 
@@ -222,12 +190,6 @@ async function handleSubmitPassword() {
 }
 
 void loadProfile();
-
-onBeforeUnmount(() => {
-  if (avatarObjectUrl.value) {
-    URL.revokeObjectURL(avatarObjectUrl.value);
-  }
-});
 </script>
 
 <template>
@@ -238,10 +200,20 @@ onBeforeUnmount(() => {
           <div class="rounded-16px bg-gradient-to-br from-primary/12 via-white to-info/10 px-20px py-24px">
             <div class="flex flex-col items-center gap-12px text-center">
               <div
-                class="flex size-108px items-center justify-center overflow-hidden rounded-full border-4 border-white bg-#f3f6fb shadow-sm"
+                class="group relative flex size-108px cursor-pointer items-center justify-center overflow-hidden rounded-full border-4 border-white bg-#f3f6fb shadow-sm"
+                @click="handleSelectAvatar"
               >
-                <img v-if="avatarObjectUrl" :src="avatarObjectUrl" class="size-full object-cover" />
-                <SvgIcon v-else class="text-72px text-#8b95a7" icon="ph:user-circle" />
+                <AuthenticatedAvatar :src="profile?.avatar">
+                  <template #default="{ src }">
+                    <img v-if="src" :src="src" class="size-full object-cover" />
+                    <SvgIcon v-else class="text-72px text-#8b95a7" icon="ph:user-circle" />
+                  </template>
+                </AuthenticatedAvatar>
+                <div
+                  class="absolute inset-0 flex items-center justify-center bg-black/45 text-12px text-white opacity-0 transition-opacity group-hover:opacity-100"
+                >
+                  {{ uploadingAvatar ? 'Uploading...' : $t('page.profile.uploadAvatar') }}
+                </div>
               </div>
               <div>
                 <div class="text-20px font-600">{{ profile?.nickname || '-' }}</div>
@@ -254,9 +226,6 @@ onBeforeUnmount(() => {
                 </NTag>
                 <NTag :type="profile?.status === 1 ? 'success' : 'warning'" round>{{ statusLabel }}</NTag>
               </NSpace>
-              <NButton :loading="uploadingAvatar" secondary type="primary" @click="handleSelectAvatar">
-                {{ $t('page.profile.uploadAvatar') }}
-              </NButton>
               <input
                 ref="fileInputRef" accept="image/jpeg,image/png,image/webp" class="hidden" type="file"
                 @change="handleAvatarChange"
@@ -264,145 +233,133 @@ onBeforeUnmount(() => {
             </div>
           </div>
 
-          <div class="mt-16px flex-col-stretch gap-12px">
-            <div class="text-14px font-600">{{ $t('page.profile.identityTitle') }}</div>
-            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-              <div class="text-12px text-#7b8798">{{ $t('page.profile.currentContext') }}</div>
-              <div class="mt-6px text-14px font-600">{{ contextSummary }}</div>
-            </div>
-
-            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-              <div class="text-12px text-#7b8798">{{ $t('page.profile.currentTenant') }}</div>
-              <div class="mt-6px text-14px font-600">{{ profile?.tenantName || '-' }}</div>
-            </div>
-
-            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-              <div class="text-12px text-#7b8798">{{ $t('page.profile.currentDepartment') }}</div>
-              <div class="mt-6px text-14px font-600">{{ profile?.departmentName || '-' }}</div>
-            </div>
-
-            <div class="rounded-12px bg-#f7f9fc px-14px py-12px">
-              <div class="text-12px text-#7b8798">{{ $t('page.user.role') }}</div>
-              <NSpace v-if="roleTags.length" class="mt-8px" size="small">
+          <NDescriptions :column="1" class="mt-16px" label-placement="top" size="small">
+            <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextSummary }}</NDescriptionsItem>
+            <NDescriptionsItem :label="$t('page.profile.currentTenant')">{{ profile?.tenantName || '-' }}</NDescriptionsItem>
+            <NDescriptionsItem :label="$t('page.profile.currentDepartment')">{{ profile?.departmentName || '-' }}</NDescriptionsItem>
+            <NDescriptionsItem :label="$t('page.user.role')">
+              <NSpace v-if="roleTags.length" size="small">
                 <NTag v-for="role in roleTags" :key="role.id" size="small" type="default">{{ role.roleName }}</NTag>
               </NSpace>
-              <div v-else class="mt-6px text-14px font-600">-</div>
-            </div>
-          </div>
+              <span v-else>-</span>
+            </NDescriptionsItem>
+          </NDescriptions>
         </NCard>
 
-        <div class="min-w-0 flex-col-stretch gap-16px">
-          <NCard :bordered="false" :title="$t('page.profile.basicTitle')" class="card-wrapper" size="small">
-            <NForm ref="basicFormRef" :label-width="110" :model="basicModel" :rules="basicRules" label-placement="left">
-              <NGrid :cols="24" :x-gap="16">
-                <NFormItemGi :label="$t('page.user.username')" span="24 m:12">
-                  <NInput :value="profile?.username || ''" disabled />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.user.nickname')" path="nickname" span="24 m:12">
-                  <NInput v-model:value="basicModel.nickname" />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.user.gender')" path="gender" span="24 m:12">
-                  <NSelect
-                    v-model:value="basicModel.gender"
-                    :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
-                    clearable
-                  />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.user.phone')" path="phone" span="24 m:12">
-                  <NInput v-model:value="basicModel.phone" clearable />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.user.email')" path="email" span="24">
-                  <NInput v-model:value="basicModel.email" clearable />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.user.bio')" path="bio" span="24">
-                  <NInput
-                    v-model:value="basicModel.bio" :autosize="{ minRows: 3, maxRows: 5 }" clearable
-                    type="textarea"
-                  />
-                </NFormItemGi>
-                <NFormItemGi span="24">
-                  <NSpace class="w-full" justify="end">
-                    <NButton @click="profile && fillBasicModel(profile)">{{ $t('common.reset') }}</NButton>
-                    <NButton :loading="submittingBasic" type="primary" @click="handleSubmitBasic">
-                      {{ $t('common.update') }}
-                    </NButton>
-                  </NSpace>
-                </NFormItemGi>
-              </NGrid>
-            </NForm>
-          </NCard>
+        <NCard :bordered="false" class="card-wrapper min-w-0" size="small">
+          <NTabs v-model:value="activeTab" animated type="line">
+            <NTabPane name="basic" :tab="$t('page.profile.basicTitle')">
+              <NForm ref="basicFormRef" :label-width="110" :model="basicModel" :rules="basicRules" label-placement="left">
+                <NGrid :cols="24" :x-gap="16">
+                  <NFormItemGi :label="$t('page.user.username')" span="24 m:12">
+                    <NInput :value="profile?.username || ''" disabled />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.user.nickname')" path="nickname" span="24 m:12">
+                    <NInput v-model:value="basicModel.nickname" />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.user.gender')" path="gender" span="24 m:12">
+                    <NSelect
+                      v-model:value="basicModel.gender"
+                      :options="genderOptions.map(item => ({ label: $t(item.label), value: item.value }))"
+                      clearable
+                    />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.user.phone')" path="phone" span="24 m:12">
+                    <NInput v-model:value="basicModel.phone" clearable />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.user.email')" path="email" span="24">
+                    <NInput v-model:value="basicModel.email" clearable />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.user.bio')" path="bio" span="24">
+                    <NInput
+                      v-model:value="basicModel.bio" :autosize="{ minRows: 3, maxRows: 5 }" clearable
+                      type="textarea"
+                    />
+                  </NFormItemGi>
+                  <NFormItemGi span="24">
+                    <NSpace class="w-full" justify="end">
+                      <NButton @click="profile && fillBasicModel(profile)">{{ $t('common.reset') }}</NButton>
+                      <NButton :loading="submittingBasic" type="primary" @click="handleSubmitBasic">
+                        {{ $t('common.update') }}
+                      </NButton>
+                    </NSpace>
+                  </NFormItemGi>
+                </NGrid>
+              </NForm>
+            </NTabPane>
 
-          <NCard :bordered="false" :title="$t('page.profile.accountTitle')" class="card-wrapper" size="small">
-            <NDescriptions :column="2" bordered label-placement="left" size="small">
-              <NDescriptionsItem :label="$t('page.profile.userId')">{{ profile?.userId || '-' }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.username')">{{ profile?.username || '-' }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.status')">{{ statusLabel }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.gender')">{{ genderLabel }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextLabel }}</NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.profile.currentTenant')">
-                {{
-                  profile?.tenantName || '-'
-                }}
-              </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.profile.currentDepartment')">
-                {{
-                  profile?.departmentName || '-'
-                }}
-              </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.role')">
-                <span v-if="roleTags.length">{{ roleTags.map(item => item.roleName).join(' / ') }}</span>
-                <span v-else>-</span>
-              </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.lastLoginTime')">
-                {{ formatDateTime(profile?.lastLoginTime) }}
-              </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.lastLoginIp')">
-                {{
-                  profile?.lastLoginIp || '-'
-                }}
-              </NDescriptionsItem>
-              <NDescriptionsItem :label="$t('page.user.createTime')">
-                {{ formatDateTime(profile?.createTime) }}
-              </NDescriptionsItem>
-            </NDescriptions>
-          </NCard>
+            <NTabPane name="security" :tab="$t('page.profile.securityTitle')">
+              <NAlert :show-icon="false" class="mb-16px" type="warning">
+                {{ $t('page.profile.passwordTip') }}
+              </NAlert>
 
-          <NCard :bordered="false" :title="$t('page.profile.securityTitle')" class="card-wrapper" size="small">
-            <NAlert :show-icon="false" class="mb-16px" type="warning">
-              {{ $t('page.profile.passwordTip') }}
-            </NAlert>
+              <NForm
+                ref="passwordFormRef" :label-width="110" :model="passwordModel" :rules="passwordRules"
+                label-placement="left"
+              >
+                <NGrid :cols="24" :x-gap="16">
+                  <NFormItemGi :label="$t('page.profile.oldPassword')" path="oldPassword" span="24 m:12">
+                    <NInput v-model:value="passwordModel.oldPassword" show-password-on="click" type="password" />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.profile.newPassword')" path="newPassword" span="24 m:12">
+                    <NInput v-model:value="passwordModel.newPassword" show-password-on="click" type="password" />
+                  </NFormItemGi>
+                  <NFormItemGi :label="$t('page.profile.confirmPassword')" path="confirmPassword" span="24 m:12">
+                    <NInput v-model:value="passwordModel.confirmPassword" show-password-on="click" type="password" />
+                  </NFormItemGi>
+                  <NFormItemGi span="24 m:12">
+                    <div class="flex h-full items-center text-13px text-#666">
+                      {{ $t('page.profile.form.passwordRule') }}
+                    </div>
+                  </NFormItemGi>
+                  <NFormItemGi span="24">
+                    <NSpace class="w-full" justify="end">
+                      <NButton @click="resetPasswordModel">{{ $t('common.reset') }}</NButton>
+                      <NButton :loading="submittingPassword" type="primary" @click="handleSubmitPassword">
+                        {{ $t('page.profile.updatePassword') }}
+                      </NButton>
+                    </NSpace>
+                  </NFormItemGi>
+                </NGrid>
+              </NForm>
+            </NTabPane>
 
-            <NForm
-              ref="passwordFormRef" :label-width="110" :model="passwordModel" :rules="passwordRules"
-              label-placement="left"
-            >
-              <NGrid :cols="24" :x-gap="16">
-                <NFormItemGi :label="$t('page.profile.oldPassword')" path="oldPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.oldPassword" show-password-on="click" type="password" />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.profile.newPassword')" path="newPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.newPassword" show-password-on="click" type="password" />
-                </NFormItemGi>
-                <NFormItemGi :label="$t('page.profile.confirmPassword')" path="confirmPassword" span="24 m:12">
-                  <NInput v-model:value="passwordModel.confirmPassword" show-password-on="click" type="password" />
-                </NFormItemGi>
-                <NFormItemGi span="24 m:12">
-                  <div class="flex h-full items-center text-13px text-#666">
-                    {{ $t('page.profile.form.passwordRule') }}
-                  </div>
-                </NFormItemGi>
-                <NFormItemGi span="24">
-                  <NSpace class="w-full" justify="end">
-                    <NButton @click="resetPasswordModel">{{ $t('common.reset') }}</NButton>
-                    <NButton :loading="submittingPassword" type="primary" @click="handleSubmitPassword">
-                      {{ $t('page.profile.updatePassword') }}
-                    </NButton>
-                  </NSpace>
-                </NFormItemGi>
-              </NGrid>
-            </NForm>
-          </NCard>
-        </div>
+            <NTabPane name="account" :tab="$t('page.profile.accountTitle')">
+              <NDescriptions :column="2" bordered label-placement="left" size="small">
+                <NDescriptionsItem :label="$t('page.profile.userId')">{{ profile?.userId || '-' }}</NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.username')">{{ profile?.username || '-' }}</NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.status')">{{ statusLabel }}</NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.gender')">{{ genderLabel }}</NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.profile.currentContext')">{{ contextLabel }}</NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.profile.currentTenant')">
+                  {{
+                    profile?.tenantName || '-'
+                  }}
+                </NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.profile.currentDepartment')">
+                  {{
+                    profile?.departmentName || '-'
+                  }}
+                </NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.role')">
+                  <span v-if="roleTags.length">{{ roleTags.map(item => item.roleName).join(' / ') }}</span>
+                  <span v-else>-</span>
+                </NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.lastLoginTime')">
+                  {{ formatDateTime(profile?.lastLoginTime) }}
+                </NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.lastLoginIp')">
+                  {{
+                    profile?.lastLoginIp || '-'
+                  }}
+                </NDescriptionsItem>
+                <NDescriptionsItem :label="$t('page.user.createTime')">
+                  {{ formatDateTime(profile?.createTime) }}
+                </NDescriptionsItem>
+              </NDescriptions>
+            </NTabPane>
+          </NTabs>
+        </NCard>
       </div>
     </NSpin>
   </div>

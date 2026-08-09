@@ -5,6 +5,7 @@ import {fetchLoginLogPage} from '@/service/api';
 import {defaultTransform, useNaivePaginatedTable} from '@/hooks/common/table';
 import {$t} from '@/locales';
 import {useAppStore} from '@/store/modules/app';
+import {formatContextType} from '@/utils/context';
 import {formatDateTime} from '@/utils/date-time';
 import SearchPanel from '@/components/advanced/search-panel.vue';
 
@@ -30,7 +31,7 @@ const {columns, columnChecks, data, loading, getData, getDataByPage, mobilePagin
   },
   columns: () => [
     {key: 'username', title: $t('page.monitor.username'), minWidth: 140},
-    {key: 'contextType', title: 'Context', width: 100, align: 'center'},
+    {key: 'contextType', title: $t('page.profile.currentContext'), width: 120, align: 'center', render: row => formatContextType(row.contextType)},
     {key: 'loginType', title: $t('page.monitor.loginType'), minWidth: 120, render: row => row.loginType || '-'},
     {
       key: 'loginStatus',
@@ -87,22 +88,24 @@ function resetSearch() {
           clearable
         />
       </NFormItemGi>
-      <NFormItemGi class="pr-24px" span="24 m:6">
-        <NSpace class="w-full" justify="end">
-          <NButton @click="resetSearch">
-            <template #icon>
-              <icon-ic-round-refresh class="text-icon" />
-            </template>
-            {{ $t('common.reset') }}
-          </NButton>
-          <NButton ghost type="primary" @click="getDataByPage(1)">
-            <template #icon>
-              <icon-ic-round-search class="text-icon" />
-            </template>
-            {{ $t('common.search') }}
-          </NButton>
-        </NSpace>
-      </NFormItemGi>
+      <template #actions>
+        <NFormItemGi class="pr-24px" span="24 m:6">
+          <NSpace class="w-full" justify="end">
+            <NButton @click="resetSearch">
+              <template #icon>
+                <icon-ic-round-refresh class="text-icon" />
+              </template>
+              {{ $t('common.reset') }}
+            </NButton>
+            <NButton ghost type="primary" @click="getDataByPage(1)">
+              <template #icon>
+                <icon-ic-round-search class="text-icon" />
+              </template>
+              {{ $t('common.search') }}
+            </NButton>
+          </NSpace>
+        </NFormItemGi>
+      </template>
     </SearchPanel>
     <NCard :bordered="false" :title="$t('route.monitor_login_log')" class="card-wrapper sm:flex-1-hidden" size="small">
       <template #header-extra>

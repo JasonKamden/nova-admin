@@ -435,14 +435,16 @@ void loadTypes();
               clearable
             />
           </NFormItemGi>
-          <NFormItemGi class="pr-24px" span="24 s:12 m:6">
-            <NSpace class="w-full" justify="end">
-              <NButton :disabled="!hasTypeSelection" @click="handleResetDataSearch">{{ $t('common.reset') }}</NButton>
-              <NButton :disabled="!hasTypeSelection" ghost type="primary" @click="getDataByPage(1)">
-                {{ $t('common.search') }}
-              </NButton>
-            </NSpace>
-          </NFormItemGi>
+          <template #actions>
+            <NFormItemGi class="pr-24px" span="24 s:12 m:6">
+              <NSpace class="w-full" justify="end">
+                <NButton :disabled="!hasTypeSelection" @click="handleResetDataSearch">{{ $t('common.reset') }}</NButton>
+                <NButton :disabled="!hasTypeSelection" ghost type="primary" @click="getDataByPage(1)">
+                  {{ $t('common.search') }}
+                </NButton>
+              </NSpace>
+            </NFormItemGi>
+          </template>
         </SearchPanel>
 
         <div class="flex-1 overflow-hidden">
